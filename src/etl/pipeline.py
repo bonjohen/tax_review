@@ -1,7 +1,7 @@
-"""Main ETL pipeline: raw IRS Excel files → canonical Parquet tables.
+"""Main ETL pipeline: raw IRS Excel files -> SQLite -> canonical Parquet tables.
 
 Usage:
-    python -m src.etl.pipeline [--years 2020 2021 2022] [--skip-download]
+    python -m src.etl.pipeline [--years 2020 2021 2022]
 """
 
 import argparse
@@ -10,8 +10,10 @@ from pathlib import Path
 
 import pandas as pd
 
-from .agi_bins import get_bins_dataframe
-from .cpi_adjust import adjust_dataframe, MONEY_COLUMNS
+from .db import get_connection, init_schema, reset_year, load_agi_bins, load_cpi_factors
+from .parse_table_1x import load_table_11, load_table_12, load_table_32, load_table_33
+from .parse_table_14a import load_table_14a
+from .parse_table_3x import load_table_34, load_table_36
 from .url_registry import YEARS
 
 logger = logging.getLogger(__name__)
@@ -20,6 +22,21 @@ DATA_ROOT = Path("data")
 RAW_DIR = DATA_ROOT / "raw"
 NOMINAL_DIR = DATA_ROOT / "processed" / "nominal"
 REAL_DIR = DATA_ROOT / "processed" / "real_2022"
+DB_PATH = DATA_ROOT / "tax_review.db"
+
+# View-to-Parquet export mapping: (view_name, parquet_name, output_dir)
+_NOMINAL_EXPORTS = [
+    ("v_agi_bins", "agi_bins", NOMINAL_DIR),
+    ("v_returns_aggregate", "returns_aggregate", NOMINAL_DIR),
+    ("v_capital_gains", "capital_gains", NOMINAL_DIR),
+    ("v_bracket_distribution", "bracket_distribution", NOMINAL_DIR),
+]
+
+_REAL_EXPORTS = [
+    ("v_returns_aggregate_real2022", "returns_aggregate", REAL_DIR),
+    ("v_capital_gains_real2022", "capital_gains", REAL_DIR),
+    ("v_bracket_distribution_real2022", "bracket_distribution", REAL_DIR),
+]
 
 
 def _write_parquet(df: pd.DataFrame, name: str, output_dir: Path) -> None:
@@ -30,68 +47,47 @@ def _write_parquet(df: pd.DataFrame, name: str, output_dir: Path) -> None:
     logger.info(f"Wrote {path} ({len(df)} rows)")
 
 
-def run_pipeline(years: list[int] | None = None) -> None:
-    """Execute the full ETL pipeline for the specified years."""
+def run_pipeline(years: list[int] | None = None,
+                 db_path: Path | str | None = None) -> None:
+    """Execute the full ETL pipeline for the specified years.
+
+    1. Initialize SQLite schema and load reference tables.
+    2. Parse raw Excel files and insert into SQLite raw tables.
+    3. Export canonical SQL views to Parquet (nominal + CPI-adjusted).
+    """
     years = years or YEARS
+    db_path = db_path or DB_PATH
+
+    conn = get_connection(db_path)
+    init_schema(conn)
+    load_agi_bins(conn)
+    load_cpi_factors(conn)
+
+    for year in years:
+        reset_year(conn, year)
+        raw = RAW_DIR / str(year)
+        prefix = str(year)[2:]
+
+        load_table_11(conn, raw / f"{prefix}in11si.xls", year)
+        load_table_12(conn, raw / f"{prefix}in12ms.xls", year)
+        load_table_32(conn, raw / f"{prefix}in32tt.xls", year)
+        load_table_33(conn, raw / f"{prefix}in33ar.xls", year)
+        load_table_14a(conn, raw / f"{prefix}in14acg.xls", year)
+        load_table_34(conn, raw / f"{prefix}in34tr.xls", year)
+        load_table_36(conn, raw / f"{prefix}in36tr.xls", year)
+
+    conn.commit()
+    logger.info("All raw tables loaded into SQLite")
+
+    # Export canonical views to Parquet
     NOMINAL_DIR.mkdir(parents=True, exist_ok=True)
     REAL_DIR.mkdir(parents=True, exist_ok=True)
 
-    # 1. Build AGI_BINS reference table
-    agi_bins_df = get_bins_dataframe(years=years)
-    _write_parquet(agi_bins_df, "agi_bins", NOMINAL_DIR)
+    for view, name, output_dir in _NOMINAL_EXPORTS + _REAL_EXPORTS:
+        df = pd.read_sql(f"SELECT * FROM {view}", conn)
+        _write_parquet(df, name, output_dir)
 
-    # 2-4. Parse tables for each year
-    # TODO: Uncomment once parsers are implemented against actual file layouts
-    #
-    # from .parse_table_1x import build_returns_aggregate
-    # from .parse_table_14a import parse_capital_gains
-    # from .parse_table_3x import parse_bracket_tables
-    #
-    # all_returns = []
-    # all_capgains = []
-    # all_brackets = []
-    #
-    # for year in years:
-    #     raw = RAW_DIR / str(year)
-    #     prefix = str(year)[2:]
-    #
-    #     returns_df = build_returns_aggregate(raw, year)
-    #     all_returns.append(returns_df)
-    #
-    #     cg_df = parse_capital_gains(raw / f"{prefix}in14acg.xls", year)
-    #     all_capgains.append(cg_df)
-    #
-    #     brackets_df = parse_bracket_tables(
-    #         raw / f"{prefix}in34tr.xls",
-    #         raw / f"{prefix}in35tr.xls",
-    #         raw / f"{prefix}in36tr.xls",
-    #         year,
-    #     )
-    #     all_brackets.append(brackets_df)
-    #
-    # # 5. Concatenate all years and write nominal Parquet
-    # returns_all = pd.concat(all_returns, ignore_index=True)
-    # capgains_all = pd.concat(all_capgains, ignore_index=True)
-    # brackets_all = pd.concat(all_brackets, ignore_index=True)
-    #
-    # _write_parquet(returns_all, "returns_aggregate", NOMINAL_DIR)
-    # _write_parquet(capgains_all, "capital_gains", NOMINAL_DIR)
-    # _write_parquet(brackets_all, "bracket_distribution", NOMINAL_DIR)
-    #
-    # # 6. CPI-adjust and write real Parquet
-    # _write_parquet(
-    #     adjust_dataframe(returns_all, MONEY_COLUMNS["returns_aggregate"]),
-    #     "returns_aggregate", REAL_DIR,
-    # )
-    # _write_parquet(
-    #     adjust_dataframe(capgains_all, MONEY_COLUMNS["capital_gains"]),
-    #     "capital_gains", REAL_DIR,
-    # )
-    # _write_parquet(
-    #     adjust_dataframe(brackets_all, MONEY_COLUMNS["bracket_distribution"]),
-    #     "bracket_distribution", REAL_DIR,
-    # )
-
+    conn.close()
     logger.info("Pipeline complete.")
 
 

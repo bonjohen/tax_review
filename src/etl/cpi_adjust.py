@@ -36,6 +36,19 @@ MONEY_COLUMNS = {
 }
 
 
+def get_cpi_rows() -> list[dict]:
+    """Return CPI factor rows suitable for SQLite insertion."""
+    target_cpi = CPI_U_ANNUAL[TARGET_YEAR]
+    return [
+        {
+            "year": year,
+            "cpi_u_annual": cpi,
+            "factor_to_2022": target_cpi / cpi,
+        }
+        for year, cpi in CPI_U_ANNUAL.items()
+    ]
+
+
 def get_adjustment_factor(year: int) -> float:
     """Return multiplier to convert a year's dollars to 2022 dollars."""
     if year not in CPI_U_ANNUAL:

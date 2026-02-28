@@ -37,6 +37,7 @@ Desktop.ini
 data/raw/
 data/parameters/*.pdf
 data/processed/
+data/*.db
 
 # Keep these tracked
 !data/parameters/*.json

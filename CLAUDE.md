@@ -35,22 +35,33 @@ pytest tests/test_agi_bins.py -k "test_standard_labels"  # single test
 ## Architecture
 
 ```
+Excel (.xls) → Python parsers (xlrd) → SQLite raw tables
+                                           ↓
+                                      SQL VIEWs (canonical + CPI-adjusted + validation)
+                                           ↓
+                                      pd.read_sql → Parquet export
+```
+
+```
 src/
   etl/
     url_registry.py      # All 36 IRS download URLs (11 Excel/year + 3 PDFs)
     download.py          # Download script + SHA256 manifest (data/manifest.json)
     agi_bins.py          # Canonical 19 AGI bin definitions + text label matching
-    parse_table_1x.py    # Tables 1.1-1.4 parser → RETURNS_AGGREGATE
-    parse_table_14a.py   # Table 1.4A parser → CAPITAL_GAINS
-    parse_table_3x.py    # Tables 3.2-3.6 parser → RETURNS_AGGREGATE + BRACKET_DISTRIBUTION
+    db.py                # SQLite connection manager, schema init, insert helpers
+    schema.sql           # All DDL: raw tables, canonical views, CPI views, validation views
+    parse_table_1x.py    # Tables 1.1-1.4 parser + load_table_*() for SQLite
+    parse_table_14a.py   # Table 1.4A parser + load_table_14a() for SQLite
+    parse_table_3x.py    # Tables 3.4-3.6 parser + load_table_*() for SQLite
     cpi_adjust.py        # CPI-U adjustment (hardcoded 2020-2022 values) → 2022 dollars
-    pipeline.py          # Orchestrator: raw Excel → Parquet output
+    pipeline.py          # Orchestrator: raw Excel → SQLite → Parquet output
   parameters/
     extract_tax_params.py  # Revenue Procedure PDFs → JSON
   validation/
-    reconcile.py         # 5 cross-table reconciliation checks (<0.05% tolerance)
+    reconcile.py         # 6 cross-table validation checks via SQLite views
     report.py            # Text/CSV report generation
 data/
+  tax_review.db          # SQLite database (gitignored)
   raw/{2020,2021,2022}/  # Downloaded .xls files (gitignored)
   parameters/            # Tax parameter JSON + Revenue Procedure PDFs
   processed/nominal/     # Parquet output in nominal dollars
