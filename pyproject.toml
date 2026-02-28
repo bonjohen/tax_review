@@ -1,0 +1,29 @@
+[project]
+name = "tax-review"
+version = "0.1.0"
+description = "IRS SOI data acquisition and ETL for tax microsimulation"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.0",
+    "xlrd>=2.0",
+    "openpyxl>=3.1",
+    "pyarrow>=14.0",
+    "requests>=2.31",
+    "pdfplumber>=0.10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
+[project.scripts]
+tax-download = "src.etl.download:main"
+tax-etl = "src.etl.pipeline:main"
+tax-validate = "src.validation.reconcile:main"
+tax-params = "src.parameters.extract_tax_params:main"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"

@@ -1,249 +1,112 @@
-PLAN DOCUMENT
-Synthetic Microsimulation Data Acquisition Plan
-Scope: Tax Years 2020–2022
-Purpose: Build a calibrated synthetic microsimulation model of the federal individual income tax system and simulate a reform eliminating preferential treatment for gains held less than five years.
+# Implementation Plan: IRS SOI Data Acquisition & ETL Pipeline
+
+## Context
+
+The project needs a complete Python pipeline to: download 33 IRS Excel files + 3 Revenue Procedure PDFs, parse them into 4 canonical Parquet tables, adjust for inflation, and validate cross-table consistency. Currently only `docs/plan.md` exists — no code, no build system.
+
+## Technology Stack
+
+- **Python 3.11+** with `pyproject.toml` for dependency management
+- **xlrd** for `.xls` parsing (IRS files are old-format Excel)
+- **pandas + pyarrow** for data manipulation and Parquet output
+- **pdfplumber** for Revenue Procedure PDF extraction
+- **requests** for downloads
+- **pytest** for testing
+
+## Directory Structure to Create
+
+```
+pyproject.toml
+src/
+  __init__.py
+  etl/
+    __init__.py
+    url_registry.py      # All IRS download URLs and metadata
+    download.py          # Download script + SHA256 manifest generation
+    agi_bins.py          # Canonical AGI bin definitions + text matching
+    parse_table_1x.py    # Tables 1.1-1.4 → RETURNS_AGGREGATE
+    parse_table_14a.py   # Table 1.4A → CAPITAL_GAINS
+    parse_table_3x.py    # Tables 3.2-3.6 → RETURNS_AGGREGATE + BRACKET_DISTRIBUTION
+    cpi_adjust.py        # CPI-U inflation adjustment to 2022 dollars
+    pipeline.py          # Main orchestrator: raw → Parquet
+  parameters/
+    __init__.py
+    extract_tax_params.py  # Rev Proc PDFs → JSON
+  validation/
+    __init__.py
+    reconcile.py         # 5 cross-table reconciliation checks
+    report.py            # Text/CSV report generation
+tests/
+  __init__.py
+  conftest.py
+  fixtures/              # Small Excel excerpts for unit tests
+  test_agi_bins.py
+  test_download.py
+  test_parse_table_1x.py
+  test_parse_table_14a.py
+  test_parse_table_3x.py
+  test_cpi_adjust.py
+  test_reconcile.py
+data/                    # .gitignore'd except parameters/
+  raw/{2020,2021,2022}/
+  parameters/
+  processed/
+    nominal/
+    real_2022/
+```
+
+## Implementation Phases (build order)
+
+### Phase 0: Project Scaffold
+- Create `pyproject.toml` with all dependencies
+- Create directory structure and `__init__.py` files
+- Create `.gitignore` (ignore `data/raw/`, `data/processed/`, `*.xls`, `*.parquet`)
+- Create `data/` directories
+
+### Phase 1: Download System
+- **`src/etl/url_registry.py`** — Dict mapping `(year, table_id)` to IRS URL. 11 Excel files per year (33 total) + 3 Revenue Procedure PDFs. URLs follow pattern: `https://www.irs.gov/pub/irs-soi/{YY}in{TABLE_SUFFIX}.xls`
+- **`src/etl/download.py`** — CLI script: `python -m src.etl.download [--years 2020 2021 2022] [--force] [--verify-only]`. Downloads to `data/raw/{year}/`, PDFs to `data/parameters/`. Generates `data/manifest.json` with URL, filename, year, table_id, sha256, download_date, size_bytes.
+
+### Phase 2: AGI Bin Definitions
+- **`src/etl/agi_bins.py`** — Define canonical AGI bin IDs (1-N) with lower/upper bounds. Provide `match_agi_bin(text) -> int | None` that fuzzy-matches the various text representations IRS uses ("Under $5,000", "$1 under $5,000", etc.) to canonical bin IDs. Returns `None` for aggregate/total rows. This is the foundation every parser depends on.
+
+### Phase 3: Excel Parsers
+Table-specific, config-driven parsing (hardcoded row/column positions per table — IRS layouts are stable across years):
+
+- **`src/etl/parse_table_1x.py`** — Tables 1.1-1.4. Config dict per table: header_rows, data_start_row, agi_col, column mappings, units_multiplier (1000 for "amounts in thousands"). Shared `_clean_cell()` function strips footnote markers (`[1]`, `*`, `†`), handles dashes/blanks. Outputs feed RETURNS_AGGREGATE.
+- **`src/etl/parse_table_14a.py`** — Table 1.4A (capital gains). Same pattern. Outputs feed CAPITAL_GAINS.
+- **`src/etl/parse_table_3x.py`** — Tables 3.2-3.3 (AGI-binned, feed RETURNS_AGGREGATE). Tables 3.4-3.6 (bracket tables: rows are marginal rates, not AGI bins; filing status appears as section headers within the table). Outputs feed BRACKET_DISTRIBUTION.
+
+Key parsing challenges:
+- `.xls` format requires `xlrd` engine
+- Multi-row headers (typically rows 1-5)
+- "Money amounts in thousands of dollars" — multiply by 1,000
+- Merged cells read as empty except top-left cell
+- Footnote markers in numeric cells
+- Tables 3.4-3.6: section-based layout with filing status as section headers, not columns
+
+### Phase 4: CPI Adjustment
+- **`src/etl/cpi_adjust.py`** — Hardcoded CPI-U annual averages (2020: 258.811, 2021: 270.970, 2022: 292.655). Multiplier = CPI_2022 / CPI_year. Apply to all monetary columns, output as separate "real_2022" Parquet files alongside nominal files.
+
+### Phase 5: Pipeline Orchestrator
+- **`src/etl/pipeline.py`** — CLI: `python -m src.etl.pipeline [--years ...]`. For each year: parse all tables → merge into 4 canonical DataFrames → write nominal Parquet → CPI-adjust → write real Parquet. Output to `data/processed/nominal/` and `data/processed/real_2022/`.
+
+### Phase 6: Validation
+- **`src/validation/reconcile.py`** — 5 checks per year:
+  1. Total AGI across Tables 1.1, 1.4, 3.2
+  2. Total income tax across Tables 1.1, 3.3
+  3. Sum of bracket tax (3.4-3.6) vs total tax in 3.3 (tolerance <0.05%)
+  4. Return counts across all major tables
+  5. Capital gain totals
+- **`src/validation/report.py`** — Text + CSV report output with PASS/FAIL per check
 
----
+### Phase 7: Tax Parameters
+- **`src/parameters/extract_tax_params.py`** — Parse Revenue Procedure PDFs with `pdfplumber`. Extract ordinary income brackets, capital gains brackets, standard deduction, AMT exemption/phaseout by filing status. Output as `data/parameters/{year}_tax_parameters.json`. Fallback: support manually-curated JSON if PDF extraction is too fragile.
 
-1. AUTHORITATIVE SOURCE ROOT
+## Verification
 
-All datasets must be sourced from:
-
-IRS Statistics of Income (SOI)
-[https://www.irs.gov/statistics](https://www.irs.gov/statistics)
-
-Primary publication series:
-
-Publication 1304 – Individual Income Tax Returns Complete Report
-Reference landing page:
-[https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-returns-complete-report-publication-1304](https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-returns-complete-report-publication-1304)
-
-Primary file directory for downloadable Excel tables:
-[https://www.irs.gov/pub/irs-soi/](https://www.irs.gov/pub/irs-soi/)
-
-All files must be archived locally with year-based directory structure:
-
-/data/raw/2020/
-/data/raw/2021/
-/data/raw/2022/
-
-Each file must retain original filename and include SHA256 checksum in a manifest file.
-
----
-
-2. REQUIRED DOWNLOAD FILES – TAX YEAR 2020
-
-Income Structure and AGI Bins
-
-[https://www.irs.gov/pub/irs-soi/20in11si.xls](https://www.irs.gov/pub/irs-soi/20in11si.xls)
-Table 1.1 – Selected Income and Tax Items
-
-[https://www.irs.gov/pub/irs-soi/20in12ms.xls](https://www.irs.gov/pub/irs-soi/20in12ms.xls)
-Table 1.2 – Income and Tax Items by Filing Status
-
-[https://www.irs.gov/pub/irs-soi/20in13ms.xls](https://www.irs.gov/pub/irs-soi/20in13ms.xls)
-Table 1.3 – Detailed Income and Tax Items by Filing Status
-
-[https://www.irs.gov/pub/irs-soi/20in14ar.xls](https://www.irs.gov/pub/irs-soi/20in14ar.xls)
-Table 1.4 – Sources of Income by Size of Adjusted Gross Income
-
-Capital Gains / Schedule D
-
-[https://www.irs.gov/pub/irs-soi/20in14acg.xls](https://www.irs.gov/pub/irs-soi/20in14acg.xls)
-Table 1.4A – Returns with Income or Loss from Sales of Capital Assets
-
-Tax Computation and Brackets
-
-[https://www.irs.gov/pub/irs-soi/20in32tt.xls](https://www.irs.gov/pub/irs-soi/20in32tt.xls)
-Table 3.2 – Total Income Tax as Percentage of AGI
-
-[https://www.irs.gov/pub/irs-soi/20in33ar.xls](https://www.irs.gov/pub/irs-soi/20in33ar.xls)
-Table 3.3 – Tax Liability and Credits by AGI
-
-[https://www.irs.gov/pub/irs-soi/20in34tr.xls](https://www.irs.gov/pub/irs-soi/20in34tr.xls)
-Table 3.4 – Tax Classified by Tax Rate and Filing Status
-
-[https://www.irs.gov/pub/irs-soi/20in35tr.xls](https://www.irs.gov/pub/irs-soi/20in35tr.xls)
-Table 3.5 – Tax Generated by Tax Rate and AGI
-
-[https://www.irs.gov/pub/irs-soi/20in36tr.xls](https://www.irs.gov/pub/irs-soi/20in36tr.xls)
-Table 3.6 – Taxable Income and Tax by Tax Rate and Filing Status
-
-Population Structure
-
-[https://www.irs.gov/pub/irs-soi/20in16ag.xls](https://www.irs.gov/pub/irs-soi/20in16ag.xls)
-Table 1.6 – Returns by Age, Marital Status, and AGI
-
----
-
-3. REQUIRED DOWNLOAD FILES – TAX YEAR 2021
-
-(Repeat structure identical to 2020 using 21-prefixed filenames.)
-
-All URLs listed in original plan remain required.
-
----
-
-4. REQUIRED DOWNLOAD FILES – TAX YEAR 2022
-
-(Repeat structure identical to 2020 using 22-prefixed filenames.)
-
-All URLs listed in original plan remain required.
-
----
-
-5. EXTRACTION SPECIFICATION
-
-All extracted datasets must be stored in normalized structured format (Parquet preferred; CSV acceptable).
-
-Required extracted fields by year:
-
-A. From Tables 1.4 and 1.4A
-
-* AGI bin identifier
-* Filing status (if available)
-* Number of returns
-* Total AGI
-* Net short-term capital gains
-* Net long-term capital gains
-* Net capital gain
-* Schedule D return counts
-
-B. From Tables 3.4–3.6
-
-* Marginal tax rate
-* Filing status
-* Taxable income in bracket
-* Tax generated in bracket
-* Count of returns in bracket
-
-C. From Table 3.3
-
-* AGI bin
-* Total income tax
-* Total credits
-* Number of returns
-
-D. From Table 3.2
-
-* AGI bin
-* Effective tax rate
-* Total tax
-* Total AGI
-
-All monetary values must be converted to constant dollars (2022 CPI-adjusted) in a derived dataset while preserving raw nominal values.
-
----
-
-6. TAX PARAMETERS (STATUTORY)
-
-Download official bracket and standard deduction parameters:
-
-2020
-[https://www.irs.gov/pub/irs-drop/rp-19-44.pdf](https://www.irs.gov/pub/irs-drop/rp-19-44.pdf)
-
-2021
-[https://www.irs.gov/pub/irs-drop/rp-20-45.pdf](https://www.irs.gov/pub/irs-drop/rp-20-45.pdf)
-
-2022
-[https://www.irs.gov/pub/irs-drop/rp-21-45.pdf](https://www.irs.gov/pub/irs-drop/rp-21-45.pdf)
-
-Extract and structure:
-
-* Ordinary income bracket thresholds
-* Capital gains bracket thresholds
-* Standard deduction by filing status
-* AMT exemption thresholds
-* AMT phaseout thresholds
-
-Store in structured JSON:
-
-/data/parameters/{year}_tax_parameters.json
-
----
-
-7. DATA MODEL REQUIREMENTS
-
-Create canonical schema:
-
-AGI_BINS
-
-* year
-* agi_bin_id
-* agi_lower_bound
-* agi_upper_bound
-
-RETURNS_AGGREGATE
-
-* year
-* agi_bin_id
-* filing_status
-* return_count
-* total_agi
-* total_taxable_income
-* total_income_tax
-* total_credits
-* effective_tax_rate
-
-CAPITAL_GAINS
-
-* year
-* agi_bin_id
-* short_term_gain
-* long_term_gain
-* total_gain
-* schedule_d_count
-
-BRACKET_DISTRIBUTION
-
-* year
-* filing_status
-* marginal_rate
-* bracket_taxable_income
-* bracket_tax
-* bracket_return_count
-
----
-
-8. VALIDATION PROCEDURES
-
-For each tax year:
-
-1. Reconcile total AGI across Tables 1.1, 1.4, and 3.2.
-2. Reconcile total income tax across Tables 1.1 and 3.3.
-3. Reconstruct total tax from bracket tables (3.4–3.6) and confirm match within rounding tolerance (<0.05%).
-4. Confirm total return counts match across all major tables.
-5. Generate reconciliation report with variance flags.
-
-Validation output must include:
-
-* AGI variance
-* Taxable income variance
-* Income tax variance
-* Bracket count variance
-* Capital gain total variance
-
----
-
-9. ARCHIVAL AND REPRODUCIBILITY
-
-* All downloads scripted and version-controlled.
-* Manifest file listing source URL, download date, checksum.
-* Parsing scripts stored in /src/etl/.
-* Validation scripts stored in /src/validation/.
-* All derived datasets reproducible from raw inputs.
-
----
-
-10. COMPLETION CRITERIA
-
-For each year 2020–2022:
-
-* All required files downloaded and archived.
-* All extraction fields populated.
-* Validation report generated and passing tolerance thresholds.
-* Structured parameter files created.
-* Cross-table totals reconciled.
-
-Only after all criteria are met may synthetic microdata generation and calibration begin.
-
+1. **Download**: `python -m src.etl.download` — all 36 files downloaded, `data/manifest.json` generated with checksums
+2. **Pipeline**: `python -m src.etl.pipeline` — 4 Parquet files in both `nominal/` and `real_2022/`
+3. **Validation**: `python -m src.validation.reconcile` — all checks pass (<0.05% variance)
+4. **Tests**: `pytest tests/` — all unit tests pass
+5. **Parameters**: `python -m src.parameters.extract_tax_params` — 3 JSON files in `data/parameters/`
