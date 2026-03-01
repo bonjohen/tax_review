@@ -22,6 +22,15 @@
         Actual IRS SOI Publication 1304 for TY2023 expected March 2026.
     </div>
 
+    <!-- ═══ Group 1: Reform Analysis ═══ -->
+    <div class="section">
+        <div class="analysis-card section-group">
+            <div class="analysis-header" id="group-reform-header">
+                <div><h2>Reform Analysis</h2><span class="analysis-subtitle">Overview, narrative, burden distribution, and revenue impact</span></div>
+                <span class="analysis-toggle" id="group-reform-toggle">Collapse</span>
+            </div>
+            <div class="section-group-body visible" id="group-reform-body">
+
     <!-- Overview: concise reform summary with headline metrics -->
     <div class="section">
         <div class="analysis-card">
@@ -476,6 +485,19 @@ unless otherwise noted.</p>
         </div>
     </div>
 
+            </div><!-- /section-group-body -->
+        </div><!-- /section-group -->
+    </div><!-- /Group 1 -->
+
+    <!-- ═══ Group 2: Interactive Charts ═══ -->
+    <div class="section">
+        <div class="analysis-card section-group">
+            <div class="analysis-header" id="group-charts-header">
+                <div><h2>Interactive Charts</h2><span class="analysis-subtitle">Filing status, concentration, income composition, brackets, and trends</span></div>
+                <span class="analysis-toggle" id="group-charts-toggle">Expand</span>
+            </div>
+            <div class="section-group-body" id="group-charts-body">
+
     <!-- Filing Status Breakdown (collapsible) -->
     <div class="section">
         <div class="analysis-card">
@@ -591,6 +613,19 @@ unless otherwise noted.</p>
             </div>
         </div>
     </div>
+
+            </div><!-- /section-group-body -->
+        </div><!-- /section-group -->
+    </div><!-- /Group 2 -->
+
+    <!-- ═══ Group 3: Legislative Framework ═══ -->
+    <div class="section">
+        <div class="analysis-card section-group">
+            <div class="analysis-header" id="group-legislative-header">
+                <div><h2>Legislative Framework</h2><span class="analysis-subtitle">Process, current law, and proposed statutory language</span></div>
+                <span class="analysis-toggle" id="group-legislative-toggle">Expand</span>
+            </div>
+            <div class="section-group-body" id="group-legislative-body">
 
     <!-- How Tax Law Is Changed (collapsible) -->
     <div class="section">
@@ -967,6 +1002,19 @@ unless otherwise noted.</p>
         </div>
     </div>
 
+            </div><!-- /section-group-body -->
+        </div><!-- /section-group -->
+    </div><!-- /Group 3 -->
+
+    <!-- ═══ Group 4: Reference ═══ -->
+    <div class="section">
+        <div class="analysis-card section-group">
+            <div class="analysis-header" id="group-reference-header">
+                <div><h2>Reference</h2><span class="analysis-subtitle">Assumptions, source data, and glossary</span></div>
+                <span class="analysis-toggle" id="group-reference-toggle">Expand</span>
+            </div>
+            <div class="section-group-body" id="group-reference-body">
+
     <!-- Model Assumptions (collapsible, at bottom) -->
     <div class="section">
         <div class="analysis-card">
@@ -1098,6 +1146,10 @@ unless otherwise noted.</p>
             </div>
         </div>
     </div>
+
+            </div><!-- /section-group-body -->
+        </div><!-- /section-group -->
+    </div><!-- /Group 4 -->
 
 </main>
 
@@ -2425,6 +2477,18 @@ fetch('data/dashboard.json')
         DATA = d;
         FORECAST_YEARS = d.forecast_years || [];
         renderAssumptions();
+
+        // Toggle: Section Groups
+        ['reform', 'charts', 'legislative', 'reference'].forEach(name => {
+            const hdr = document.getElementById('group-' + name + '-header');
+            const bdy = document.getElementById('group-' + name + '-body');
+            const tgl = document.getElementById('group-' + name + '-toggle');
+            hdr.addEventListener('click', () => {
+                const showing = bdy.classList.contains('visible');
+                bdy.classList.toggle('visible', !showing);
+                tgl.textContent = showing ? 'Expand' : 'Collapse';
+            });
+        });
 
         // Toggle: Overview
         (function() {

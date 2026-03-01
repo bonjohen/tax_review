@@ -706,6 +706,32 @@ body {
     display: block;
 }
 
+/* Section groups (nested collapsible containers) */
+.section-group {
+    border-top: none;
+    border-left: 4px solid var(--accent);
+}
+
+.section-group-body {
+    display: none;
+    padding: 0 1rem 1rem;
+    max-width: none;
+    font-family: inherit;
+    line-height: inherit;
+}
+
+.section-group-body.visible {
+    display: block;
+}
+
+.section-group-body > .section {
+    margin-bottom: 1rem;
+}
+
+.section-group-body > .section:last-child {
+    margin-bottom: 0;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .chart-grid {
