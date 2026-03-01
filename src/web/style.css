@@ -640,6 +640,72 @@ body {
     font-style: italic;
 }
 
+/* Legal/statutory text formatting */
+.legal-text {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--text);
+    margin: 0.8rem 0;
+    padding-left: 2rem;
+    text-indent: -0.5rem;
+}
+
+.legal-text .legal-section-num {
+    font-weight: 700;
+    color: var(--accent-dark);
+}
+
+.legal-text .legal-subsection {
+    display: block;
+    padding-left: 1.5rem;
+    margin-top: 0.4rem;
+}
+
+.legal-text .legal-subparagraph {
+    display: block;
+    padding-left: 3rem;
+    margin-top: 0.3rem;
+}
+
+.legal-amendment {
+    background: #fefce8;
+    border: 1px solid #f0c040;
+    border-radius: var(--radius);
+    padding: 0.8rem 1.2rem;
+    margin: 1rem 0;
+    font-size: 0.82rem;
+}
+
+.legal-amendment-label {
+    font-weight: 700;
+    color: #7d6608;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.3rem;
+}
+
+.legal-struck {
+    text-decoration: line-through;
+    color: var(--red);
+    opacity: 0.7;
+}
+
+.legal-inserted {
+    color: var(--green);
+    font-weight: 600;
+}
+
+.legal-cite {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 0.5rem;
+    display: block;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .chart-grid {

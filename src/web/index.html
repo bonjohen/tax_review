@@ -592,6 +592,381 @@ unless otherwise noted.</p>
         </div>
     </div>
 
+    <!-- How Tax Law Is Changed (collapsible) -->
+    <div class="section">
+        <div class="analysis-card">
+            <div class="analysis-header" id="lawprocess-header">
+                <div>
+                    <h2>How Tax Law Is Changed</h2>
+                    <span class="analysis-subtitle">The legislative process for federal tax reform</span>
+                </div>
+                <span class="analysis-toggle" id="lawprocess-toggle">Expand</span>
+            </div>
+            <div class="analysis-body" id="lawprocess-body">
+
+                <h2 class="analysis-section-title">
+                    <span class="section-number">I</span>
+                    Constitutional Foundation
+                </h2>
+                <p>All federal tax legislation must originate in the House of Representatives. Article&nbsp;I, Section&nbsp;7 of the Constitution provides:</p>
+                <div class="pullquote">&ldquo;All Bills for raising Revenue shall originate in the House of Representatives; but the Senate may propose or concur with Amendments as on other Bills.&rdquo;</div>
+                <p>This &ldquo;Origination Clause&rdquo; ensures that the chamber most directly accountable to voters&mdash;with its two-year election cycle&mdash;initiates any changes to the tax code. In practice, the Senate routinely amends House-passed revenue bills extensively, but the constitutional starting point remains the House.</p>
+
+                <h2 class="analysis-section-title">
+                    <span class="section-number">II</span>
+                    Committee Process
+                </h2>
+                <p>Tax bills are drafted and refined in committee before reaching the floor:</p>
+                <ul>
+                    <li><strong>House Ways and Means Committee</strong> &mdash; The primary tax-writing committee in the House. Staff draft the bill in consultation with the Joint Committee on Taxation (JCT), which provides revenue estimates. The committee holds hearings with expert witnesses, then conducts a &ldquo;markup&rdquo; session where members debate and amend specific provisions. The bill is reported to the full House with a committee report explaining each provision.</li>
+                    <li><strong>House Floor Vote</strong> &mdash; The Rules Committee sets debate parameters. The House votes on amendments (if allowed) and final passage. A simple majority (218 of 435) is required.</li>
+                </ul>
+
+                <h2 class="analysis-section-title">
+                    <span class="section-number">III</span>
+                    Senate Consideration
+                </h2>
+                <p>Once the House passes a revenue bill, the Senate has two paths:</p>
+                <ul>
+                    <li><strong>Regular order</strong> &mdash; The Senate Finance Committee holds its own hearings and markup, often producing a substantially different bill. Floor debate is subject to the filibuster, requiring 60 votes for cloture.</li>
+                    <li><strong>Budget reconciliation</strong> &mdash; If the tax changes are included in a budget resolution, the bill can pass the Senate with a simple majority (51 votes), bypassing the filibuster. Most major tax legislation since 1981 has used reconciliation, including the Tax Reform Act of 1986, the 2001/2003 Bush tax cuts, and the Tax Cuts and Jobs Act of 2017.</li>
+                </ul>
+                <p>The reconciliation path is subject to the &ldquo;Byrd Rule,&rdquo; which prohibits provisions that increase the deficit beyond the budget window (typically 10 years) or that are &ldquo;merely incidental&rdquo; to the budget. This rule is why many tax provisions include sunset dates.</p>
+
+                <h2 class="analysis-section-title">
+                    <span class="section-number">IV</span>
+                    Conference &amp; Presidential Signature
+                </h2>
+                <p>When the House and Senate pass different versions of a tax bill, a conference committee of members from both chambers negotiates a unified text. Both chambers must then approve the conference report without further amendment. The enrolled bill is presented to the President, who may sign it into law or veto it.</p>
+
+                <h2 class="analysis-section-title">
+                    <span class="section-number">V</span>
+                    Effective Dates &amp; Transition Rules
+                </h2>
+                <p>Tax legislation almost always specifies an effective date&mdash;the date from which new rules apply. Common approaches include:</p>
+                <ul>
+                    <li><strong>Prospective application</strong> &mdash; Changes apply only to transactions occurring after the effective date.</li>
+                    <li><strong>Grandfathering</strong> &mdash; Existing positions or holdings are exempt from new rules. For example, assets already held on the date of enactment might retain the prior 1-year holding-period threshold.</li>
+                    <li><strong>Phase-in periods</strong> &mdash; New rates or thresholds are implemented gradually over several years.</li>
+                </ul>
+                <p>The reform modeled in this dashboard assumes prospective application with grandfathering: assets held on the date of enactment retain the current 1-year threshold for long-term treatment, while newly acquired assets face the 5-year threshold.</p>
+
+                <h2 class="analysis-section-title">
+                    <span class="section-number">VI</span>
+                    Historical Precedent
+                </h2>
+                <p>Congress has previously adjusted holding-period requirements for capital gains treatment. The Tax Reform Act of 1984 reduced the long-term holding period from &ldquo;more than 1 year&rdquo; to &ldquo;more than 6 months,&rdquo; and the Tax Reform Act of 1986 restored it to more than 1 year. More recently, &sect;1061, enacted in 2017, imposes a 3-year holding period on &ldquo;applicable partnership interests&rdquo; (carried interest) as a condition for long-term capital gains treatment&mdash;demonstrating that Congress can and does differentiate holding periods for specific asset categories.</p>
+
+                <div class="footnote">
+                    <p>U.S. Const. art. I, &sect;&nbsp;7, cl. 1. Congressional Research Service, &ldquo;The Budget Reconciliation Process&rdquo; (R40480). Joint Committee on Taxation, &ldquo;Overview of the Federal Tax System&rdquo; (JCX-18-23).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Law: Capital Gains Taxation (collapsible) -->
+    <div class="section">
+        <div class="analysis-card">
+            <div class="analysis-header" id="currentlaw-header">
+                <div>
+                    <h2>Current Law: Capital Gains Taxation</h2>
+                    <span class="analysis-subtitle">IRC statutory text with reform annotations</span>
+                </div>
+                <span class="analysis-toggle" id="currentlaw-toggle">Expand</span>
+            </div>
+            <div class="analysis-body" id="currentlaw-body">
+
+                <p>The following sections of the Internal Revenue Code govern the taxation of capital gains. Annotation boxes highlight the specific language that the proposed reform would modify.</p>
+
+                <!-- B.1: IRC §1222 -->
+                <h2 class="analysis-section-title">
+                    <span class="section-number">B.1</span>
+                    IRC &sect;1222 &mdash; Definitions of Capital Gains and Losses
+                </h2>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(1) Short-term capital gain.</span>
+                    <span class="legal-subsection">The term &ldquo;short-term capital gain&rdquo; means gain from the sale or exchange of a capital asset held for <strong>not more than 1 year</strong>, if and to the extent such gain is taken into account in computing gross income.</span>
+                </div>
+                <div class="legal-amendment">
+                    <div class="legal-amendment-label">Reform Impact</div>
+                    The threshold &ldquo;not more than 1 year&rdquo; would become &ldquo;not more than 5 years.&rdquo; Gains on assets held 1&ndash;5 years, currently treated as long-term, would be reclassified as short-term and taxed as ordinary income.
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(2) Short-term capital loss.</span>
+                    <span class="legal-subsection">The term &ldquo;short-term capital loss&rdquo; means loss from the sale or exchange of a capital asset held for <strong>not more than 1 year</strong>, if and to the extent such loss is taken into account in computing taxable income.</span>
+                </div>
+                <div class="legal-amendment">
+                    <div class="legal-amendment-label">Reform Impact</div>
+                    The threshold becomes &ldquo;not more than 5 years.&rdquo; Losses on assets held 1&ndash;5 years become short-term losses, which under the reform cannot offset long-term capital gains&mdash;they become &ldquo;stranded.&rdquo;
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(3) Long-term capital gain.</span>
+                    <span class="legal-subsection">The term &ldquo;long-term capital gain&rdquo; means gain from the sale or exchange of a capital asset held for <strong>more than 1 year</strong>, if and to the extent such gain is taken into account in computing gross income.</span>
+                </div>
+                <div class="legal-amendment">
+                    <div class="legal-amendment-label">Reform Impact</div>
+                    The threshold &ldquo;more than 1 year&rdquo; would become &ldquo;more than 5 years.&rdquo; Only assets held longer than 5 years would qualify for preferential long-term capital gains rates.
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(4) Long-term capital loss.</span>
+                    <span class="legal-subsection">The term &ldquo;long-term capital loss&rdquo; means loss from the sale or exchange of a capital asset held for <strong>more than 1 year</strong>, if and to the extent such loss is taken into account in computing taxable income.</span>
+                </div>
+                <div class="legal-amendment">
+                    <div class="legal-amendment-label">Reform Impact</div>
+                    The threshold becomes &ldquo;more than 5 years.&rdquo; Only losses on assets held more than 5 years qualify as long-term capital losses.
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(5) Net short-term capital gain.</span>
+                    <span class="legal-subsection">The term &ldquo;net short-term capital gain&rdquo; means the excess of short-term capital gains for the taxable year over the short-term capital losses for such year.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(6) Net short-term capital loss.</span>
+                    <span class="legal-subsection">The term &ldquo;net short-term capital loss&rdquo; means the excess of short-term capital losses for the taxable year over the short-term capital gains for such year.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(7) Net long-term capital gain.</span>
+                    <span class="legal-subsection">The term &ldquo;net long-term capital gain&rdquo; means the excess of long-term capital gains for the taxable year over the long-term capital losses for such year.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(8) Net long-term capital loss.</span>
+                    <span class="legal-subsection">The term &ldquo;net long-term capital loss&rdquo; means the excess of long-term capital losses for the taxable year over the long-term capital gains for such year.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(9) Net capital gain.</span>
+                    <span class="legal-subsection">The term &ldquo;net capital gain&rdquo; means the excess of the net long-term capital gain for the taxable year over the net short-term capital loss for such year.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(10) Net capital loss.</span>
+                    <span class="legal-subsection">The term &ldquo;net capital loss&rdquo; means the excess of the losses from sales or exchanges of capital assets over the sum allowed under section 1211. For purposes of determining losses under the preceding sentence, amounts which are short-term capital losses under section 1212 shall be excluded.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(11) Net capital gain.</span>
+                    <span class="legal-subsection">For purposes of section 1(h), the term &ldquo;net capital gain&rdquo; means net capital gain (determined without regard to this paragraph) reduced (but not below zero) by the sum of&mdash;</span>
+                    <span class="legal-subparagraph">(A) unrecaptured section 1250 gain, and</span>
+                    <span class="legal-subparagraph">(B) 28-percent rate gain.</span>
+                </div>
+
+                <span class="legal-cite">26 U.S.C. &sect;1222 &mdash; via Cornell Law Institute (law.cornell.edu/uscode/text/26/section-1222)</span>
+
+                <!-- B.2: IRC §1211 -->
+                <h2 class="analysis-section-title">
+                    <span class="section-number">B.2</span>
+                    IRC &sect;1211 &mdash; Limitation on Capital Losses
+                </h2>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1211(a) Corporations.</span>
+                    <span class="legal-subsection">In the case of a corporation, losses from sales or exchanges of capital assets shall be allowed only to the extent of gains from such sales or exchanges.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1211(b) Other taxpayers.</span>
+                    <span class="legal-subsection">In the case of a taxpayer other than a corporation, losses from sales or exchanges of capital assets shall be allowed only to the extent of the gains from such sales or exchanges, plus (if such losses exceed such gains) the lower of&mdash;</span>
+                    <span class="legal-subparagraph">(1) $3,000 ($1,500 in the case of a married individual filing a separate return), or</span>
+                    <span class="legal-subparagraph">(2) the excess of such losses over such gains.</span>
+                </div>
+                <div class="legal-amendment">
+                    <div class="legal-amendment-label">Reform Impact</div>
+                    Under the reform, short-term capital losses (assets held &le;5 years) cannot offset long-term capital gains. These losses become &ldquo;stranded&rdquo;&mdash;limited to offsetting other short-term gains or the $3,000 annual deduction against ordinary income. This is the primary revenue driver of the reform: high-income taxpayers currently use short-term losses to shelter long-term gains, and severing that offset generates substantial additional revenue.
+                </div>
+
+                <span class="legal-cite">26 U.S.C. &sect;1211 &mdash; via Cornell Law Institute (law.cornell.edu/uscode/text/26/section-1211)</span>
+
+                <!-- B.3: IRC §1223 -->
+                <h2 class="analysis-section-title">
+                    <span class="section-number">B.3</span>
+                    IRC &sect;1223 &mdash; Holding Period of Property
+                </h2>
+
+                <p>Section 1223 provides rules for determining how long a taxpayer has held a capital asset, including &ldquo;tacking&rdquo; rules that allow the holding period of one asset to carry over to a replacement asset. Key paragraphs:</p>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1223(1)</span>
+                    <span class="legal-subsection">In determining the period for which the taxpayer has held property received in an exchange, there shall be included the period for which he held the property exchanged if, under the provisions of section 1031, the property received has, for the purpose of determining gain or loss from a sale or exchange, the same basis in whole or in part in his hands as the property exchanged.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1223(2)</span>
+                    <span class="legal-subsection">In determining the period for which the taxpayer has held property however acquired there shall be included the period for which such property was held by any other person, if under the provisions of this subtitle such property has, for the purpose of determining gain or loss from a sale or exchange, the same basis in whole or in part in his hands as it would have in the hands of such other person.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1223(3)</span>
+                    <span class="legal-subsection">In determining the period for which the taxpayer has held stock or securities the acquisition of which (or the contract or option to acquire which) resulted in the nondeductibility (under section 1091 relating to wash sales) of the loss from the sale or other disposition of substantially identical stock or securities, there shall be included the period for which he held the stock or securities the loss from the sale or other disposition of which was not deductible.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1223(9)</span>
+                    <span class="legal-subsection">In the case of a person acquiring property from a decedent or to whom property passed from a decedent (within the meaning of section 1014(b)), if&mdash;</span>
+                    <span class="legal-subparagraph">(A) the basis of such property in the hands of such person is determined under section 1014, and</span>
+                    <span class="legal-subparagraph">(B) such property is sold or otherwise disposed of by such person within 1 year after the decedent&rsquo;s date of death,</span>
+                    <span class="legal-subsection">then such person shall be considered to have held such property for more than 1 year.</span>
+                </div>
+                <div class="legal-amendment">
+                    <div class="legal-amendment-label">Reform Impact</div>
+                    Paragraph (9) creates a deemed holding period for inherited property. Under the reform, the &ldquo;1 year&rdquo; references would become &ldquo;5 years,&rdquo; so inherited property sold within 1 year would be deemed held for more than 5 years. The grandfathering provision ensures inherited property from decedents dying before enactment retains the current treatment.
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1223(10)</span>
+                    <span class="legal-subsection">If&mdash;</span>
+                    <span class="legal-subparagraph">(A) property is acquired by any person in a transfer to which section 1040 applies,</span>
+                    <span class="legal-subparagraph">(B) such property is sold or otherwise disposed of by such person within 1 year after the decedent&rsquo;s date of death, and</span>
+                    <span class="legal-subparagraph">(C) such sale or disposition is to a person who is a qualified heir (as defined in section 2032A(e)(1)) with respect to the decedent,</span>
+                    <span class="legal-subsection">then the person making such sale or other disposition shall be considered to have held such property for more than 1 year.</span>
+                </div>
+
+                <span class="legal-cite">26 U.S.C. &sect;1223 &mdash; via Cornell Law Institute (law.cornell.edu/uscode/text/26/section-1223)</span>
+
+                <!-- B.4: IRC §1(h) -->
+                <h2 class="analysis-section-title">
+                    <span class="section-number">B.4</span>
+                    IRC &sect;1(h) &mdash; Preferential Capital Gains Rates
+                </h2>
+
+                <p>Section 1(h) is the operative provision that taxes &ldquo;net capital gain&rdquo; (as defined in &sect;1222(11)) at preferential rates rather than the ordinary income rates. The rate tiers are:</p>
+
+                <ul>
+                    <li><strong>0%</strong> &mdash; for net capital gain that would otherwise be taxed at the 10% or 12% ordinary rate</li>
+                    <li><strong>15%</strong> &mdash; for net capital gain that would otherwise be taxed at the 22%, 24%, 32%, or 35% ordinary rate</li>
+                    <li><strong>20%</strong> &mdash; for net capital gain that would otherwise be taxed at the 37% ordinary rate</li>
+                    <li><strong>25%</strong> &mdash; for unrecaptured section 1250 gain (depreciation recapture on real property)</li>
+                    <li><strong>28%</strong> &mdash; for collectibles gain and certain small business stock gain (&sect;1202)</li>
+                </ul>
+
+                <div class="legal-amendment">
+                    <div class="legal-amendment-label">Key Mechanism</div>
+                    Section 1(h) does not independently define &ldquo;long-term&rdquo; or &ldquo;short-term.&rdquo; It relies on the definitions in &sect;1222, which in turn rely on the holding-period rules in &sect;1223. By changing the threshold in &sect;1222 from &ldquo;more than 1 year&rdquo; to &ldquo;more than 5 years,&rdquo; the preferential rates in &sect;1(h) automatically become available only for assets held more than 5 years. No amendment to &sect;1(h) itself is required.
+                </div>
+
+                <p>This cascading design is a feature of the Internal Revenue Code: definitions flow through cross-references, so a targeted change to &sect;1222 has broad downstream effects without needing to amend dozens of other provisions.</p>
+
+                <span class="legal-cite">26 U.S.C. &sect;1(h) &mdash; via Cornell Law Institute (law.cornell.edu/uscode/text/26/section-1)</span>
+
+                <div class="footnote">
+                    <p>All statutory text sourced from Cornell Law Institute, Legal Information Institute (law.cornell.edu/uscode/text/26/). Annotations reflect the reform as modeled in this dashboard and do not constitute legal advice.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proposed Statutory Language (collapsible) -->
+    <div class="section">
+        <div class="analysis-card">
+            <div class="analysis-header" id="proposed-header">
+                <div>
+                    <h2>Proposed Statutory Language</h2>
+                    <span class="analysis-subtitle">Redline amendments to the Internal Revenue Code</span>
+                </div>
+                <span class="analysis-toggle" id="proposed-toggle">Expand</span>
+            </div>
+            <div class="analysis-body" id="proposed-body">
+
+                <p>The following shows the proposed amendments in redline format. <span class="legal-struck">Struck text</span> indicates language to be deleted; <span class="legal-inserted">bold green text</span> indicates language to be inserted.</p>
+
+                <!-- C.1: Amendments to §1222 -->
+                <h2 class="analysis-section-title">
+                    <span class="section-number">C.1</span>
+                    Amendments to &sect;1222 &mdash; Definitions
+                </h2>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(1) Short-term capital gain.</span>
+                    <span class="legal-subsection">The term &ldquo;short-term capital gain&rdquo; means gain from the sale or exchange of a capital asset held for <span class="legal-struck">not more than 1 year</span> <span class="legal-inserted">not more than 5 years</span>, if and to the extent such gain is taken into account in computing gross income.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(2) Short-term capital loss.</span>
+                    <span class="legal-subsection">The term &ldquo;short-term capital loss&rdquo; means loss from the sale or exchange of a capital asset held for <span class="legal-struck">not more than 1 year</span> <span class="legal-inserted">not more than 5 years</span>, if and to the extent such loss is taken into account in computing taxable income.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(3) Long-term capital gain.</span>
+                    <span class="legal-subsection">The term &ldquo;long-term capital gain&rdquo; means gain from the sale or exchange of a capital asset held for <span class="legal-struck">more than 1 year</span> <span class="legal-inserted">more than 5 years</span>, if and to the extent such gain is taken into account in computing gross income.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(4) Long-term capital loss.</span>
+                    <span class="legal-subsection">The term &ldquo;long-term capital loss&rdquo; means loss from the sale or exchange of a capital asset held for <span class="legal-struck">more than 1 year</span> <span class="legal-inserted">more than 5 years</span>, if and to the extent such loss is taken into account in computing taxable income.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1222(12) Limitation on short-term capital losses.</span>
+                    <span class="legal-subsection"><span class="legal-inserted">For purposes of this subtitle, short-term capital losses (as defined in paragraph (2)) shall not be allowed to offset net long-term capital gain (as defined in paragraph (7)). Such losses shall be allowed only to the extent of&mdash;</span></span>
+                    <span class="legal-subparagraph"><span class="legal-inserted">(A) short-term capital gains for the taxable year, plus</span></span>
+                    <span class="legal-subparagraph"><span class="legal-inserted">(B) the amount allowed under section 1211(b) as a deduction against ordinary income.</span></span>
+                </div>
+
+                <!-- C.2: Amendments to §1211 -->
+                <h2 class="analysis-section-title">
+                    <span class="section-number">C.2</span>
+                    Amendments to &sect;1211 &mdash; Limitation on Capital Losses
+                </h2>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1211(b) Other taxpayers.</span>
+                    <span class="legal-subsection">In the case of a taxpayer other than a corporation, losses from sales or exchanges of capital assets shall be allowed only to the extent of the gains from such sales or exchanges, plus (if such losses exceed such gains) the lower of&mdash;</span>
+                    <span class="legal-subparagraph">(1) $3,000 ($1,500 in the case of a married individual filing a separate return), or</span>
+                    <span class="legal-subparagraph">(2) the excess of such losses over such gains.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num"><span class="legal-inserted">&sect;1211(c) Cross-reference to short-term loss limitation.</span></span>
+                    <span class="legal-subsection"><span class="legal-inserted">For limitation on the offset of short-term capital losses against long-term capital gains, see section 1222(12).</span></span>
+                </div>
+
+                <!-- C.3: Amendments to §1223 -->
+                <h2 class="analysis-section-title">
+                    <span class="section-number">C.3</span>
+                    Amendments to &sect;1223 &mdash; Holding Period
+                </h2>
+
+                <div class="legal-text">
+                    <span class="legal-section-num">&sect;1223(9)</span>
+                    <span class="legal-subsection">In the case of a person acquiring property from a decedent or to whom property passed from a decedent (within the meaning of section 1014(b)), if&mdash;</span>
+                    <span class="legal-subparagraph">(A) the basis of such property in the hands of such person is determined under section 1014, and</span>
+                    <span class="legal-subparagraph">(B) such property is sold or otherwise disposed of by such person within <span class="legal-struck">1 year</span> <span class="legal-inserted">5 years</span> after the decedent&rsquo;s date of death,</span>
+                    <span class="legal-subsection">then such person shall be considered to have held such property for more than <span class="legal-struck">1 year</span> <span class="legal-inserted">5 years</span>.</span>
+                </div>
+
+                <div class="legal-text">
+                    <span class="legal-section-num"><span class="legal-inserted">&sect;1223(16) Grandfathering of assets held on date of enactment.</span></span>
+                    <span class="legal-subsection"><span class="legal-inserted">In the case of any capital asset held by the taxpayer on the date of the enactment of this paragraph&mdash;</span></span>
+                    <span class="legal-subparagraph"><span class="legal-inserted">(A) the amendments made by sections 2(a) through 2(d) of the Capital Gains Holding Period Reform Act shall not apply to such asset, and</span></span>
+                    <span class="legal-subparagraph"><span class="legal-inserted">(B) such asset shall be treated under the provisions of sections 1222 and 1223 as in effect before the date of the enactment of this paragraph.</span></span>
+                </div>
+
+                <!-- C.4: Effective Date -->
+                <h2 class="analysis-section-title">
+                    <span class="section-number">C.4</span>
+                    Effective Date
+                </h2>
+
+                <div class="legal-text">
+                    <span class="legal-section-num"><span class="legal-inserted">SEC. 3. EFFECTIVE DATE.</span></span>
+                    <span class="legal-subsection"><span class="legal-inserted">(a) In general. &mdash; Except as provided in subsection (b), the amendments made by this Act shall apply to sales and exchanges of capital assets after the date of the enactment of this Act.</span></span>
+                    <span class="legal-subsection"><span class="legal-inserted">(b) Grandfathering. &mdash; In the case of any capital asset held by the taxpayer on the date of the enactment of this Act, the amendments made by this Act shall not apply, and such asset shall be treated under the provisions of sections 1222 and 1223 of the Internal Revenue Code of 1986 as in effect before the date of the enactment of this Act.</span></span>
+                    <span class="legal-subsection"><span class="legal-inserted">(c) Identification. &mdash; The Secretary shall prescribe such regulations as may be necessary to require adequate identification of assets subject to the grandfathering rule under subsection (b), including rules for determining the holding period of fungible assets.</span></span>
+                </div>
+
+                <div class="footnote">
+                    <p>This proposed statutory language is illustrative and reflects the reform as modeled in this dashboard. Actual legislative text would undergo drafting by the Office of the Legislative Counsel and review by the Joint Committee on Taxation. It does not constitute legal advice or a formal legislative proposal.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Model Assumptions (collapsible, at bottom) -->
     <div class="section">
         <div class="analysis-card">
@@ -2056,6 +2431,42 @@ fetch('data/dashboard.json')
             const hdr = document.getElementById('overview-header');
             const bdy = document.getElementById('overview-body');
             const tgl = document.getElementById('overview-toggle');
+            hdr.addEventListener('click', () => {
+                const showing = bdy.classList.contains('visible');
+                bdy.classList.toggle('visible', !showing);
+                tgl.textContent = showing ? 'Expand' : 'Collapse';
+            });
+        })();
+
+        // Toggle: How Tax Law Is Changed
+        (function() {
+            const hdr = document.getElementById('lawprocess-header');
+            const bdy = document.getElementById('lawprocess-body');
+            const tgl = document.getElementById('lawprocess-toggle');
+            hdr.addEventListener('click', () => {
+                const showing = bdy.classList.contains('visible');
+                bdy.classList.toggle('visible', !showing);
+                tgl.textContent = showing ? 'Expand' : 'Collapse';
+            });
+        })();
+
+        // Toggle: Current Law
+        (function() {
+            const hdr = document.getElementById('currentlaw-header');
+            const bdy = document.getElementById('currentlaw-body');
+            const tgl = document.getElementById('currentlaw-toggle');
+            hdr.addEventListener('click', () => {
+                const showing = bdy.classList.contains('visible');
+                bdy.classList.toggle('visible', !showing);
+                tgl.textContent = showing ? 'Expand' : 'Collapse';
+            });
+        })();
+
+        // Toggle: Proposed Statutory Language
+        (function() {
+            const hdr = document.getElementById('proposed-header');
+            const bdy = document.getElementById('proposed-body');
+            const tgl = document.getElementById('proposed-toggle');
             hdr.addEventListener('click', () => {
                 const showing = bdy.classList.contains('visible');
                 bdy.classList.toggle('visible', !showing);
