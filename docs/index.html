@@ -92,20 +92,7 @@
                     <h2>Read the Analysis</h2>
                     <span class="analysis-subtitle">The $1.1 Trillion Question: Why Capital Gains Tax Reform Can't Wait</span>
                 </div>
-                <div class="analysis-header-right">
-                    <div class="year-select-wrap">
-                        <label for="year-select">Tax Year:</label>
-                        <select id="year-select" onclick="event.stopPropagation()">
-                            <option value="2018">2018</option>
-                            <option value="2019">2019</option>
-                            <option value="2020">2020</option>
-                            <option value="2021" selected>2021</option>
-                            <option value="2022">2022</option>
-                            <option value="2023">2023 (Forecast)</option>
-                        </select>
-                    </div>
-                    <span class="analysis-toggle" id="analysis-toggle">Expand</span>
-                </div>
+                <span class="analysis-toggle" id="analysis-toggle">Expand</span>
             </div>
             <div class="analysis-body" id="analysis-body">
 
@@ -494,7 +481,20 @@ unless otherwise noted.</p>
         <div class="analysis-card section-group">
             <div class="analysis-header" id="group-charts-header">
                 <div><h2>Interactive Charts</h2><span class="analysis-subtitle">Filing status, concentration, income composition, brackets, and trends</span></div>
-                <span class="analysis-toggle" id="group-charts-toggle">Expand</span>
+                <div class="analysis-header-right">
+                    <div class="year-select-wrap">
+                        <label for="year-select">Tax Year:</label>
+                        <select id="year-select" onclick="event.stopPropagation()">
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021" selected>2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023 (Forecast)</option>
+                        </select>
+                    </div>
+                    <span class="analysis-toggle" id="group-charts-toggle">Expand</span>
+                </div>
             </div>
             <div class="section-group-body" id="group-charts-body">
 
@@ -2483,7 +2483,8 @@ fetch('data/dashboard.json')
             const hdr = document.getElementById('group-' + name + '-header');
             const bdy = document.getElementById('group-' + name + '-body');
             const tgl = document.getElementById('group-' + name + '-toggle');
-            hdr.addEventListener('click', () => {
+            hdr.addEventListener('click', (e) => {
+                if (e.target.closest('.year-select-wrap')) return;
                 const showing = bdy.classList.contains('visible');
                 bdy.classList.toggle('visible', !showing);
                 tgl.textContent = showing ? 'Expand' : 'Collapse';
