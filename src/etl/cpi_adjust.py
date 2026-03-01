@@ -9,6 +9,8 @@ import pandas as pd
 
 # Published final CPI-U annual averages (will not change for these years)
 CPI_U_ANNUAL = {
+    2018: 251.107,
+    2019: 255.657,
     2020: 258.811,
     2021: 270.970,
     2022: 292.655,

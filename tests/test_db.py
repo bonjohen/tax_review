@@ -90,7 +90,7 @@ class TestReferenceTables:
     def test_load_cpi_factors(self, db):
         load_cpi_factors(db)
         count = db.execute("SELECT COUNT(*) AS n FROM cpi_factors").fetchone()["n"]
-        assert count == 3
+        assert count == 5
 
     def test_cpi_2022_factor_is_unity(self, db):
         load_cpi_factors(db)

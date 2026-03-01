@@ -24,12 +24,14 @@ _TABLE_SUFFIXES = {
 
 # Revenue Procedure PDFs for statutory tax parameters
 _REV_PROC_FILES = {
+    2018: "rp-18-22.pdf",
+    2019: "rp-18-57.pdf",
     2020: "rp-19-44.pdf",
     2021: "rp-20-45.pdf",
     2022: "rp-21-45.pdf",
 }
 
-YEARS = [2020, 2021, 2022]
+YEARS = [2018, 2019, 2020, 2021, 2022]
 
 
 def get_excel_files(year: int) -> dict[str, dict]:

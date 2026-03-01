@@ -1,0 +1,48 @@
+{
+  "year": 2021,
+  "source": "rp-20-45.pdf",
+  "ordinary_income_brackets": {
+    "single": [
+      {"rate": 0.10, "threshold": 0,       "upper": 9950},
+      {"rate": 0.12, "threshold": 9951,    "upper": 40525},
+      {"rate": 0.22, "threshold": 40526,   "upper": 86375},
+      {"rate": 0.24, "threshold": 86376,   "upper": 164925},
+      {"rate": 0.32, "threshold": 164926,  "upper": 209425},
+      {"rate": 0.35, "threshold": 209426,  "upper": 523600},
+      {"rate": 0.37, "threshold": 523601,  "upper": null}
+    ],
+    "married_filing_jointly": [
+      {"rate": 0.10, "threshold": 0,       "upper": 19900},
+      {"rate": 0.12, "threshold": 19901,   "upper": 81050},
+      {"rate": 0.22, "threshold": 81051,   "upper": 172750},
+      {"rate": 0.24, "threshold": 172751,  "upper": 329850},
+      {"rate": 0.32, "threshold": 329851,  "upper": 418850},
+      {"rate": 0.35, "threshold": 418851,  "upper": 628300},
+      {"rate": 0.37, "threshold": 628301,  "upper": null}
+    ],
+    "married_filing_separately": [
+      {"rate": 0.10, "threshold": 0,       "upper": 9950},
+      {"rate": 0.12, "threshold": 9951,    "upper": 40525},
+      {"rate": 0.22, "threshold": 40526,   "upper": 86375},
+      {"rate": 0.24, "threshold": 86376,   "upper": 164925},
+      {"rate": 0.32, "threshold": 164926,  "upper": 209425},
+      {"rate": 0.35, "threshold": 209426,  "upper": 314150},
+      {"rate": 0.37, "threshold": 314151,  "upper": null}
+    ],
+    "head_of_household": [
+      {"rate": 0.10, "threshold": 0,       "upper": 14200},
+      {"rate": 0.12, "threshold": 14201,   "upper": 54200},
+      {"rate": 0.22, "threshold": 54201,   "upper": 86350},
+      {"rate": 0.24, "threshold": 86351,   "upper": 164900},
+      {"rate": 0.32, "threshold": 164901,  "upper": 209400},
+      {"rate": 0.35, "threshold": 209401,  "upper": 523600},
+      {"rate": 0.37, "threshold": 523601,  "upper": null}
+    ]
+  },
+  "standard_deduction": {
+    "single": 12550,
+    "married_filing_jointly": 25100,
+    "married_filing_separately": 12550,
+    "head_of_household": 18800
+  }
+}

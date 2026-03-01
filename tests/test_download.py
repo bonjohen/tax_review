@@ -32,6 +32,6 @@ class TestUrlRegistry:
             assert "irs-drop" in pdf["url"]
 
     def test_all_downloads_count(self):
-        # 11 Excel files * 3 years + 3 PDFs = 36
+        # 11 Excel files * 5 years + 5 PDFs = 60
         downloads = get_all_downloads()
-        assert len(downloads) == 36
+        assert len(downloads) == 60

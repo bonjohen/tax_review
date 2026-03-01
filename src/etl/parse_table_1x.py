@@ -207,10 +207,22 @@ def parse_table_33(filepath: Path, year: int) -> pd.DataFrame:
     """Parse Table 3.3 — Tax Liability, Tax Credits, and Tax Payments."""
     wb = xlrd.open_workbook(str(filepath))
     sh = wb.sheet_by_index(0)
+
+    # Find "Total income tax minus refundable credits" column dynamically —
+    # its position varies by year (2018: 105, 2019: 101, 2020: 119, etc.)
+    income_tax_col = None
+    for c in range(sh.ncols):
+        val = str(sh.cell_value(2, c)).lower()
+        if "total income tax" in val and "minus" in val:
+            income_tax_col = c + 1  # Amount column is one to the right
+            break
+    if income_tax_col is None:
+        raise ValueError(f"Could not find 'Total income tax minus refundable credits' column in {filepath.name}")
+
     col_map = {
         "return_count":       (1, False),
         "total_credits":      (3, True),
-        "total_income_tax":   (119, True),
+        "total_income_tax":   (income_tax_col, True),
     }
     rows = _parse_rows(sh, data_start=9, col_map=col_map, year=year,
                        filing_status="all")

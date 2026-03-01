@@ -1,0 +1,32 @@
+{
+  "holding_period_lt_under_5yr": {
+    "description": "Fraction of net LT gains held 1-5 years (vs 5+ years). Higher-income filers tend to hold longer.",
+    "sources": [
+      "IRS SOI Capital Assets Study (2007-2012)",
+      "JCT estimates of holding period distributions"
+    ],
+    "note": "Values are calibration placeholders. Reform targets gains held <5 years for ordinary rate treatment.",
+    "by_agi_group": [
+      {"agi_bin_ids": [1, 2, 3, 4, 5, 6, 7], "fraction": 0.55},
+      {"agi_bin_ids": [8, 9],                  "fraction": 0.50},
+      {"agi_bin_ids": [10, 11],                "fraction": 0.45},
+      {"agi_bin_ids": [12],                    "fraction": 0.40},
+      {"agi_bin_ids": [13],                    "fraction": 0.35},
+      {"agi_bin_ids": [14],                    "fraction": 0.30},
+      {"agi_bin_ids": [15, 16, 17],            "fraction": 0.25},
+      {"agi_bin_ids": [18, 19],                "fraction": 0.20}
+    ]
+  },
+  "gross_loss_ratio": {
+    "description": "Fraction of gross LT gains offset by harvested losses. If 0.85, only 15% of gross gains survive as net — the rest are deliberately sold losers used to offset.",
+    "note": "Most investors with meaningful portfolios engage in year-end tax-loss harvesting, selling losers to offset winners. Higher-income filers harvest more aggressively (larger portfolios, better advisors, stronger incentive at higher marginal rates). Under reform, these stranded losses can no longer offset reclassified gains ($3K/yr cap).",
+    "default": 0.85,
+    "by_agi_group": [
+      {"agi_bin_ids": [1, 2, 3, 4, 5, 6, 7],   "ratio": 0.70},
+      {"agi_bin_ids": [8, 9, 10, 11],            "ratio": 0.75},
+      {"agi_bin_ids": [12, 13],                  "ratio": 0.80},
+      {"agi_bin_ids": [14, 15, 16, 17],          "ratio": 0.85},
+      {"agi_bin_ids": [18, 19],                  "ratio": 0.90}
+    ]
+  }
+}

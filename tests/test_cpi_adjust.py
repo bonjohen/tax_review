@@ -21,9 +21,14 @@ class TestAdjustmentFactor:
         assert factor > 1.0
         assert factor < get_adjustment_factor(2020)  # 2021 closer to 2022
 
+    def test_2018_inflates(self):
+        factor = get_adjustment_factor(2018)
+        assert factor > 1.0
+        assert factor > get_adjustment_factor(2019)  # 2018 further from 2022
+
     def test_invalid_year(self):
         with pytest.raises(ValueError):
-            get_adjustment_factor(2019)
+            get_adjustment_factor(2010)
 
 
 class TestAdjustDataframe:

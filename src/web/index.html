@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capital Gains Tax Reform: Revenue Impact Analysis</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header class="dashboard-header">
+    <h1>Capital Gains Tax Reform: Revenue Impact Analysis</h1>
+    <p class="subtitle">Eliminating preferential treatment for gains held under 5 years</p>
+    <div class="year-selector">
+        <button class="year-btn" data-year="2018">2018</button>
+        <button class="year-btn" data-year="2019">2019</button>
+        <button class="year-btn" data-year="2020">2020</button>
+        <button class="year-btn" data-year="2021">2021</button>
+        <button class="year-btn active" data-year="2022">2022</button>
+    </div>
+</header>
+
+<main class="dashboard-body">
+
+    <!-- Assumptions Banner -->
+    <div class="section">
+        <div class="assumptions-card">
+            <div class="assumptions-header">
+                <strong>Model Assumptions (v2)</strong>
+                <span class="assumptions-toggle" id="assumptions-toggle">Show details</span>
+            </div>
+            <div class="assumptions-body" id="assumptions-body" style="display:none;">
+                <div class="assumptions-grid">
+                    <div>
+                        <h4>Holding Period Fractions</h4>
+                        <p class="assumptions-note">Fraction of LT gains held 1&ndash;5 years (remainder held 5+).</p>
+                        <table class="assumptions-table" id="hp-table"></table>
+                    </div>
+                    <div>
+                        <h4>Loss Harvesting Offset</h4>
+                        <p class="assumptions-note">Fraction of gross LT gains offset by harvested losses. At 0.85, only 15% survives as net gains.</p>
+                        <table class="assumptions-table" id="gl-table"></table>
+                    </div>
+                </div>
+                <p class="assumptions-note" style="margin-top:0.75rem;">
+                    Sources: IRS SOI Capital Assets Study (2007&ndash;2012), JCT estimates. Values are calibration placeholders.
+                    Reform uses bracket-based marginal rates weighted by filing status return counts.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 1: Key Metrics -->
+    <div class="section">
+        <div class="metrics-row">
+            <div class="metric-card highlight" id="mc-revenue">
+                <div class="metric-label">Additional Tax Revenue</div>
+                <div class="metric-value" id="m-reform-rev">&mdash;</div>
+                <div class="metric-sub" id="m-reform-sub"></div>
+            </div>
+            <div class="metric-card" id="mc-burden">
+                <div class="metric-label">Paid by $1M+ Filers</div>
+                <div class="metric-value" id="m-top-pct">&mdash;</div>
+                <div class="metric-sub" id="m-top-sub"></div>
+            </div>
+            <div class="metric-card" id="mc-sheltered">
+                <div class="metric-label">Income Currently Sheltered</div>
+                <div class="metric-value" id="m-sheltered">&mdash;</div>
+                <div class="metric-sub" id="m-sheltered-sub"></div>
+            </div>
+            <div class="metric-card" id="mc-per-filer">
+                <div class="metric-label">Avg. Tax per $10M+ Filer</div>
+                <div class="metric-value" id="m-per-filer">&mdash;</div>
+                <div class="metric-sub" id="m-per-filer-sub"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Who Bears the Burden? -->
+    <div class="section">
+        <h2 class="section-title">Who Bears the Burden?</h2>
+        <div class="chart-card">
+            <div class="chart-wrapper chart-wrapper-tall"><canvas id="chart-burden"></canvas></div>
+            <p class="chart-note" id="burden-note"></p>
+        </div>
+    </div>
+
+    <!-- Section 3: Revenue Waterfall -->
+    <div class="section">
+        <h2 class="section-title">Revenue Impact by Income Segment</h2>
+        <div class="chart-card">
+            <div class="chart-wrapper"><canvas id="chart-revenue"></canvas></div>
+            <p class="chart-note">Two revenue components: (1) rate differential on net gains (marginal vs. 15%), (2) stranded losses now taxed at ordinary rates (previously netted away). Only bins with positive revenue shown.</p>
+        </div>
+    </div>
+
+    <!-- Section 3b: Filing Status Breakdown -->
+    <div class="section">
+        <h2 class="section-title">Reform Revenue by Filing Status</h2>
+        <div class="chart-card">
+            <div class="chart-wrapper"><canvas id="chart-filing-status"></canvas></div>
+            <div class="fs-legend" id="fs-legend"></div>
+            <p class="chart-note">Net additional revenue allocated by AGI share within each bin. Only bins with positive revenue shown.</p>
+        </div>
+    </div>
+
+    <!-- Section 4 & 5: Side by side -->
+    <div class="section">
+        <div class="chart-grid">
+            <div>
+                <h2 class="section-title">Capital Gains Concentration</h2>
+                <div class="chart-card">
+                    <div class="chart-wrapper"><canvas id="chart-concentration"></canvas></div>
+                    <p class="chart-note">Cumulative % of LT gains from lowest to highest AGI bin</p>
+                </div>
+            </div>
+            <div>
+                <h2 class="section-title">Year-over-Year Trends</h2>
+                <div class="chart-card">
+                    <div class="chart-wrapper"><canvas id="chart-trends"></canvas></div>
+                    <p class="chart-note">Total LT gains, ST gains, and income tax (2018-2022)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 6: Tax Rate Brackets -->
+    <div class="section">
+        <h2 class="section-title">Tax Generated by Marginal Rate Bracket</h2>
+        <div class="chart-card">
+            <div class="chart-wrapper"><canvas id="chart-brackets"></canvas></div>
+            <p class="chart-note">Ordinary income tax generated at each statutory marginal rate</p>
+        </div>
+    </div>
+
+</main>
+
+<footer class="dashboard-footer">
+    <p><strong>Data source:</strong> IRS Statistics of Income, Publication 1304, Tax Years 2020&ndash;2022</p>
+    <p><strong>Methodology (v2.1):</strong> Under reform, affected gross LT gains become ordinary income.
+        Corresponding losses are stranded by the $3K/year cap (IRC &sect;1211(b)).
+        Revenue = reform tax on gross gains &minus; current-law tax on net gains.
+        Pipeline: (1) cross-category loss netting, (2) gross gain estimation,
+        (3) holding period filter, (4) bracket-based marginal rate, (5) revenue with stranded losses.
+        Static estimate; does not model behavioral responses.</p>
+</footer>
+
+<script>
+// ── Globals ──────────────────────────────────────────────────────────────────
+let DATA = null;
+let selectedYear = 2022;
+const charts = {};
+
+const FS_COLORS = {
+    single:                    { bg: 'rgba(52, 152, 219, 0.7)',  border: 'rgba(52, 152, 219, 1)' },
+    married_filing_jointly:    { bg: 'rgba(39, 174, 96, 0.7)',   border: 'rgba(39, 174, 96, 1)' },
+    married_filing_separately: { bg: 'rgba(230, 126, 34, 0.7)',  border: 'rgba(230, 126, 34, 1)' },
+    head_of_household:         { bg: 'rgba(155, 89, 182, 0.7)',  border: 'rgba(155, 89, 182, 1)' },
+};
+const FS_LABELS = {
+    single: 'Single',
+    married_filing_jointly: 'Married Filing Jointly',
+    married_filing_separately: 'Married Filing Separately',
+    head_of_household: 'Head of Household',
+};
+
+// Color palette for AGI bins (19 bins: light->dark blue gradient)
+function binColors(count, alpha) {
+    const colors = [];
+    for (let i = 0; i < count; i++) {
+        const t = count > 1 ? i / (count - 1) : 0;
+        const r = Math.round(200 - t * 170);
+        const g = Math.round(220 - t * 140);
+        const b = Math.round(255 - t * 80);
+        colors.push(`rgba(${r},${g},${b},${alpha || 1})`);
+    }
+    return colors;
+}
+
+// Short labels for bins
+function shortLabel(label) {
+    return label
+        .replace('No adjusted gross income', 'No AGI')
+        .replace(/\$(\d+),(\d+),(\d+)/g, (_, a, b, c) => '$' + a + '.' + b + 'M')
+        .replace(/\$(\d+),(\d+)/g, (_, a, b) => '$' + a + 'K')
+        .replace(/ under /g, '\u2013')
+        .replace(/ or more/, '+');
+}
+
+function fmtDollars(val) {
+    if (val == null) return '\u2014';
+    const abs = Math.abs(val);
+    if (abs >= 1e12) return '$' + (val / 1e12).toFixed(1) + 'T';
+    if (abs >= 1e9) return '$' + (val / 1e9).toFixed(1) + 'B';
+    if (abs >= 1e6) return '$' + (val / 1e6).toFixed(1) + 'M';
+    if (abs >= 1e3) return '$' + (val / 1e3).toFixed(0) + 'K';
+    return '$' + val.toFixed(0);
+}
+
+function fmtCount(val) {
+    if (val == null) return '\u2014';
+    if (val >= 1e6) return (val / 1e6).toFixed(1) + 'M';
+    if (val >= 1e3) return (val / 1e3).toFixed(0) + 'K';
+    return val.toFixed(0);
+}
+
+function fmtPct(val) {
+    return val.toFixed(1) + '%';
+}
+
+// ── Data helpers ─────────────────────────────────────────────────────────────
+function yearData(arr, year) {
+    return arr.filter(r => r.year === (year || selectedYear));
+}
+
+function summaryFor(year) {
+    return DATA.summary.find(s => s.year === (year || selectedYear));
+}
+
+// ── Assumptions banner ──────────────────────────────────────────────────────
+function renderAssumptions() {
+    if (!DATA.reform_metadata) return;
+    const meta = DATA.reform_metadata;
+
+    // Toggle
+    const toggle = document.getElementById('assumptions-toggle');
+    const body = document.getElementById('assumptions-body');
+    toggle.onclick = () => {
+        const showing = body.style.display !== 'none';
+        body.style.display = showing ? 'none' : 'block';
+        toggle.textContent = showing ? 'Show details' : 'Hide details';
+    };
+
+    // Build bin-ID-to-label lookup from data
+    const binLabels = {};
+    for (const r of DATA.capital_gains_by_bin) {
+        binLabels[r.agi_bin_id] = r.label;
+    }
+    function binRangeLabel(ids) {
+        if (ids.length === 1) return binLabels[ids[0]] || 'Bin ' + ids[0];
+        // For ranges, show "Under $30K" or "$30K-$100K" or "$5M+"
+        const first = binLabels[ids[0]] || '';
+        const last = binLabels[ids[ids.length - 1]] || '';
+        // Extract the upper bound from the last label, or use "or more" indicator
+        if (first.startsWith('No adjusted')) {
+            // First group starts at $0
+            const upperMatch = last.match(/under\s+\$([\d,]+)/);
+            if (upperMatch) return 'Under $' + fmtShortK(upperMatch[1]);
+            return first + ' \u2013 ' + last;
+        }
+        const lowerMatch = first.match(/^\$([\d,]+)/);
+        const upperMatch = last.match(/under\s+\$([\d,]+)/);
+        const lower = lowerMatch ? '$' + fmtShortK(lowerMatch[1]) : first;
+        if (last.includes('or more')) return lower + '+';
+        const upper = upperMatch ? '$' + fmtShortK(upperMatch[1]) : last;
+        return lower + ' \u2013 ' + upper;
+    }
+    function fmtShortK(numStr) {
+        const n = parseInt(numStr.replace(/,/g, ''));
+        if (n >= 10000000) return (n/1000000).toFixed(0) + 'M';
+        if (n >= 1000000) return (n/1000000).toFixed(1).replace('.0','') + 'M';
+        if (n >= 1000) return (n/1000).toFixed(0) + 'K';
+        return numStr;
+    }
+
+    // Holding period table
+    const hpTable = document.getElementById('hp-table');
+    let hpHtml = '<tr><th>AGI Range</th><th>Fraction</th></tr>';
+    for (const g of meta.holding_period_fractions) {
+        hpHtml += `<tr><td>${binRangeLabel(g.agi_bin_ids)}</td><td>${(g.fraction * 100).toFixed(0)}%</td></tr>`;
+    }
+    hpTable.innerHTML = hpHtml;
+
+    // Gross loss table
+    const glTable = document.getElementById('gl-table');
+    let glHtml = '<tr><th>AGI Range</th><th>Ratio</th></tr>';
+    for (const g of meta.gross_loss_ratios) {
+        glHtml += `<tr><td>${binRangeLabel(g.agi_bin_ids)}</td><td>${(g.ratio * 100).toFixed(0)}%</td></tr>`;
+    }
+    glTable.innerHTML = glHtml;
+}
+
+// ── Metrics ──────────────────────────────────────────────────────────────────
+function updateMetrics() {
+    const reform = yearData(DATA.reform_estimate);
+    const cg = yearData(DATA.capital_gains_by_bin);
+
+    // ── Card 1: Additional Tax Revenue ──
+    const netReform = reform.reduce((a, r) => a + r.net_additional_revenue, 0);
+    const rateDiffTotal = reform.reduce((a, r) => a + r.rate_diff_revenue, 0);
+    const strandedTotal = reform.reduce((a, r) => a + r.stranded_loss_revenue, 0);
+    document.getElementById('m-reform-rev').textContent = fmtDollars(netReform);
+    document.getElementById('m-reform-sub').textContent =
+        fmtDollars(rateDiffTotal) + ' rate diff + ' + fmtDollars(strandedTotal) + ' stranded losses';
+    document.getElementById('mc-revenue').title =
+        'Total additional federal income tax revenue from reclassifying LT capital gains ' +
+        '(held <5 years) as ordinary income.\n\n' +
+        'Two components:\n' +
+        '\u2022 Rate differential: net gains taxed at marginal rates (24\u201337%) instead of 15%\n' +
+        '\u2022 Stranded losses: gains previously sheltered by harvested losses are now taxed ' +
+        'at ordinary rates because capital losses can only offset $3K/year of ordinary income (IRC \u00A71211)';
+
+    // ── Card 2: Paid by $1M+ Filers ──
+    // Bins 15-19 = $1M+
+    const topRev = reform.filter(r => r.agi_bin_id >= 15)
+                         .reduce((a, r) => a + r.net_additional_revenue, 0);
+    const topPct = netReform > 0 ? (topRev / netReform * 100) : 0;
+    document.getElementById('m-top-pct').textContent = fmtPct(topPct);
+    document.getElementById('m-top-sub').textContent = fmtDollars(topRev) + ' of ' + fmtDollars(netReform);
+    document.getElementById('mc-burden').title =
+        'Share of additional revenue paid by filers with AGI above $1 million.\n\n' +
+        'This reform is highly progressive: the wealthiest filers hold the largest portfolios, ' +
+        'harvest losses most aggressively, and face the highest marginal rates. ' +
+        'Their sheltered income is the largest source of new revenue.';
+
+    // ── Card 3: Income Currently Sheltered ──
+    const totalSheltered = reform.reduce((a, r) => a + r.estimated_lt_losses, 0);
+    const totalNetLT = reform.reduce((a, r) => a + r.net_lt_gain, 0);
+    const totalGrossLT = reform.reduce((a, r) => a + r.gross_lt_gains, 0);
+    const multiplier = totalNetLT > 0 ? (totalGrossLT / totalNetLT) : 1;
+    document.getElementById('m-sheltered').textContent = fmtDollars(totalSheltered);
+    document.getElementById('m-sheltered-sub').textContent =
+        'Gross gains ' + multiplier.toFixed(1) + '\u00D7 reported net';
+    document.getElementById('mc-sheltered').title =
+        'Estimated LT capital losses used to shelter gains from taxation.\n\n' +
+        'Under current law, investors sell losing positions year-end to offset winners. ' +
+        'Only the small net remainder is taxed at the preferential 15% rate.\n\n' +
+        'Under the reform, these losses become stranded \u2014 they can no longer freely offset ' +
+        'reclassified gains, exposing the full gross gains to ordinary income tax rates.';
+
+    // ── Card 4: Avg Additional Tax per $10M+ Filer ──
+    const bin19 = reform.find(r => r.agi_bin_id === 19);
+    const bin19cg = cg.find(r => r.agi_bin_id === 19);
+    if (bin19 && bin19cg && bin19cg.schedule_d_count > 0) {
+        const avgTax = bin19.net_additional_revenue / bin19cg.schedule_d_count;
+        document.getElementById('m-per-filer').textContent = fmtDollars(avgTax);
+        document.getElementById('m-per-filer-sub').textContent =
+            fmtCount(bin19cg.schedule_d_count) + ' Schedule D filers';
+    }
+    document.getElementById('mc-per-filer').title =
+        'Average additional tax per filer with AGI above $10 million who files Schedule D.\n\n' +
+        'These filers have the largest gross capital gains, the most aggressive ' +
+        'tax-loss harvesting, and the highest marginal rate (37%). ' +
+        'The per-filer impact illustrates the scale of currently sheltered income at the top.';
+}
+
+// ── Chart: Burden (population bars + revenue points) ─────────────────────────
+// Custom plugin to draw revenue labels next to each point
+const revenueLabelPlugin = {
+    id: 'revenueLabels',
+    afterDatasetsDraw(chart) {
+        const meta = chart.getDatasetMeta(1); // revenue line dataset
+        if (!meta || meta.hidden) return;
+        const dataset = chart.data.datasets[1];
+        if (!dataset) return;
+        const ctx = chart.ctx;
+        ctx.save();
+        ctx.font = 'bold 10px -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        meta.data.forEach((point, i) => {
+            const val = dataset.data[i];
+            if (val > 0) {
+                ctx.fillStyle = 'rgba(39, 174, 96, 1)';
+                ctx.fillText(fmtDollars(val * 1e9), point.x + 6, point.y);
+            }
+        });
+        ctx.restore();
+    }
+};
+
+function renderBurden() {
+    const cg = yearData(DATA.capital_gains_by_bin);
+    const reform = yearData(DATA.reform_estimate);
+    const agg = yearData(DATA.returns_aggregate);
+
+    // Total LT gains for percentage calc
+    const totalLT = cg.reduce((a, r) => a + (r.long_term_gain || 0), 0);
+
+    const labels = cg.map(r => shortLabel(r.label));
+    const population = [];
+    const revenue = [];
+
+    // Build per-bin tooltip data
+    const binMeta = [];
+    for (const r of cg) {
+        const aggRow = agg.find(a => a.agi_bin_id === r.agi_bin_id);
+        const refRow = reform.find(a => a.agi_bin_id === r.agi_bin_id);
+        const returnCount = aggRow ? aggRow.return_count || 0 : 0;
+        const ltGain = r.long_term_gain || 0;
+        const netRev = refRow ? refRow.net_additional_revenue || 0 : 0;
+        const pctGain = totalLT > 0 ? (ltGain / totalLT * 100) : 0;
+        const schedD = r.schedule_d_count || 0;
+
+        population.push(returnCount / 1e3); // thousands
+        revenue.push(netRev > 0 ? netRev / 1e9 : 0); // billions
+
+        binMeta.push({ ltGain, netRev, pctGain, schedD, returnCount });
+    }
+
+    if (charts.burden) charts.burden.destroy();
+    charts.burden = new Chart(document.getElementById('chart-burden'), {
+        type: 'bar',
+        plugins: [revenueLabelPlugin],
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Tax Filers (thousands)',
+                    data: population,
+                    backgroundColor: 'rgba(41, 128, 185, 0.6)',
+                    borderColor: 'rgba(41, 128, 185, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y',
+                    order: 2,
+                },
+                {
+                    label: 'Net Reform Revenue ($B)',
+                    data: revenue,
+                    type: 'line',
+                    borderColor: 'rgba(39, 174, 96, 1)',
+                    backgroundColor: 'rgba(39, 174, 96, 0.3)',
+                    pointBackgroundColor: 'rgba(39, 174, 96, 1)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    pointHoverRadius: 9,
+                    borderWidth: 2.5,
+                    tension: 0.2,
+                    fill: false,
+                    yAxisID: 'y1',
+                    order: 1,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: { usePointStyle: true, padding: 15 }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: ctx => ctx[0].label,
+                        afterBody: function(ctx) {
+                            const i = ctx[0].dataIndex;
+                            const m = binMeta[i];
+                            return [
+                                '',
+                                'Total LT Gains:    ' + fmtDollars(m.ltGain),
+                                'Net Reform Rev:    ' + fmtDollars(m.netRev),
+                                '% of All LT Gains: ' + m.pctGain.toFixed(1) + '%',
+                                'Schedule D Filers: ' + fmtCount(m.schedD),
+                            ];
+                        },
+                        label: function(ctx) {
+                            if (ctx.datasetIndex === 0)
+                                return 'Tax Filers: ' + Math.round(ctx.parsed.y).toLocaleString() + 'K';
+                            return 'Reform Revenue: $' + ctx.parsed.y.toFixed(1) + 'B';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { ticks: { font: { size: 9 }, maxRotation: 70 } },
+                y: {
+                    position: 'left',
+                    title: { display: true, text: 'Tax Filers (thousands)' },
+                    ticks: { callback: v => v.toLocaleString() + 'K' },
+                    beginAtZero: true,
+                },
+                y1: {
+                    position: 'right',
+                    title: { display: true, text: 'Net Reform Revenue ($B)', color: 'rgba(39, 174, 96, 1)' },
+                    ticks: { callback: v => '$' + v + 'B', color: 'rgba(39, 174, 96, 0.8)' },
+                    grid: { drawOnChartArea: false },
+                    beginAtZero: true,
+                }
+            }
+        }
+    });
+
+    // Update note with concentration stat
+    const topLT = cg.filter(r => r.agi_bin_id >= 13)
+                     .reduce((a, r) => a + (r.long_term_gain || 0), 0);
+    const pct = totalLT > 0 ? (topLT / totalLT * 100) : 0;
+    const topRev = reform.filter(r => r.agi_bin_id >= 13)
+                         .reduce((a, r) => a + (r.net_additional_revenue || 0), 0);
+    document.getElementById('burden-note').textContent =
+        `AGI $200K+ holds ${fmtPct(pct)} of LT gains and accounts for ${fmtDollars(topRev)} of reform revenue (${selectedYear}). Hover over any bar for full details.`;
+}
+
+// ── Chart: Revenue Impact (stacked bar: rate diff + stranded losses) ─────────
+function renderRevenue() {
+    const reform = yearData(DATA.reform_estimate);
+    // Only show bins with positive revenue (bins where marginal > preferential)
+    const filtered = reform.filter(r => r.net_additional_revenue > 0);
+    const labels = filtered.map(r => shortLabel(r.label));
+    const rateDiff = filtered.map(r => r.rate_diff_revenue / 1e9);
+    const strandedLoss = filtered.map(r => r.stranded_loss_revenue / 1e9);
+
+    if (charts.revenue) charts.revenue.destroy();
+    charts.revenue = new Chart(document.getElementById('chart-revenue'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Rate Differential ($B)',
+                    data: rateDiff,
+                    backgroundColor: 'rgba(41, 128, 185, 0.7)',
+                    borderColor: 'rgba(41, 128, 185, 1)',
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Stranded Loss Revenue ($B)',
+                    data: strandedLoss,
+                    backgroundColor: 'rgba(230, 126, 34, 0.7)',
+                    borderColor: 'rgba(230, 126, 34, 1)',
+                    borderWidth: 1,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(1) + 'B'
+                    }
+                }
+            },
+            scales: {
+                x: { stacked: true, ticks: { font: { size: 11 } } },
+                y: {
+                    stacked: true,
+                    title: { display: true, text: '$ Billions' },
+                    ticks: { callback: v => '$' + v + 'B' }
+                }
+            }
+        }
+    });
+}
+
+// ── Chart: Filing Status (stacked bar) ──────────────────────────────────────
+function renderFilingStatus() {
+    if (!DATA.reform_by_filing_status) return;
+
+    const fsData = yearData(DATA.reform_by_filing_status);
+    // Get unique bins that have positive total revenue
+    const binIds = [...new Set(fsData.map(r => r.agi_bin_id))];
+    const positiveBins = binIds.filter(bid => {
+        const binTotal = fsData.filter(r => r.agi_bin_id === bid)
+                                .reduce((a, r) => a + r.allocated_revenue, 0);
+        return binTotal > 0;
+    });
+
+    // Get labels
+    const labels = positiveBins.map(bid => {
+        const row = fsData.find(r => r.agi_bin_id === bid);
+        return row ? shortLabel(row.label) : 'Bin ' + bid;
+    });
+
+    const statuses = ['single', 'married_filing_jointly', 'married_filing_separately', 'head_of_household'];
+    const datasets = statuses.map(fs => ({
+        label: FS_LABELS[fs],
+        data: positiveBins.map(bid => {
+            const row = fsData.find(r => r.agi_bin_id === bid && r.filing_status === fs);
+            return row ? row.allocated_revenue / 1e9 : 0;
+        }),
+        backgroundColor: FS_COLORS[fs].bg,
+        borderColor: FS_COLORS[fs].border,
+        borderWidth: 1,
+    }));
+
+    if (charts.filingStatus) charts.filingStatus.destroy();
+    charts.filingStatus = new Chart(document.getElementById('chart-filing-status'), {
+        type: 'bar',
+        data: { labels, datasets },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(2) + 'B'
+                    }
+                }
+            },
+            scales: {
+                x: { stacked: true, ticks: { font: { size: 11 } } },
+                y: {
+                    stacked: true,
+                    title: { display: true, text: '$ Billions' },
+                    ticks: { callback: v => '$' + v + 'B' }
+                }
+            }
+        }
+    });
+
+    // Legend
+    const legendEl = document.getElementById('fs-legend');
+    legendEl.innerHTML = statuses.map(fs =>
+        `<span class="fs-legend-item"><span class="fs-swatch" style="background:${FS_COLORS[fs].bg}"></span>${FS_LABELS[fs]}</span>`
+    ).join('');
+}
+
+// ── Chart: Concentration (cumulative line) ───────────────────────────────────
+function renderConcentration() {
+    const rows = yearData(DATA.concentration);
+    const labels = rows.map(r => shortLabel(r.label));
+    const values = rows.map(r => r.cumulative_pct);
+
+    if (charts.concentration) charts.concentration.destroy();
+    charts.concentration = new Chart(document.getElementById('chart-concentration'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Cumulative % of LT Gains',
+                data: values,
+                fill: true,
+                backgroundColor: 'rgba(41, 128, 185, 0.15)',
+                borderColor: 'rgba(41, 128, 185, 1)',
+                borderWidth: 2,
+                pointRadius: 3,
+                pointBackgroundColor: 'rgba(41, 128, 185, 1)',
+                tension: 0.3,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.y.toFixed(1) + '% of LT gains'
+                    }
+                }
+            },
+            scales: {
+                x: { ticks: { font: { size: 9 }, maxRotation: 70 } },
+                y: {
+                    min: 0, max: 100,
+                    title: { display: true, text: 'Cumulative %' },
+                    ticks: { callback: v => v + '%' }
+                }
+            }
+        }
+    });
+}
+
+// ── Chart: Year-over-Year Trends (line) ──────────────────────────────────────
+function renderTrends() {
+    const years = [2018, 2019, 2020, 2021, 2022];
+    const ltGains = years.map(y => summaryFor(y).total_lt_gain / 1e9);
+    const stGains = years.map(y => summaryFor(y).total_st_gain / 1e9);
+    const totalTax = years.map(y => summaryFor(y).total_tax / 1e9);
+
+    if (charts.trends) charts.trends.destroy();
+    charts.trends = new Chart(document.getElementById('chart-trends'), {
+        type: 'line',
+        data: {
+            labels: years.map(String),
+            datasets: [
+                {
+                    label: 'LT Gains ($B)',
+                    data: ltGains,
+                    borderColor: 'rgba(41, 128, 185, 1)',
+                    backgroundColor: 'rgba(41, 128, 185, 0.1)',
+                    borderWidth: 2.5,
+                    pointRadius: 5,
+                    tension: 0.2,
+                },
+                {
+                    label: 'ST Gains ($B)',
+                    data: stGains,
+                    borderColor: 'rgba(230, 126, 34, 1)',
+                    backgroundColor: 'rgba(230, 126, 34, 0.1)',
+                    borderWidth: 2.5,
+                    pointRadius: 5,
+                    tension: 0.2,
+                },
+                {
+                    label: 'Income Tax ($B)',
+                    data: totalTax,
+                    borderColor: 'rgba(39, 174, 96, 1)',
+                    backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                    borderWidth: 2.5,
+                    pointRadius: 5,
+                    tension: 0.2,
+                    yAxisID: 'y1',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                y: {
+                    title: { display: true, text: 'Capital Gains ($B)' },
+                    ticks: { callback: v => '$' + v + 'B' }
+                },
+                y1: {
+                    position: 'right',
+                    title: { display: true, text: 'Income Tax ($B)' },
+                    ticks: { callback: v => '$' + v + 'B' },
+                    grid: { drawOnChartArea: false },
+                }
+            }
+        }
+    });
+}
+
+// ── Chart: Brackets (stacked bar) ────────────────────────────────────────────
+function renderBrackets() {
+    const rows = yearData(DATA.bracket_distribution);
+    const bracketRates = rows.map(r => r.marginal_rate);
+    const labels = rows.map(r => (r.marginal_rate * 100).toFixed(0) + '%');
+    const currentTax = rows.map(r => r.bracket_tax / 1e9);
+
+    // Aggregate reform revenue by bracket: map each AGI bin's weighted_marginal_rate
+    // to the nearest bracket rate, then sum net_additional_revenue per bracket
+    const reformRows = yearData(DATA.reform_estimate);
+    const reformByBracket = new Array(bracketRates.length).fill(0);
+    for (const r of reformRows) {
+        const wmr = r.weighted_marginal_rate;
+        // Find closest bracket rate
+        let bestIdx = 0, bestDist = Math.abs(wmr - bracketRates[0]);
+        for (let i = 1; i < bracketRates.length; i++) {
+            const dist = Math.abs(wmr - bracketRates[i]);
+            if (dist < bestDist) { bestDist = dist; bestIdx = i; }
+        }
+        reformByBracket[bestIdx] += (r.net_additional_revenue || 0) / 1e9;
+    }
+
+    if (charts.brackets) charts.brackets.destroy();
+    charts.brackets = new Chart(document.getElementById('chart-brackets'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Current Tax',
+                    data: currentTax,
+                    backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                    borderColor: 'rgba(52, 152, 219, 1)',
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Additional Reform Revenue',
+                    data: reformByBracket,
+                    backgroundColor: 'rgba(231, 76, 60, 0.7)',
+                    borderColor: 'rgba(231, 76, 60, 1)',
+                    borderWidth: 1,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true, position: 'top' },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(1) + 'B',
+                        afterBody: function(tooltipItems) {
+                            const idx = tooltipItems[0].dataIndex;
+                            const cur = currentTax[idx];
+                            const ref = reformByBracket[idx];
+                            const total = cur + ref;
+                            return ['Total: $' + total.toFixed(1) + 'B',
+                                    'Reform +' + (ref > 0 ? (ref/cur*100).toFixed(0) : '0') + '% over current'];
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                    title: { display: true, text: 'Marginal Tax Rate' }
+                },
+                y: {
+                    stacked: true,
+                    title: { display: true, text: 'Tax Generated ($ Billions)' },
+                    ticks: { callback: v => '$' + v + 'B' }
+                }
+            }
+        }
+    });
+}
+
+// ── Render all ────────────────────────────────────────────────────────────────
+function renderAll() {
+    updateMetrics();
+    renderBurden();
+    renderRevenue();
+    renderFilingStatus();
+    renderConcentration();
+    renderTrends();
+    renderBrackets();
+}
+
+// ── Year selector ────────────────────────────────────────────────────────────
+document.querySelectorAll('.year-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedYear = parseInt(btn.dataset.year);
+        renderAll();
+    });
+});
+
+// ── Load data and initialize ─────────────────────────────────────────────────
+fetch('data/dashboard.json')
+    .then(r => r.json())
+    .then(d => { DATA = d; renderAssumptions(); renderAll(); })
+    .catch(err => {
+        document.querySelector('.dashboard-body').innerHTML =
+            '<div class="chart-card" style="text-align:center;padding:3rem;">' +
+            '<p style="color:#c0392b;font-weight:600;">Failed to load dashboard data.</p>' +
+            '<p style="color:#7f8c8d;">Run <code>python -m src.web.export_data</code> first, ' +
+            'then open this file via a local server (e.g. <code>python -m http.server</code> from src/web/).</p>' +
+            '<p style="color:#999;margin-top:1rem;font-size:0.85rem;">Error: ' + err.message + '</p></div>';
+    });
+</script>
+
+</body>
+</html>
