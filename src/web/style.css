@@ -575,6 +575,71 @@ body {
     margin-bottom: 1.5rem;
 }
 
+/* Relevant Data & Glossary sections */
+.reference-stats-table,
+.reference-sources-table,
+.glossary-table {
+    width: 100%;
+    font-size: 0.82rem;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.reference-stats-table th,
+.reference-stats-table td,
+.reference-sources-table th,
+.reference-sources-table td,
+.glossary-table th,
+.glossary-table td {
+    padding: 0.35rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.reference-stats-table th,
+.reference-sources-table th,
+.glossary-table th {
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.3px;
+}
+
+.glossary-term {
+    font-weight: 600;
+    color: var(--accent-dark);
+    white-space: nowrap;
+}
+
+.glossary-subsection {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--accent-dark);
+    margin: 1.2rem 0 0.5rem;
+    padding-bottom: 0.2rem;
+    border-bottom: 2px solid var(--accent);
+}
+
+.glossary-subsection:first-child {
+    margin-top: 0;
+}
+
+/* Overview section */
+.overview-narrative {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.overview-cta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .chart-grid {

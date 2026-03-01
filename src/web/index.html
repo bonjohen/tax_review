@@ -22,6 +22,59 @@
         Actual IRS SOI Publication 1304 for TY2023 expected March 2026.
     </div>
 
+    <!-- Overview: concise reform summary with headline metrics -->
+    <div class="section">
+        <div class="analysis-card">
+            <div class="analysis-header" id="overview-header">
+                <div>
+                    <h2>Overview</h2>
+                    <span class="analysis-subtitle">Reform at a glance</span>
+                </div>
+                <span class="analysis-toggle" id="overview-toggle">Collapse</span>
+            </div>
+            <div class="analysis-body collapsible-section-body visible" id="overview-body">
+                <p class="overview-narrative">
+                    This document seeks to offer a simple tax soluition to a tax revenue shortfall. This model
+                    simulates a minor Federal Tax reform that eliminates the preferential tax rate for capital
+                    gains held fewer than five years, reclassifying them as ordinary income. The result is a
+                    massive, steeply progressive revenue increase&mdash;driven overwhelmingly by stranded losses
+                    at the top of the income distribution.
+                    Explore the analysis and interactive charts below to see how the numbers break down.
+                </p>
+                <div class="metrics-row">
+                    <div class="analysis-card metric-expand-card highlight">
+                        <div class="metric-expand-header">
+                            <div>
+                                <div class="metric-label">Reform Revenue</div>
+                                <div class="metric-value" id="ov-revenue">&mdash;</div>
+                                <div class="metric-sub" id="ov-revenue-sub"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="analysis-card metric-expand-card">
+                        <div class="metric-expand-header">
+                            <div>
+                                <div class="metric-label">Paid by $1M+ Filers</div>
+                                <div class="metric-value" id="ov-top-pct">&mdash;</div>
+                                <div class="metric-sub" id="ov-top-sub"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="analysis-card metric-expand-card">
+                        <div class="metric-expand-header">
+                            <div>
+                                <div class="metric-label">Total LT Capital Gains</div>
+                                <div class="metric-value" id="ov-lt-gains">&mdash;</div>
+                                <div class="metric-sub" id="ov-lt-sub"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="overview-cta">Read the full analysis below, or jump to any interactive chart section.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Analysis: Collapsible narrative -->
     <div class="section">
         <div class="analysis-card">
@@ -30,7 +83,20 @@
                     <h2>Read the Analysis</h2>
                     <span class="analysis-subtitle">The $1.1 Trillion Question: Why Capital Gains Tax Reform Can't Wait</span>
                 </div>
-                <span class="analysis-toggle" id="analysis-toggle">Expand</span>
+                <div class="analysis-header-right">
+                    <div class="year-select-wrap">
+                        <label for="year-select">Tax Year:</label>
+                        <select id="year-select" onclick="event.stopPropagation()">
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021" selected>2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023 (Forecast)</option>
+                        </select>
+                    </div>
+                    <span class="analysis-toggle" id="analysis-toggle">Expand</span>
+                </div>
             </div>
             <div class="analysis-body" id="analysis-body">
 
@@ -320,17 +386,6 @@ unless otherwise noted.</p>
                 </div>
                 <div class="analysis-header-right">
                     <a class="analysis-ref" data-analysis-section="analysis-section-4">Read analysis</a>
-                    <div class="year-select-wrap">
-                        <label for="year-select">Tax Year:</label>
-                        <select id="year-select" onclick="event.stopPropagation()">
-                            <option value="2018">2018</option>
-                            <option value="2019">2019</option>
-                            <option value="2020">2020</option>
-                            <option value="2021" selected>2021</option>
-                            <option value="2022">2022</option>
-                            <option value="2023">2023 (Forecast)</option>
-                        </select>
-                    </div>
                     <span class="analysis-toggle" id="burden-toggle">Expand</span>
                 </div>
             </div>
@@ -468,29 +523,6 @@ unless otherwise noted.</p>
         </div>
     </div>
 
-    <!-- Year-over-Year Trends (collapsible) -->
-    <div class="section">
-        <div class="analysis-card">
-            <div class="analysis-header collapsible-section-header" id="trends-section-header">
-                <div>
-                    <h2>Year-over-Year Trends (2018&ndash;2023)</h2>
-                    <span class="analysis-subtitle">Long-term gains, short-term gains, and total income tax over time</span>
-                </div>
-                <div class="analysis-header-right">
-                    <a class="analysis-ref" data-analysis-section="analysis-section-7">Read analysis</a>
-                    <span class="analysis-toggle" id="trends-toggle">Expand</span>
-                </div>
-            </div>
-            <div class="analysis-body collapsible-section-body" id="trends-body">
-                <p class="section-narrative">Long-term capital gains surged to a record $1.92 trillion in 2021, driven by equity and real-estate markets, before correcting sharply in 2022. Short-term gains and total income tax follow related but distinct cycles. The dashed segment shows our trend-based 2023 forecast.</p>
-                <div class="chart-card">
-                    <div class="chart-wrapper"><canvas id="chart-trends"></canvas></div>
-                    <p class="chart-note">Total LT gains, ST gains, and income tax (2018&ndash;2023). Dashed segment = forecast.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Income Composition (collapsible) -->
     <div class="section">
         <div class="analysis-card">
@@ -537,6 +569,29 @@ unless otherwise noted.</p>
         </div>
     </div>
 
+    <!-- Year-over-Year Trends (collapsible) -->
+    <div class="section">
+        <div class="analysis-card">
+            <div class="analysis-header collapsible-section-header" id="trends-section-header">
+                <div>
+                    <h2>Year-over-Year Trends (2018&ndash;2023)</h2>
+                    <span class="analysis-subtitle">Long-term gains, short-term gains, and total income tax over time</span>
+                </div>
+                <div class="analysis-header-right">
+                    <a class="analysis-ref" data-analysis-section="analysis-section-7">Read analysis</a>
+                    <span class="analysis-toggle" id="trends-toggle">Expand</span>
+                </div>
+            </div>
+            <div class="analysis-body collapsible-section-body" id="trends-body">
+                <p class="section-narrative">Long-term capital gains surged to a record $1.92 trillion in 2021, driven by equity and real-estate markets, before correcting sharply in 2022. Short-term gains and total income tax follow related but distinct cycles. The dashed segment shows our trend-based 2023 forecast.</p>
+                <div class="chart-card">
+                    <div class="chart-wrapper"><canvas id="chart-trends"></canvas></div>
+                    <p class="chart-note">Total LT gains, ST gains, and income tax (2018&ndash;2023). Dashed segment = forecast.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Model Assumptions (collapsible, at bottom) -->
     <div class="section">
         <div class="analysis-card">
@@ -568,6 +623,106 @@ unless otherwise noted.</p>
         </div>
     </div>
 
+    <!-- Relevant Data (collapsible) -->
+    <div class="section">
+        <div class="analysis-card">
+            <div class="analysis-header" id="relevant-data-header">
+                <div>
+                    <h2>Relevant Data</h2>
+                    <span class="analysis-subtitle">Key statistics and IRS source references</span>
+                </div>
+                <span class="analysis-toggle" id="relevant-data-toggle">Expand</span>
+            </div>
+            <div class="analysis-body" id="relevant-data-body">
+                <h4 class="glossary-subsection">Key Statistics</h4>
+                <table class="reference-stats-table" id="relevant-stats-table">
+                    <thead>
+                        <tr><th>Metric</th><th>Value</th></tr>
+                    </thead>
+                    <tbody id="relevant-stats-tbody"></tbody>
+                </table>
+
+                <h4 class="glossary-subsection">IRS Source References</h4>
+                <p style="font-size:0.82rem; margin-bottom:0.75rem;">
+                    All data sourced from
+                    <a href="https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-returns-complete-report-publication-1304" target="_blank" style="color:var(--accent);">
+                        IRS SOI Publication 1304
+                    </a>
+                </p>
+                <table class="reference-sources-table">
+                    <thead>
+                        <tr><th>Table</th><th>File Pattern</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1.1</td><td><code>{yy}in11si.xls</code></td><td>Selected Income and Tax Items</td></tr>
+                        <tr><td>1.2</td><td><code>{yy}in12ms.xls</code></td><td>Income and Tax Items by Filing Status</td></tr>
+                        <tr><td>1.4</td><td><code>{yy}in14ar.xls</code></td><td>Sources of Income by Size of AGI</td></tr>
+                        <tr><td>1.4A</td><td><code>{yy}in14acg.xls</code></td><td>Capital Asset Sales (Schedule D)</td></tr>
+                        <tr><td>3.2</td><td><code>{yy}in32tt.xls</code></td><td>Income Tax as Percentage of AGI</td></tr>
+                        <tr><td>3.3</td><td><code>{yy}in33ar.xls</code></td><td>Tax Liability and Credits by AGI</td></tr>
+                        <tr><td>3.4&ndash;3.6</td><td><code>{yy}in3{4,5,6}tr.xls</code></td><td>Tax by Marginal Rate and Filing Status</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glossary of Terms (collapsible) -->
+    <div class="section">
+        <div class="analysis-card">
+            <div class="analysis-header" id="glossary-header">
+                <div>
+                    <h2>Glossary of Terms</h2>
+                    <span class="analysis-subtitle">Definitions, chart explanations, and methodology</span>
+                </div>
+                <span class="analysis-toggle" id="glossary-toggle">Expand</span>
+            </div>
+            <div class="analysis-body" id="glossary-body">
+
+                <h4 class="glossary-subsection">Tax &amp; Model Terms</h4>
+                <table class="glossary-table">
+                    <tbody>
+                        <tr><td class="glossary-term">AGI</td><td>Adjusted Gross Income; total income minus above-the-line deductions</td></tr>
+                        <tr><td class="glossary-term">Long-Term Capital Gains (LTCG)</td><td>Gains on assets held more than one year; currently taxed at preferential rates (0%, 15%, or 20%)</td></tr>
+                        <tr><td class="glossary-term">Short-Term Capital Gains (STCG)</td><td>Gains on assets held one year or less; taxed as ordinary income</td></tr>
+                        <tr><td class="glossary-term">Preferential Rate</td><td>The reduced tax rate (modeled at 15%) applied to LTCG under current law</td></tr>
+                        <tr><td class="glossary-term">Marginal Tax Rate</td><td>The rate applied to the last dollar of taxable income within a bracket</td></tr>
+                        <tr><td class="glossary-term">Effective Tax Rate</td><td>Total tax divided by total income; the average rate actually paid</td></tr>
+                        <tr><td class="glossary-term">Filing Status</td><td>IRS classification (Single, Married Filing Jointly, Married Filing Separately, Head of Household) that determines bracket thresholds</td></tr>
+                        <tr><td class="glossary-term">Schedule D</td><td>IRS form for reporting capital gains and losses</td></tr>
+                        <tr><td class="glossary-term">Stranded Losses</td><td>Capital losses that can no longer offset gains after reclassification; limited to $3,000/year deduction against ordinary income (IRC &sect;1211(b))</td></tr>
+                        <tr><td class="glossary-term">Rate Differential Revenue</td><td>Additional tax from applying the ordinary marginal rate instead of the 15% preferential rate to reclassified gains</td></tr>
+                        <tr><td class="glossary-term">CPI-U Adjustment</td><td>Consumer Price Index for All Urban Consumers; used to convert nominal dollars to constant 2022 dollars</td></tr>
+                    </tbody>
+                </table>
+
+                <h4 class="glossary-subsection">Chart Explanations</h4>
+                <table class="glossary-table">
+                    <tbody>
+                        <tr><td class="glossary-term">Who Bears the Burden</td><td>Bar chart of tax filers with line overlay of reform revenue across 5 AGI groups</td></tr>
+                        <tr><td class="glossary-term">Revenue Impact</td><td>Stacked bar of rate differential vs. stranded loss revenue channels</td></tr>
+                        <tr><td class="glossary-term">Filing Status</td><td>Stacked bar of reform revenue allocated by filing status</td></tr>
+                        <tr><td class="glossary-term">Concentration</td><td>Cumulative line showing how LT gains concentrate in upper AGI groups</td></tr>
+                        <tr><td class="glossary-term">Trends</td><td>Multi-line chart of LT gains, ST gains, and income tax over TY2018&ndash;2023</td></tr>
+                        <tr><td class="glossary-term">Income Composition</td><td>Stacked bar of income sources (wages, gains, business, etc.) by AGI group</td></tr>
+                        <tr><td class="glossary-term">Tax Brackets</td><td>Stacked bar of tax generated at each marginal rate</td></tr>
+                    </tbody>
+                </table>
+
+                <h4 class="glossary-subsection">Methodology Notes</h4>
+                <table class="glossary-table">
+                    <tbody>
+                        <tr><td class="glossary-term">5-Step Pipeline</td><td>(1) Identify LT gains held &lt;5 years, (2) reclassify as ordinary income, (3) compute rate differential, (4) compute stranded loss revenue, (5) sum net additional revenue</td></tr>
+                        <tr><td class="glossary-term">Holding Period Fractions</td><td>Calibrated per AGI bin (range 0.20&ndash;0.55)</td></tr>
+                        <tr><td class="glossary-term">Gross Loss Ratios</td><td>Calibrated per AGI bin (range 0.70&ndash;0.90)</td></tr>
+                        <tr><td class="glossary-term">CPI-U Annual Averages</td><td>2018: 251.107, 2019: 255.657, 2020: 258.811, 2021: 270.970, 2022: 292.655</td></tr>
+                        <tr><td class="glossary-term">Forecast (2023)</td><td>Trend-based extrapolation, not IRS actuals</td></tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
 
 </main>
 
@@ -748,6 +903,32 @@ function renderAssumptions() {
         glHtml += `<tr><td>${binRangeLabel(g.agi_bin_ids)}</td><td>${(g.ratio * 100).toFixed(0)}%</td></tr>`;
     }
     glTable.innerHTML = glHtml;
+}
+
+// ── Overview metrics ─────────────────────────────────────────────────────────
+function renderOverview() {
+    const reform = yearData(DATA.reform_estimate);
+    const summary = summaryFor();
+
+    // Metric 1: Reform Revenue
+    const netReform = reform.reduce((a, r) => a + r.net_additional_revenue, 0);
+    document.getElementById('ov-revenue').textContent = fmtDollars(netReform);
+    document.getElementById('ov-revenue-sub').textContent =
+        'Net additional revenue' + (isForecastYear() ? ' (forecast)' : '') + ' \u2014 TY' + selectedYear;
+
+    // Metric 2: Paid by $1M+ Filers
+    const topRev = reform.filter(r => r.agi_bin_id >= 15)
+                         .reduce((a, r) => a + r.net_additional_revenue, 0);
+    const topPct = netReform > 0 ? (topRev / netReform * 100) : 0;
+    document.getElementById('ov-top-pct').textContent = fmtPct(topPct);
+    document.getElementById('ov-top-sub').textContent = fmtDollars(topRev) + ' of ' + fmtDollars(netReform);
+
+    // Metric 3: Total LT Capital Gains
+    if (summary) {
+        document.getElementById('ov-lt-gains').textContent = fmtDollars(summary.total_lt_gain);
+        document.getElementById('ov-lt-sub').textContent =
+            'Reported net LT gains \u2014 TY' + selectedYear;
+    }
 }
 
 // ── Metrics ──────────────────────────────────────────────────────────────────
@@ -1334,6 +1515,30 @@ function renderBrackets() {
     });
 }
 
+// ── Relevant Data: key stats table ───────────────────────────────────────────
+function renderRelevantData() {
+    const tbody = document.getElementById('relevant-stats-tbody');
+    if (!tbody || !DATA) return;
+
+    const summary = summaryFor();
+    const reform = yearData(DATA.reform_estimate);
+    const netReformRev = reform.reduce((a, r) => a + r.net_additional_revenue, 0);
+
+    const rows = [];
+    if (summary) {
+        rows.push(['Total Returns Filed', fmtCount(summary.total_returns)]);
+        rows.push(['Total AGI', fmtDollars(summary.total_agi)]);
+        rows.push(['Total Income Tax', fmtDollars(summary.total_tax)]);
+        rows.push(['Total LT Capital Gains', fmtDollars(summary.total_lt_gain)]);
+        rows.push(['Total ST Capital Gains', fmtDollars(summary.total_st_gain)]);
+    }
+    rows.push(['Net Reform Revenue', fmtDollars(netReformRev)]);
+
+    tbody.innerHTML = rows.map(r =>
+        '<tr><td>' + r[0] + '</td><td style="text-align:right;font-weight:600;">' + r[1] + '</td></tr>'
+    ).join('');
+}
+
 // ── Render all ────────────────────────────────────────────────────────────────
 function renderAll() {
     // Toggle forecast banner
@@ -1357,6 +1562,7 @@ function renderAll() {
         if (el) el.textContent = text;
     }
 
+    renderOverview();
     updateMetrics();
     renderBurden();
     renderRevenue();
@@ -1365,6 +1571,7 @@ function renderAll() {
     renderTrends();
     renderIncomeSources();
     renderBrackets();
+    renderRelevantData();
 }
 
 // ── Year selector ────────────────────────────────────────────────────────────
@@ -1843,6 +2050,43 @@ fetch('data/dashboard.json')
         DATA = d;
         FORECAST_YEARS = d.forecast_years || [];
         renderAssumptions();
+
+        // Toggle: Overview
+        (function() {
+            const hdr = document.getElementById('overview-header');
+            const bdy = document.getElementById('overview-body');
+            const tgl = document.getElementById('overview-toggle');
+            hdr.addEventListener('click', () => {
+                const showing = bdy.classList.contains('visible');
+                bdy.classList.toggle('visible', !showing);
+                tgl.textContent = showing ? 'Expand' : 'Collapse';
+            });
+        })();
+
+        // Toggle: Relevant Data
+        (function() {
+            const hdr = document.getElementById('relevant-data-header');
+            const bdy = document.getElementById('relevant-data-body');
+            const tgl = document.getElementById('relevant-data-toggle');
+            hdr.addEventListener('click', () => {
+                const showing = bdy.classList.contains('visible');
+                bdy.classList.toggle('visible', !showing);
+                tgl.textContent = showing ? 'Expand' : 'Collapse';
+            });
+        })();
+
+        // Toggle: Glossary
+        (function() {
+            const hdr = document.getElementById('glossary-header');
+            const bdy = document.getElementById('glossary-body');
+            const tgl = document.getElementById('glossary-toggle');
+            hdr.addEventListener('click', () => {
+                const showing = bdy.classList.contains('visible');
+                bdy.classList.toggle('visible', !showing);
+                tgl.textContent = showing ? 'Expand' : 'Collapse';
+            });
+        })();
+
         renderAll();
     })
     .catch(err => {
