@@ -3,6 +3,7 @@
     "allow": [
       "Bash(cd:)",
       "Bash(cd:*)",
+      "Bash(cd /c/Projects/tax_review && git:*)",
       "WebFetch(domain:www.irs.gov)",
       "WebSearch",
       "WebFetch(domain:www.minneapolisfed.org)",
