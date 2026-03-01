@@ -18,7 +18,19 @@
       "Bash(cd /c/Projects/tax_review && source .venv/Scripts/activate && python -m src.validation.reconcile 2>&1)",
       "Bash(cd /c/Projects/tax_review && git push -u origin master 2>&1)",
       "Bash(cd /c/Projects/tax_review && git remote set-url origin https://github.com/bonjohen/tax_review.git && git push -u origin master 2>&1)",
-      "Bash(cd /c/Projects/tax_review && gh repo create bonjohen/tax_review --private --source=. --push 2>&1)"
+      "Bash(cd /c/Projects/tax_review && gh repo create bonjohen/tax_review --private --source=. --push 2>&1)",
+      "Bash(python:*)",
+      "Bash(grep:*)",
+      "Bash(which git:*)",
+      "Bash(start:*)",
+      "WebFetch(domain:taxfoundation.org)",
+      "WebFetch(domain:www.usinflationcalculator.com)",
+      "WebFetch(domain:bradfordtaxinstitute.com)",
+      "WebFetch(domain:www.bls.gov)",
+      "WebFetch(domain:fred.stlouisfed.org)",
+      "WebFetch(domain:www.ssa.gov)",
+      "WebFetch(domain:dlt.ri.gov)",
+      "WebFetch(domain:api.bls.gov)"
     ]
   }
 }

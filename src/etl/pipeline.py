@@ -13,6 +13,7 @@ import pandas as pd
 from .db import get_connection, init_schema, reset_year, load_agi_bins, load_cpi_factors
 from .parse_table_1x import load_table_11, load_table_12, load_table_32, load_table_33
 from .parse_table_14a import load_table_14a
+from .parse_table_14 import load_table_14
 from .parse_table_3x import load_table_34, load_table_36
 from .url_registry import YEARS
 
@@ -73,6 +74,7 @@ def run_pipeline(years: list[int] | None = None,
         load_table_32(conn, raw / f"{prefix}in32tt.xls", year)
         load_table_33(conn, raw / f"{prefix}in33ar.xls", year)
         load_table_14a(conn, raw / f"{prefix}in14acg.xls", year)
+        load_table_14(conn, raw / f"{prefix}in14ar.xls", year)
         load_table_34(conn, raw / f"{prefix}in34tr.xls", year)
         load_table_36(conn, raw / f"{prefix}in36tr.xls", year)
 

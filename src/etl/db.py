@@ -19,7 +19,7 @@ DEFAULT_DB_PATH = Path("data") / "tax_review.db"
 # All raw tables that store per-year data
 _RAW_TABLES = [
     "raw_table_11", "raw_table_12", "raw_table_32", "raw_table_33",
-    "raw_table_14a", "raw_table_34", "raw_table_36",
+    "raw_table_14a", "raw_table_14", "raw_table_34", "raw_table_36",
 ]
 
 

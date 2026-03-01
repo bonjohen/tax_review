@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 OUTPUT_DIR = Path(__file__).parent / "data"
 OUTPUT_FILE = OUTPUT_DIR / "dashboard.json"
 
-YEARS = [2018, 2019, 2020, 2021, 2022]
+YEARS = [2018, 2019, 2020, 2021, 2022, 2023]
 PREFERENTIAL_CG_RATE = 0.15  # typical preferential capital gains rate
 ANNUAL_LOSS_DEDUCTION_LIMIT = 3000  # IRC §1211(b) — $3K/year cap on capital losses vs ordinary income
 
@@ -116,6 +116,22 @@ def _query_returns_aggregate(conn: sqlite3.Connection) -> list[dict]:
         JOIN agi_bins b ON t12.agi_bin_id = b.agi_bin_id
         WHERE t12.filing_status = 'all'
         ORDER BY t12.year, t12.agi_bin_id
+    """)
+    return [dict(r) for r in cur.fetchall()]
+
+
+def _query_income_sources(conn: sqlite3.Connection) -> list[dict]:
+    """Per-bin income source breakdown for all years."""
+    cur = conn.execute("""
+        SELECT t14.year, t14.agi_bin_id, b.label,
+               t14.wages, t14.taxable_interest, t14.ordinary_dividends,
+               t14.qualified_dividends, t14.tax_exempt_interest,
+               t14.business_income, t14.capital_gains,
+               t14.partnership_scorp, t14.ira_pension,
+               t14.social_security, t14.rental_royalty, t14.estate_trust
+        FROM raw_table_14 t14
+        JOIN agi_bins b ON t14.agi_bin_id = b.agi_bin_id
+        ORDER BY t14.year, t14.agi_bin_id
     """)
     return [dict(r) for r in cur.fetchall()]
 
@@ -328,10 +344,12 @@ def export_dashboard_json(db_path=None):
             "capital_gains_by_bin": _query_capital_gains_by_bin(conn),
             "concentration": _query_concentration(conn),
             "returns_aggregate": _query_returns_aggregate(conn),
+            "income_sources": _query_income_sources(conn),
             "bracket_distribution": _query_bracket_distribution(conn),
             "reform_estimate": reform_estimate,
             "reform_by_filing_status": reform_by_fs,
             "reform_metadata": _build_reform_metadata(assumptions),
+            "forecast_years": [2023],
         }
     finally:
         conn.close()

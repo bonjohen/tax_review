@@ -1,6 +1,6 @@
 # Tax Review
 
-A data acquisition and ETL pipeline for building a calibrated synthetic microsimulation model of the federal individual income tax system (Tax Years 2020-2022). The model supports simulating a reform that eliminates preferential treatment for capital gains held less than five years.
+A calibrated synthetic microsimulation model of the federal individual income tax system (Tax Years 2018-2022, with 2023 forecast). The model simulates a reform that eliminates preferential treatment for capital gains held less than five years and includes an interactive dashboard for exploring results.
 
 All source data comes from the [IRS Statistics of Income (SOI)](https://www.irs.gov/statistics), Publication 1304 — Individual Income Tax Returns Complete Report.
 
@@ -76,7 +76,28 @@ Checks performed per tax year:
 4. Return count consistency across all major tables
 5. Capital gain totals from Table 1.4A vs Table 1.4
 
-### 5. Run Tests
+### 5. Generate Dashboard
+
+Exports pipeline and reform model results to JSON and serves the interactive dashboard.
+
+```
+python -m src.web.export_data
+```
+
+Open `src/web/index.html` in a browser (served via a local HTTP server for fetch to work):
+
+```
+cd src/web && python -m http.server 8000
+```
+
+The dashboard features:
+- **Collapsible chart sections** with 5 consolidated AGI groups (Under $200K, $200K-$1M, $1M-$5M, $5M-$10M, $10M+)
+- **Year selector** dropdown (TY2018-2023) with forecast banner for projected years
+- **Interactive analysis** with bidirectional links between narrative sections and charts
+- **Read Aloud** capability using the Web Speech API
+- Charts: burden distribution, revenue impact, filing status breakdown, concentration curve, year-over-year trends, income composition, and tax bracket distribution
+
+### 6. Run Tests
 
 ```
 run_tests.bat
@@ -110,9 +131,18 @@ src/
     pipeline.py            ETL orchestrator
   parameters/
     extract_tax_params.py  Revenue Procedure PDF extractor
+  reform/
+    filing_status.py       AGI-share allocation by filing status
+  forecast/
+    generate_2023.py       Trend-based TY2023 forecast generation
   validation/
     reconcile.py           Cross-table reconciliation checks
     report.py              Report generation (text + CSV)
+  web/
+    index.html             Interactive dashboard (HTML + embedded JS)
+    style.css              Dashboard styles
+    export_data.py         Pipeline → dashboard JSON exporter
+    data/dashboard.json    Exported dashboard data (not in git)
 tests/                     Unit and integration tests
 docs/
   old_plan.md              Original data acquisition specification

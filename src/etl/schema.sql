@@ -71,6 +71,24 @@ CREATE TABLE IF NOT EXISTS raw_table_14a (
     PRIMARY KEY (year, agi_bin_id)
 );
 
+CREATE TABLE IF NOT EXISTS raw_table_14 (
+    year               INTEGER NOT NULL,
+    agi_bin_id         INTEGER NOT NULL,
+    wages              REAL,
+    taxable_interest   REAL,
+    ordinary_dividends REAL,
+    qualified_dividends REAL,
+    tax_exempt_interest REAL,
+    business_income    REAL,
+    capital_gains      REAL,
+    partnership_scorp  REAL,
+    ira_pension        REAL,
+    social_security    REAL,
+    rental_royalty     REAL,
+    estate_trust       REAL,
+    PRIMARY KEY (year, agi_bin_id)
+);
+
 CREATE TABLE IF NOT EXISTS raw_table_34 (
     year                   INTEGER NOT NULL,
     filing_status          TEXT NOT NULL,
@@ -107,6 +125,13 @@ CREATE VIEW IF NOT EXISTS v_capital_gains AS
 SELECT year, agi_bin_id, schedule_d_count,
        short_term_gain, long_term_gain, total_gain
 FROM raw_table_14a;
+
+CREATE VIEW IF NOT EXISTS v_income_sources AS
+SELECT year, agi_bin_id, wages, taxable_interest, ordinary_dividends,
+       qualified_dividends, tax_exempt_interest, business_income,
+       capital_gains, partnership_scorp, ira_pension, social_security,
+       rental_royalty, estate_trust
+FROM raw_table_14;
 
 CREATE VIEW IF NOT EXISTS v_bracket_distribution AS
 SELECT year, filing_status, marginal_rate,
