@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Synthetic microsimulation model of the federal individual income tax system for Tax Years 2020-2022. The goal is to simulate a reform eliminating preferential treatment for capital gains held less than five years, using IRS Statistics of Income (SOI) data.
+Synthetic microsimulation model of the federal individual income tax system for Tax Years 2018-2022 (with 2023 forecast). The goal is to simulate a reform eliminating preferential treatment for capital gains held less than five years, using IRS Statistics of Income (SOI) data.
 
 ## Build & Run Commands
 
@@ -12,7 +12,7 @@ Synthetic microsimulation model of the federal individual income tax system for 
 # Install dependencies (from project root)
 pip install -e ".[dev]"
 
-# Download IRS data files (33 Excel + 3 PDFs)
+# Download IRS data files (55 Excel + 5 PDFs)
 python -m src.etl.download
 python -m src.etl.download --years 2020   # single year
 python -m src.etl.download --verify-only  # check manifest checksums
@@ -45,7 +45,7 @@ Excel (.xls) → Python parsers (xlrd) → SQLite raw tables
 ```
 src/
   etl/
-    url_registry.py      # All 36 IRS download URLs (11 Excel/year + 3 PDFs)
+    url_registry.py      # All 60 IRS download URLs (11 Excel/year × 5 years + 5 PDFs)
     download.py          # Download script + SHA256 manifest (data/manifest.json)
     agi_bins.py          # Canonical 19 AGI bin definitions + text label matching
     db.py                # SQLite connection manager, schema init, insert helpers
@@ -53,7 +53,7 @@ src/
     parse_table_1x.py    # Tables 1.1-1.4 parser + load_table_*() for SQLite
     parse_table_14a.py   # Table 1.4A parser + load_table_14a() for SQLite
     parse_table_3x.py    # Tables 3.4-3.6 parser + load_table_*() for SQLite
-    cpi_adjust.py        # CPI-U adjustment (hardcoded 2020-2022 values) → 2022 dollars
+    cpi_adjust.py        # CPI-U adjustment (hardcoded 2018-2022 values) → 2022 dollars
     pipeline.py          # Orchestrator: raw Excel → SQLite → Parquet output
   parameters/
     extract_tax_params.py  # Revenue Procedure PDFs → JSON
@@ -62,7 +62,7 @@ src/
     report.py            # Text/CSV report generation
 data/
   tax_review.db          # SQLite database (gitignored)
-  raw/{2020,2021,2022}/  # Downloaded .xls files (gitignored)
+  raw/{2018,2019,2020,2021,2022}/  # Downloaded .xls files (gitignored)
   parameters/            # Tax parameter JSON + Revenue Procedure PDFs
   processed/nominal/     # Parquet output in nominal dollars
   processed/real_2022/   # Parquet output in 2022 constant dollars
@@ -82,7 +82,7 @@ data/
 - IRS Excel files have multi-row headers (rows 1-5), footnote markers in cells (`[1]`, `*`), and merged cells
 - AGI bin text labels vary between tables — `agi_bins.py` provides centralized fuzzy matching
 - Tables 3.4-3.6 are organized by marginal rate (not AGI bin), with filing status as section headers
-- CPI-U annual averages are hardcoded (2020: 258.811, 2021: 270.970, 2022: 292.655)
+- CPI-U annual averages are hardcoded (2018: 251.107, 2019: 255.657, 2020: 258.811, 2021: 270.970, 2022: 292.655)
 
 ## Key Constraints
 

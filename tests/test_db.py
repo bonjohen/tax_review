@@ -14,15 +14,6 @@ from src.etl.db import (
 )
 
 
-@pytest.fixture
-def db(tmp_path):
-    """In-memory SQLite database with schema initialized."""
-    db_path = tmp_path / "test.db"
-    conn = get_connection(db_path)
-    init_schema(conn)
-    return conn
-
-
 class TestSchema:
     """Verify schema creation produces expected tables and views."""
 

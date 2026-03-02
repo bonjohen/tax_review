@@ -36,7 +36,7 @@ from .parse_table_1x import _clean_cell, _money
 
 logger = logging.getLogger(__name__)
 
-# Standard marginal tax rates for 2020-2022
+# Standard marginal tax rates for 2018-2022 (TCJA rates)
 MARGINAL_RATES = [0.10, 0.12, 0.22, 0.24, 0.32, 0.35, 0.37]
 
 # Filing status labels as they appear in IRS tables

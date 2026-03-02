@@ -29,9 +29,14 @@ _REV_PROC_FILES = {
     2020: "rp-19-44.pdf",
     2021: "rp-20-45.pdf",
     2022: "rp-21-45.pdf",
+    2023: "rp-22-38.pdf",
 }
 
 YEARS = [2018, 2019, 2020, 2021, 2022]
+
+# When 2023 SOI data is published, add 2023 to YEARS above.
+# Excel files will follow the same {yy}{suffix}.xls pattern (e.g. 23in11si.xls).
+# The Rev Proc PDF for TY2023 parameters (rp-22-38.pdf) is already registered.
 
 
 def get_excel_files(year: int) -> dict[str, dict]:

@@ -1,7 +1,7 @@
 """Download IRS SOI data files and generate SHA-256 manifest.
 
 Usage:
-    python -m src.etl.download [--years 2020 2021 2022] [--force] [--verify-only]
+    python -m src.etl.download [--years 2018 2019 2020 2021 2022] [--force] [--verify-only]
 """
 
 import argparse

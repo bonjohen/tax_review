@@ -375,46 +375,83 @@ body {
 .read-aloud-bar {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     margin-bottom: 1.2rem;
     padding-bottom: 0.8rem;
     border-bottom: 1px solid var(--border);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    flex-wrap: wrap;
 }
 
-.read-aloud-btn,
-.read-aloud-stop {
+.ra-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0.4rem 0.9rem;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.35rem 0.7rem;
     border-radius: 4px;
     border: 1px solid var(--border);
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s, border-color 0.15s;
     font-family: inherit;
-}
-
-.read-aloud-btn {
     background: var(--card-bg);
     color: var(--accent-dark);
+    min-width: 32px;
 }
 
-.read-aloud-btn:hover {
+.ra-btn:hover {
     background: #eef6fc;
     border-color: var(--accent);
 }
 
-.read-aloud-stop {
-    background: var(--card-bg);
+.ra-btn.ra-stop {
     color: var(--red);
     border-color: var(--red);
 }
 
-.read-aloud-stop:hover {
+.ra-btn.ra-stop:hover {
     background: #fdf2f2;
+}
+
+.ra-btn.ra-active {
+    background: #eef6fc;
+    border-color: var(--accent);
+}
+
+.ra-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.ra-select {
+    padding: 0.3rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    font-size: 0.78rem;
+    font-family: inherit;
+    color: var(--accent-dark);
+    background: var(--card-bg);
+    cursor: pointer;
+}
+
+.ra-select:hover {
+    border-color: var(--accent);
+}
+
+.ra-sep {
+    width: 1px;
+    height: 20px;
+    background: var(--border);
+    margin: 0 0.15rem;
+}
+
+.ra-progress {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    margin-left: 0.2rem;
 }
 
 .analysis-body p {
@@ -712,6 +749,13 @@ body {
     border-left: 4px solid var(--accent);
 }
 
+.section-group-desc {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    padding: 0.4rem 1.5rem 0.6rem;
+}
+
 .section-group-body {
     display: none;
     padding: 0 1rem 1rem;
@@ -730,6 +774,99 @@ body {
 
 .section-group-body > .section:last-child {
     margin-bottom: 0;
+}
+
+/* Pipeline diagram */
+.pipeline-intro {
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.pipeline-svg-wrap {
+    position: relative;
+    width: 100%;
+    overflow: visible;
+}
+
+.pipeline-svg-wrap svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Node styling */
+.pipeline-svg-wrap .pn-external  rect { fill: #fef9e7; stroke: #d4ac0d; }
+.pipeline-svg-wrap .pn-script    rect { fill: #eef6fc; stroke: #5dade2; }
+.pipeline-svg-wrap .pn-storage   rect { fill: #f0f4f8; stroke: #aab7c4; }
+.pipeline-svg-wrap .pn-parser    rect { fill: #ebf5fb; stroke: #3498db; }
+.pipeline-svg-wrap .pn-database  rect { fill: #e8f8f5; stroke: #1abc9c; }
+.pipeline-svg-wrap .pn-view      rect { fill: #fdf2e9; stroke: #e67e22; }
+.pipeline-svg-wrap .pn-export    rect { fill: #f4ecf7; stroke: #8e44ad; }
+.pipeline-svg-wrap .pn-validate  rect { fill: #fdedec; stroke: #e74c3c; }
+.pipeline-svg-wrap .pn-output    rect { fill: #eafaf1; stroke: #27ae60; }
+
+.pipeline-svg-wrap [data-tt-body] {
+    cursor: pointer;
+}
+
+.pipeline-svg-wrap [data-tt-body] rect {
+    stroke-width: 1.5;
+    transition: stroke-width 0.15s;
+}
+
+.pipeline-svg-wrap [data-tt-body]:hover rect {
+    stroke-width: 2.5;
+    filter: brightness(0.95);
+}
+
+.pipeline-svg-wrap [data-tt-body]:hover line,
+.pipeline-svg-wrap [data-tt-body]:hover path {
+    stroke-width: 2.5;
+}
+
+.pipeline-svg-wrap text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    fill: #2c3e50;
+}
+
+.pipeline-svg-wrap .stage-label {
+    font-size: 11px;
+    font-weight: 700;
+    fill: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Tooltip */
+.pipeline-tooltip {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    padding: 0.6rem 0.8rem;
+    max-width: 280px;
+    pointer-events: none;
+    z-index: 100;
+    font-size: 0.8rem;
+    line-height: 1.45;
+}
+
+.pipeline-tooltip.visible {
+    display: block;
+}
+
+.pipeline-tooltip .tt-title {
+    font-weight: 700;
+    color: var(--accent-dark);
+    margin-bottom: 0.2rem;
+}
+
+.pipeline-tooltip .tt-body {
+    color: var(--text);
 }
 
 /* Responsive */

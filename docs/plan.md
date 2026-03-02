@@ -2,7 +2,7 @@
 
 ## Context
 
-The project needs a complete Python pipeline to: download 33 IRS Excel files + 3 Revenue Procedure PDFs, parse them into 4 canonical Parquet tables, adjust for inflation, and validate cross-table consistency. Currently only `docs/plan.md` exists — no code, no build system.
+The project needs a complete Python pipeline to: download 55 IRS Excel files + 5 Revenue Procedure PDFs, parse them into 4 canonical Parquet tables, adjust for inflation, and validate cross-table consistency. Currently only `docs/plan.md` exists — no code, no build system.
 
 ## Technology Stack
 
@@ -48,7 +48,7 @@ tests/
   test_cpi_adjust.py
   test_reconcile.py
 data/                    # .gitignore'd except parameters/
-  raw/{2020,2021,2022}/
+  raw/{2018,2019,2020,2021,2022}/
   parameters/
   processed/
     nominal/
@@ -64,8 +64,8 @@ data/                    # .gitignore'd except parameters/
 - Create `data/` directories
 
 ### Phase 1: Download System
-- **`src/etl/url_registry.py`** — Dict mapping `(year, table_id)` to IRS URL. 11 Excel files per year (33 total) + 3 Revenue Procedure PDFs. URLs follow pattern: `https://www.irs.gov/pub/irs-soi/{YY}in{TABLE_SUFFIX}.xls`
-- **`src/etl/download.py`** — CLI script: `python -m src.etl.download [--years 2020 2021 2022] [--force] [--verify-only]`. Downloads to `data/raw/{year}/`, PDFs to `data/parameters/`. Generates `data/manifest.json` with URL, filename, year, table_id, sha256, download_date, size_bytes.
+- **`src/etl/url_registry.py`** — Dict mapping `(year, table_id)` to IRS URL. 11 Excel files per year (55 total) + 5 Revenue Procedure PDFs. URLs follow pattern: `https://www.irs.gov/pub/irs-soi/{YY}in{TABLE_SUFFIX}.xls`
+- **`src/etl/download.py`** — CLI script: `python -m src.etl.download [--years 2018 2019 2020 2021 2022] [--force] [--verify-only]`. Downloads to `data/raw/{year}/`, PDFs to `data/parameters/`. Generates `data/manifest.json` with URL, filename, year, table_id, sha256, download_date, size_bytes.
 
 ### Phase 2: AGI Bin Definitions
 - **`src/etl/agi_bins.py`** — Define canonical AGI bin IDs (1-N) with lower/upper bounds. Provide `match_agi_bin(text) -> int | None` that fuzzy-matches the various text representations IRS uses ("Under $5,000", "$1 under $5,000", etc.) to canonical bin IDs. Returns `None` for aggregate/total rows. This is the foundation every parser depends on.
@@ -86,7 +86,7 @@ Key parsing challenges:
 - Tables 3.4-3.6: section-based layout with filing status as section headers, not columns
 
 ### Phase 4: CPI Adjustment
-- **`src/etl/cpi_adjust.py`** — Hardcoded CPI-U annual averages (2020: 258.811, 2021: 270.970, 2022: 292.655). Multiplier = CPI_2022 / CPI_year. Apply to all monetary columns, output as separate "real_2022" Parquet files alongside nominal files.
+- **`src/etl/cpi_adjust.py`** — Hardcoded CPI-U annual averages (2018: 251.107, 2019: 255.657, 2020: 258.811, 2021: 270.970, 2022: 292.655). Multiplier = CPI_2022 / CPI_year. Apply to all monetary columns, output as separate "real_2022" Parquet files alongside nominal files.
 
 ### Phase 5: Pipeline Orchestrator
 - **`src/etl/pipeline.py`** — CLI: `python -m src.etl.pipeline [--years ...]`. For each year: parse all tables → merge into 4 canonical DataFrames → write nominal Parquet → CPI-adjust → write real Parquet. Output to `data/processed/nominal/` and `data/processed/real_2022/`.
@@ -105,8 +105,8 @@ Key parsing challenges:
 
 ## Verification
 
-1. **Download**: `python -m src.etl.download` — all 36 files downloaded, `data/manifest.json` generated with checksums
+1. **Download**: `python -m src.etl.download` — all 60 files downloaded, `data/manifest.json` generated with checksums
 2. **Pipeline**: `python -m src.etl.pipeline` — 4 Parquet files in both `nominal/` and `real_2022/`
 3. **Validation**: `python -m src.validation.reconcile` — all checks pass (<0.05% variance)
 4. **Tests**: `pytest tests/` — all unit tests pass
-5. **Parameters**: `python -m src.parameters.extract_tax_params` — 3 JSON files in `data/parameters/`
+5. **Parameters**: `python -m src.parameters.extract_tax_params` — 5 JSON files in `data/parameters/`

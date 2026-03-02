@@ -27,8 +27,22 @@
         <div class="analysis-card section-group">
             <div class="analysis-header" id="group-reform-header">
                 <div><h2>Reform Analysis</h2><span class="analysis-subtitle">Overview, narrative, burden distribution, and revenue impact</span></div>
-                <span class="analysis-toggle" id="group-reform-toggle">Collapse</span>
+                <div class="analysis-header-right">
+                    <div class="year-select-wrap">
+                        <label for="year-select">Tax Year:</label>
+                        <select id="year-select" onclick="event.stopPropagation()">
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021" selected>2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023 (Forecast)</option>
+                        </select>
+                    </div>
+                    <span class="analysis-toggle" id="group-reform-toggle">Collapse</span>
+                </div>
             </div>
+            <p class="section-group-desc">This section presents the core reform analysis: an overview of the proposed change, a detailed narrative essay, and two interactive charts showing how the revenue burden distributes across income levels and through which channels (rate differential vs. stranded losses) additional tax is generated. Use the Tax Year selector above to view results for any year from 2018 to 2023.</p>
             <div class="section-group-body visible" id="group-reform-body">
 
     <!-- Overview: concise reform summary with headline metrics -->
@@ -39,15 +53,15 @@
                     <h2>Overview</h2>
                     <span class="analysis-subtitle">Reform at a glance</span>
                 </div>
-                <span class="analysis-toggle" id="overview-toggle">Collapse</span>
+                <span class="analysis-toggle" id="overview-toggle">Expand</span>
             </div>
-            <div class="analysis-body collapsible-section-body visible" id="overview-body">
+            <div class="analysis-body collapsible-section-body" id="overview-body">
                 <p class="overview-narrative">
-                    This document seeks to offer a simple tax soluition to a tax revenue shortfall. This model
-                    simulates a minor Federal Tax reform that eliminates the preferential tax rate for capital
-                    gains held fewer than five years, reclassifying them as ordinary income. The result is a
-                    massive, steeply progressive revenue increase&mdash;driven overwhelmingly by stranded losses
-                    at the top of the income distribution.
+                    This model simulates a targeted federal tax reform: eliminating the preferential rate for
+                    capital gains held fewer than five years and reclassifying them as ordinary income. The
+                    result is a steeply progressive revenue increase&mdash;driven overwhelmingly by stranded
+                    losses at the top of the income distribution&mdash;that would represent a significant share
+                    of total individual income tax collections.
                     Explore the analysis and interactive charts below to see how the numbers break down.
                 </p>
                 <div class="metrics-row">
@@ -96,11 +110,23 @@
             </div>
             <div class="analysis-body" id="analysis-body">
 
-<div class="read-aloud-bar">
-    <button class="read-aloud-btn" id="read-aloud-btn" title="Read analysis aloud">
-        <span id="read-aloud-icon">&#9654;</span> <span id="read-aloud-label">Read Aloud</span>
-    </button>
-    <button class="read-aloud-stop" id="read-aloud-stop" title="Stop reading" style="display:none;">&#9632; Stop</button>
+<div class="read-aloud-bar ra-bar">
+    <button class="ra-btn ra-play" title="Play">&#9654;</button>
+    <button class="ra-btn ra-pause" title="Pause" disabled>&#10074;&#10074;</button>
+    <button class="ra-btn ra-stop" title="Stop" disabled>&#9632;</button>
+    <span class="ra-sep"></span>
+    <button class="ra-btn ra-prev" title="Previous paragraph">&#9664;&#9664;</button>
+    <button class="ra-btn ra-next" title="Next paragraph">&#9654;&#9654;</button>
+    <span class="ra-sep"></span>
+    <select class="ra-select ra-speed" title="Speed">
+        <option value="0.75">0.75&times;</option>
+        <option value="1" selected>1&times;</option>
+        <option value="1.25">1.25&times;</option>
+        <option value="1.5">1.5&times;</option>
+        <option value="2">2&times;</option>
+    </select>
+    <select class="ra-select ra-voice" title="Voice"></select>
+    <span class="ra-progress ra-status"></span>
 </div>
 
 <p class="lede">
@@ -115,17 +141,18 @@ closing it would look like.
 
 <p>
 In tax year 2021, American taxpayers reported <strong>$1.92 trillion</strong> in net long-term
-capital gains on 20.5 million Schedule D filings&mdash;a record driven by surging equity and
-real estate markets. That figure alone exceeds the GDP of all but a handful of nations. But
-it's the number you <em>don't</em> see on the IRS Statistics of Income tables that tells the
-real story.
+capital gains on 20.5 million Schedule D filings. That figure alone exceeds the GDP of all
+but a handful of nations. But the number you <em>don't</em> see on the IRS Statistics of
+Income tables&mdash;the gross gains hidden by tax-loss harvesting&mdash;tells the real story.
 </p>
 
 <p>
-Our model estimates that before tax-loss harvesting, gross long-term gains were substantially
-larger than the net figures reported to the IRS. Across all income levels, investors strategically
-realize losses to offset gains, reducing their taxable capital income. This is perfectly legal.
-It is also enormously expensive for the public fisc.
+Our model indicates that the net long-term capital gains reported in IRS tables substantially
+understate the total volume of realized gains. Before tax-loss harvesting and offsetting, gross
+gains are materially larger. Across all income levels, investors deliberately realize losses to
+offset realized gains, reducing the amount of capital income subject to tax. This behavior is
+entirely lawful under current statute. However, by narrowing the taxable base relative to economic
+gains realized, it materially reduces federal revenue.
 </p>
 
 <div class="stat-callout">
@@ -134,13 +161,13 @@ It is also enormously expensive for the public fisc.
 </div>
 
 <p>
-That number&mdash;over one trillion dollars in a single year&mdash;is not a theoretical maximum. It is the
-result of a conservative, five-step microsimulation applied to actual IRS data at all 19 income
-levels, using real tax bracket schedules and calibrated loss ratios. It accounts for the $3,000
+That figure&mdash;over one trillion dollars in TY2021 alone&mdash;is not a theoretical maximum. It is
+the result of a five-step microsimulation applied to actual IRS data at all 19 income levels,
+using real tax bracket schedules and calibrated loss ratios. The model accounts for the $3,000
 annual cap on capital loss deductions against ordinary income (IRC &sect;1211(b)), the composition
 of gains by holding period, and the return-count-weighted marginal rates across all filing statuses.
-Even in the 2022 correction, when gains fell to $1.35 trillion, the reform still generated
-$718 billion.
+Even in the 2022 market correction, when gains fell to $1.35 trillion, the reform still generated
+$718 billion&mdash;equivalent to 28% of that year's $2.6 trillion in individual income tax collections.
 </p>
 
 <div class="analysis-chart-wrap"><canvas id="ac-trends"></canvas></div>
@@ -301,20 +328,23 @@ as gains recover to $1.79 trillion.
 </p>
 
 <table>
-<tr><th>Tax Year</th><th>LT Gains</th><th>Reform Revenue</th><th>% from $1M+ Filers</th></tr>
-<tr><td>2018</td><td>$951B</td><td>$507B</td><td>72.5%</td></tr>
-<tr><td>2019</td><td>$849B</td><td>$464B</td><td>73.2%</td></tr>
-<tr><td>2020</td><td>$1,064B</td><td>$582B</td><td>75.6%</td></tr>
-<tr style="font-weight:600;"><td>2021</td><td>$1,922B</td><td>$1,119B</td><td>78.2%</td></tr>
-<tr><td>2022</td><td>$1,351B</td><td>$718B</td><td>76.6%</td></tr>
-<tr style="font-style:italic; color:#7d6608;"><td>2023 (F)</td><td>$1,789B</td><td>$1,003B</td><td>78.2%</td></tr>
+<tr><th>Tax Year</th><th>LT Gains</th><th>Reform Revenue</th><th>Federal Income Tax</th><th>Reform as % of Tax</th><th>% from $1M+ Filers</th></tr>
+<tr><td>2018</td><td>$951B</td><td>$507B</td><td>$1,700B</td><td>29.8%</td><td>72.5%</td></tr>
+<tr><td>2019</td><td>$849B</td><td>$464B</td><td>$1,700B</td><td>27.3%</td><td>73.2%</td></tr>
+<tr><td>2020</td><td>$1,064B</td><td>$582B</td><td>$1,600B</td><td>36.4%</td><td>75.6%</td></tr>
+<tr style="font-weight:600;"><td>2021</td><td>$1,922B</td><td>$1,119B</td><td>$2,000B</td><td>56.0%</td><td>78.2%</td></tr>
+<tr><td>2022</td><td>$1,351B</td><td>$718B</td><td>$2,600B</td><td>27.6%</td><td>76.6%</td></tr>
+<tr style="font-style:italic; color:#7d6608;"><td>2023 (F)</td><td>$1,789B</td><td>$1,003B</td><td>$2,200B</td><td>45.6%</td><td>78.2%</td></tr>
 </table>
 
 <p>
-Two patterns emerge. First, the share of revenue from million-dollar-plus filers has
+Three patterns emerge. First, the share of revenue from million-dollar-plus filers has
 trended upward, from 72.5% in 2018 to 78.2% in 2021&mdash;capital gains are concentrating
 further at the top. Second, even in a down year (2022), the reform generates more than
-$700 billion, providing a substantial and relatively stable revenue base.
+$700 billion, providing a substantial and relatively stable revenue base. Third, the
+&ldquo;Reform as % of Tax&rdquo; column puts the numbers in perspective: reform revenue
+ranges from 27% to 56% of total federal individual income tax collections, underscoring
+the scale of the revenue currently sheltered by the preferential rate.
 </p>
 
 <h2 class="analysis-section-title" id="analysis-section-8"><span class="section-number">Section 8</span>What This Means</h2>
@@ -332,7 +362,7 @@ Eliminating preferential treatment for gains held fewer than five years would:
 </p>
 
 <ul>
-<li>Generate $500 billion&ndash;$1.1 trillion per year depending on market conditions</li>
+<li>Generate $500 billion&ndash;$1.1 trillion per year depending on market conditions&mdash;equivalent to 27&ndash;56% of total federal individual income tax collections</li>
 <li>Draw 73&ndash;78% of that revenue from filers with AGI above $1 million</li>
 <li>Leave filers below $200,000 AGI bearing less than 5% of the additional burden</li>
 <li>Preserve preferential treatment for truly long-term holdings (5+ years)</li>
@@ -380,12 +410,27 @@ unless otherwise noted.</p>
                     <h2 id="burden-title">Who Bears the Burden? (2022)</h2>
                     <span class="analysis-subtitle">Reform impact distribution across income levels</span>
                 </div>
-                <div class="analysis-header-right">
-                    <a class="analysis-ref" data-analysis-section="analysis-section-4">Read analysis</a>
-                    <span class="analysis-toggle" id="burden-toggle">Expand</span>
-                </div>
+                <span class="analysis-toggle" id="burden-toggle">Expand</span>
             </div>
             <div class="analysis-body collapsible-section-body" id="burden-body">
+                <div class="read-aloud-bar ra-bar">
+                    <button class="ra-btn ra-play" title="Play">&#9654;</button>
+                    <button class="ra-btn ra-pause" title="Pause" disabled>&#10074;&#10074;</button>
+                    <button class="ra-btn ra-stop" title="Stop" disabled>&#9632;</button>
+                    <span class="ra-sep"></span>
+                    <button class="ra-btn ra-prev" title="Previous paragraph">&#9664;&#9664;</button>
+                    <button class="ra-btn ra-next" title="Next paragraph">&#9654;&#9654;</button>
+                    <span class="ra-sep"></span>
+                    <select class="ra-select ra-speed" title="Speed">
+                        <option value="0.75">0.75&times;</option>
+                        <option value="1" selected>1&times;</option>
+                        <option value="1.25">1.25&times;</option>
+                        <option value="1.5">1.5&times;</option>
+                        <option value="2">2&times;</option>
+                    </select>
+                    <select class="ra-select ra-voice" title="Voice"></select>
+                    <span class="ra-progress ra-status"></span>
+                </div>
                 <p class="section-narrative">This chart maps where reform revenue originates across the income spectrum. The horizontal bars show each AGI bin's share of total long-term capital gains, while the green line traces the additional tax revenue the reform would generate. The steepest gains come from filers above $1 million, who hold the largest portfolios and harvest losses most aggressively.</p>
                 <div class="chart-card">
                     <div class="chart-wrapper chart-wrapper-tall"><canvas id="chart-burden"></canvas></div>
@@ -457,12 +502,27 @@ unless otherwise noted.</p>
                     <h2 id="revenue-title">Revenue Impact by Income Segment (2022)</h2>
                     <span class="analysis-subtitle">Rate differential and stranded loss components</span>
                 </div>
-                <div class="analysis-header-right">
-                    <a class="analysis-ref" data-analysis-section="analysis-section-3">Read analysis</a>
-                    <span class="analysis-toggle" id="revenue-toggle">Expand</span>
-                </div>
+                <span class="analysis-toggle" id="revenue-toggle">Expand</span>
             </div>
             <div class="analysis-body collapsible-section-body" id="revenue-body">
+                <div class="read-aloud-bar ra-bar">
+                    <button class="ra-btn ra-play" title="Play">&#9654;</button>
+                    <button class="ra-btn ra-pause" title="Pause" disabled>&#10074;&#10074;</button>
+                    <button class="ra-btn ra-stop" title="Stop" disabled>&#9632;</button>
+                    <span class="ra-sep"></span>
+                    <button class="ra-btn ra-prev" title="Previous paragraph">&#9664;&#9664;</button>
+                    <button class="ra-btn ra-next" title="Next paragraph">&#9654;&#9654;</button>
+                    <span class="ra-sep"></span>
+                    <select class="ra-select ra-speed" title="Speed">
+                        <option value="0.75">0.75&times;</option>
+                        <option value="1" selected>1&times;</option>
+                        <option value="1.25">1.25&times;</option>
+                        <option value="1.5">1.5&times;</option>
+                        <option value="2">2&times;</option>
+                    </select>
+                    <select class="ra-select ra-voice" title="Voice"></select>
+                    <span class="ra-progress ra-status"></span>
+                </div>
                 <p class="section-narrative">Reform revenue comes from two channels. The smaller &ldquo;rate differential&rdquo; component reflects the gap between the 15% preferential rate and the filer's ordinary marginal rate. The much larger &ldquo;stranded losses&rdquo; component arises because reclassifying gains as ordinary income renders previously harvested capital losses nearly worthless&mdash;they can only offset $3,000/year of ordinary income.</p>
                 <div class="chart-card">
                     <div class="chart-wrapper"><canvas id="chart-revenue"></canvas></div>
@@ -481,21 +541,9 @@ unless otherwise noted.</p>
         <div class="analysis-card section-group">
             <div class="analysis-header" id="group-charts-header">
                 <div><h2>Interactive Charts</h2><span class="analysis-subtitle">Filing status, concentration, income composition, brackets, and trends</span></div>
-                <div class="analysis-header-right">
-                    <div class="year-select-wrap">
-                        <label for="year-select">Tax Year:</label>
-                        <select id="year-select" onclick="event.stopPropagation()">
-                            <option value="2018">2018</option>
-                            <option value="2019">2019</option>
-                            <option value="2020">2020</option>
-                            <option value="2021" selected>2021</option>
-                            <option value="2022">2022</option>
-                            <option value="2023">2023 (Forecast)</option>
-                        </select>
-                    </div>
-                    <span class="analysis-toggle" id="group-charts-toggle">Expand</span>
-                </div>
+                <span class="analysis-toggle" id="group-charts-toggle">Expand</span>
             </div>
+            <p class="section-group-desc">Five interactive visualizations explore the data behind the reform model. Each chart responds to the Tax Year selector in the Reform Analysis header above. Expand any section to see the chart along with a narrative explanation of what it shows.</p>
             <div class="section-group-body" id="group-charts-body">
 
     <!-- Filing Status Breakdown (collapsible) -->
@@ -506,10 +554,7 @@ unless otherwise noted.</p>
                     <h2 id="filing-status-title">Reform Revenue by Filing Status (2022)</h2>
                     <span class="analysis-subtitle">Revenue allocation across filing types and income levels</span>
                 </div>
-                <div class="analysis-header-right">
-                    <a class="analysis-ref" data-analysis-section="analysis-section-5">Read analysis</a>
-                    <span class="analysis-toggle" id="filing-status-toggle">Expand</span>
-                </div>
+                <span class="analysis-toggle" id="filing-status-toggle">Expand</span>
             </div>
             <div class="analysis-body collapsible-section-body" id="filing-status-body">
                 <p class="section-narrative">Married filing jointly dominates reform revenue at every income level, reflecting the concentration of investment portfolios in joint-filing households. Single filers contribute a secondary share, while head-of-household and married-filing-separately filers bear minimal impact.</p>
@@ -530,10 +575,7 @@ unless otherwise noted.</p>
                     <h2 id="concentration-title">Capital Gains Concentration (2022)</h2>
                     <span class="analysis-subtitle">Cumulative share of long-term gains from lowest to highest AGI bin</span>
                 </div>
-                <div class="analysis-header-right">
-                    <a class="analysis-ref" data-analysis-section="analysis-section-2">Read analysis</a>
-                    <span class="analysis-toggle" id="concentration-toggle">Expand</span>
-                </div>
+                <span class="analysis-toggle" id="concentration-toggle">Expand</span>
             </div>
             <div class="analysis-body collapsible-section-body" id="concentration-body">
                 <p class="section-narrative">Capital gains are among the most concentrated forms of income in the U.S. tax base. The curve below rises slowly through the lower and middle AGI bins, then climbs steeply above $1 million. Filers with AGI above $2 million routinely account for more than 60% of all reported long-term gains.</p>
@@ -553,10 +595,7 @@ unless otherwise noted.</p>
                     <h2 id="income-title">Income Composition by AGI Bin (2022)</h2>
                     <span class="analysis-subtitle">How income sources shift across the income spectrum</span>
                 </div>
-                <div class="analysis-header-right">
-                    <a class="analysis-ref" data-analysis-section="analysis-section-2">Read analysis</a>
-                    <span class="analysis-toggle" id="income-toggle">Expand</span>
-                </div>
+                <span class="analysis-toggle" id="income-toggle">Expand</span>
             </div>
             <div class="analysis-body collapsible-section-body" id="income-body">
                 <p class="section-narrative">Below $200,000 AGI, wages and salaries account for the vast majority of income. Above $1 million, the composition flips: capital gains, partnership and S-corporation income, and other investment returns dominate. This structural shift is what makes the preferential capital gains rate so consequential&mdash;it applies precisely where income is largest.</p>
@@ -576,10 +615,7 @@ unless otherwise noted.</p>
                     <h2 id="brackets-title">Tax Generated by Marginal Rate Bracket (2022)</h2>
                     <span class="analysis-subtitle">Ordinary income tax distribution by statutory rate</span>
                 </div>
-                <div class="analysis-header-right">
-                    <a class="analysis-ref" data-analysis-section="analysis-section-6">Read analysis</a>
-                    <span class="analysis-toggle" id="brackets-toggle">Expand</span>
-                </div>
+                <span class="analysis-toggle" id="brackets-toggle">Expand</span>
             </div>
             <div class="analysis-body collapsible-section-body" id="brackets-body">
                 <p class="section-narrative">The 22% and 24% brackets generate the most total income tax by volume, but the reform&rsquo;s additional revenue concentrates in the 35% and 37% brackets&mdash;where the wealthiest filers&rsquo; reclassified gains land. The stacked bars show current-law tax alongside the reform increment at each rate.</p>
@@ -599,10 +635,7 @@ unless otherwise noted.</p>
                     <h2>Year-over-Year Trends (2018&ndash;2023)</h2>
                     <span class="analysis-subtitle">Long-term gains, short-term gains, and total income tax over time</span>
                 </div>
-                <div class="analysis-header-right">
-                    <a class="analysis-ref" data-analysis-section="analysis-section-7">Read analysis</a>
-                    <span class="analysis-toggle" id="trends-toggle">Expand</span>
-                </div>
+                <span class="analysis-toggle" id="trends-toggle">Expand</span>
             </div>
             <div class="analysis-body collapsible-section-body" id="trends-body">
                 <p class="section-narrative">Long-term capital gains surged to a record $1.92 trillion in 2021, driven by equity and real-estate markets, before correcting sharply in 2022. Short-term gains and total income tax follow related but distinct cycles. The dashed segment shows our trend-based 2023 forecast.</p>
@@ -625,6 +658,7 @@ unless otherwise noted.</p>
                 <div><h2>Legislative Framework</h2><span class="analysis-subtitle">Process, current law, and proposed statutory language</span></div>
                 <span class="analysis-toggle" id="group-legislative-toggle">Expand</span>
             </div>
+            <p class="section-group-desc">This section provides the legal and procedural context for the proposed reform. It covers how federal tax legislation is enacted, the specific Internal Revenue Code provisions that currently govern capital gains taxation, and the proposed statutory language that would implement the five-year holding period threshold.</p>
             <div class="section-group-body" id="group-legislative-body">
 
     <!-- How Tax Law Is Changed (collapsible) -->
@@ -638,6 +672,24 @@ unless otherwise noted.</p>
                 <span class="analysis-toggle" id="lawprocess-toggle">Expand</span>
             </div>
             <div class="analysis-body" id="lawprocess-body">
+                <div class="read-aloud-bar ra-bar">
+                    <button class="ra-btn ra-play" title="Play">&#9654;</button>
+                    <button class="ra-btn ra-pause" title="Pause" disabled>&#10074;&#10074;</button>
+                    <button class="ra-btn ra-stop" title="Stop" disabled>&#9632;</button>
+                    <span class="ra-sep"></span>
+                    <button class="ra-btn ra-prev" title="Previous paragraph">&#9664;&#9664;</button>
+                    <button class="ra-btn ra-next" title="Next paragraph">&#9654;&#9654;</button>
+                    <span class="ra-sep"></span>
+                    <select class="ra-select ra-speed" title="Speed">
+                        <option value="0.75">0.75&times;</option>
+                        <option value="1" selected>1&times;</option>
+                        <option value="1.25">1.25&times;</option>
+                        <option value="1.5">1.5&times;</option>
+                        <option value="2">2&times;</option>
+                    </select>
+                    <select class="ra-select ra-voice" title="Voice"></select>
+                    <span class="ra-progress ra-status"></span>
+                </div>
 
                 <h2 class="analysis-section-title">
                     <span class="section-number">I</span>
@@ -710,6 +762,24 @@ unless otherwise noted.</p>
                 <span class="analysis-toggle" id="currentlaw-toggle">Expand</span>
             </div>
             <div class="analysis-body" id="currentlaw-body">
+                <div class="read-aloud-bar ra-bar">
+                    <button class="ra-btn ra-play" title="Play">&#9654;</button>
+                    <button class="ra-btn ra-pause" title="Pause" disabled>&#10074;&#10074;</button>
+                    <button class="ra-btn ra-stop" title="Stop" disabled>&#9632;</button>
+                    <span class="ra-sep"></span>
+                    <button class="ra-btn ra-prev" title="Previous paragraph">&#9664;&#9664;</button>
+                    <button class="ra-btn ra-next" title="Next paragraph">&#9654;&#9654;</button>
+                    <span class="ra-sep"></span>
+                    <select class="ra-select ra-speed" title="Speed">
+                        <option value="0.75">0.75&times;</option>
+                        <option value="1" selected>1&times;</option>
+                        <option value="1.25">1.25&times;</option>
+                        <option value="1.5">1.5&times;</option>
+                        <option value="2">2&times;</option>
+                    </select>
+                    <select class="ra-select ra-voice" title="Voice"></select>
+                    <span class="ra-progress ra-status"></span>
+                </div>
 
                 <p>The following sections of the Internal Revenue Code govern the taxation of capital gains. Annotation boxes highlight the specific language that the proposed reform would modify.</p>
 
@@ -907,6 +977,24 @@ unless otherwise noted.</p>
                 <span class="analysis-toggle" id="proposed-toggle">Expand</span>
             </div>
             <div class="analysis-body" id="proposed-body">
+                <div class="read-aloud-bar ra-bar">
+                    <button class="ra-btn ra-play" title="Play">&#9654;</button>
+                    <button class="ra-btn ra-pause" title="Pause" disabled>&#10074;&#10074;</button>
+                    <button class="ra-btn ra-stop" title="Stop" disabled>&#9632;</button>
+                    <span class="ra-sep"></span>
+                    <button class="ra-btn ra-prev" title="Previous paragraph">&#9664;&#9664;</button>
+                    <button class="ra-btn ra-next" title="Next paragraph">&#9654;&#9654;</button>
+                    <span class="ra-sep"></span>
+                    <select class="ra-select ra-speed" title="Speed">
+                        <option value="0.75">0.75&times;</option>
+                        <option value="1" selected>1&times;</option>
+                        <option value="1.25">1.25&times;</option>
+                        <option value="1.5">1.5&times;</option>
+                        <option value="2">2&times;</option>
+                    </select>
+                    <select class="ra-select ra-voice" title="Voice"></select>
+                    <span class="ra-progress ra-status"></span>
+                </div>
 
                 <p>The following shows the proposed amendments in redline format. <span class="legal-struck">Struck text</span> indicates language to be deleted; <span class="legal-inserted">bold green text</span> indicates language to be inserted.</p>
 
@@ -1013,7 +1101,261 @@ unless otherwise noted.</p>
                 <div><h2>Reference</h2><span class="analysis-subtitle">Assumptions, source data, and glossary</span></div>
                 <span class="analysis-toggle" id="group-reference-toggle">Expand</span>
             </div>
+            <p class="section-group-desc">Reference materials for the dashboard: the data pipeline architecture showing how IRS source files flow through parsing, transformation, and export; model calibration assumptions; IRS source table references; and a glossary of tax, model, and chart terminology.</p>
             <div class="section-group-body" id="group-reference-body">
+
+    <!-- Architecture & Methodology (collapsible) -->
+    <div class="section">
+        <div class="analysis-card">
+            <div class="analysis-header" id="architecture-header">
+                <div>
+                    <h2>Architecture &amp; Methodology</h2>
+                    <span class="analysis-subtitle">Data pipeline from IRS source files to interactive dashboard</span>
+                </div>
+                <span class="analysis-toggle" id="architecture-toggle">Expand</span>
+            </div>
+            <div class="analysis-body" id="architecture-body">
+                <div class="read-aloud-bar ra-bar">
+                    <button class="ra-btn ra-play" title="Play">&#9654;</button>
+                    <button class="ra-btn ra-pause" title="Pause" disabled>&#10074;&#10074;</button>
+                    <button class="ra-btn ra-stop" title="Stop" disabled>&#9632;</button>
+                    <span class="ra-sep"></span>
+                    <button class="ra-btn ra-prev" title="Previous paragraph">&#9664;&#9664;</button>
+                    <button class="ra-btn ra-next" title="Next paragraph">&#9654;&#9654;</button>
+                    <span class="ra-sep"></span>
+                    <select class="ra-select ra-speed" title="Speed">
+                        <option value="0.75">0.75&times;</option>
+                        <option value="1" selected>1&times;</option>
+                        <option value="1.25">1.25&times;</option>
+                        <option value="1.5">1.5&times;</option>
+                        <option value="2">2&times;</option>
+                    </select>
+                    <select class="ra-select ra-voice" title="Voice"></select>
+                    <span class="ra-progress ra-status"></span>
+                </div>
+                <p class="pipeline-intro">
+                    The diagram below traces data from IRS Statistics of Income source files through five
+                    processing stages to the interactive charts in this dashboard. Hover any node or edge
+                    for implementation details.
+                </p>
+                <div class="pipeline-svg-wrap">
+                    <div class="pipeline-tooltip" id="pipeline-tooltip">
+                        <div class="tt-title"></div>
+                        <div class="tt-body"></div>
+                    </div>
+                    <svg viewBox="0 0 780 660" xmlns="http://www.w3.org/2000/svg" role="img"
+                         aria-label="ETL pipeline architecture diagram">
+                        <defs>
+                            <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                                <path d="M0,0 L8,3 L0,6 Z" fill="#7f8c8d"/>
+                            </marker>
+                        </defs>
+
+                        <!-- ══ Stage 1: Download ══ -->
+                        <text x="16" y="30" class="stage-label">1. Download</text>
+                        <g class="pn-external" data-tt-title="IRS Website"
+                           data-tt-body="irs.gov/statistics — SOI Publication 1304. Source of all 55 Excel workbooks (11 per year × 5 years) and 5 Revenue Procedure PDFs.">
+                            <rect x="40" y="42" width="130" height="36" rx="6"/>
+                            <text x="105" y="64" text-anchor="middle" font-size="12">IRS Website</text>
+                        </g>
+                        <g data-tt-title="HTTP download" data-tt-body="download.py fetches 60 files (11 per year × 5 years + 5 PDFs) and verifies SHA-256 checksums against data/manifest.json.">
+                            <line x1="170" y1="60" x2="240" y2="60" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+                        <g class="pn-script" data-tt-title="download.py"
+                           data-tt-body="python -m src.etl.download — Downloads all IRS source files. Supports --years filter and --verify-only mode. SHA-256 manifest ensures data integrity.">
+                            <rect x="244" y="42" width="130" height="36" rx="6"/>
+                            <text x="309" y="64" text-anchor="middle" font-size="12">download.py</text>
+                        </g>
+                        <g data-tt-title="Save to disk" data-tt-body="Files written to data/raw/{2018,2019,2020,2021,2022}/ preserving original IRS filenames (e.g. 21in14acg.xls).">
+                            <line x1="374" y1="60" x2="444" y2="60" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+                        <g class="pn-storage" data-tt-title="data/raw/"
+                           data-tt-body="55 Excel (.xls) files in BIFF format + 5 Revenue Procedure PDFs. Organized by tax year subdirectory. All files gitignored.">
+                            <rect x="448" y="42" width="130" height="36" rx="6"/>
+                            <text x="513" y="64" text-anchor="middle" font-size="12">data/raw/</text>
+                        </g>
+
+                        <!-- Edge: Stage 1 → Stage 2 -->
+                        <g data-tt-title="Raw files → Parsers" data-tt-body="Excel files read with xlrd (BIFF format). Multi-row headers (rows 1-5), footnote markers, and merged cells handled per parser.">
+                            <line x1="390" y1="78" x2="390" y2="115" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+
+                        <!-- ══ Stage 2: Parse & Load ══ -->
+                        <text x="16" y="135" class="stage-label">2. Parse &amp; Load</text>
+                        <g class="pn-script" data-tt-title="pipeline.py"
+                           data-tt-body="python -m src.etl.pipeline — Orchestrator that runs all parsers for each tax year, loads into SQLite, then exports to Parquet.">
+                            <rect x="40" y="145" width="130" height="36" rx="6"/>
+                            <text x="105" y="167" text-anchor="middle" font-size="12">pipeline.py</text>
+                        </g>
+                        <g data-tt-title="Calls parsers" data-tt-body="pipeline.py imports and calls load_table_*() functions from each parser module for years 2018-2022.">
+                            <line x1="170" y1="163" x2="225" y2="163" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+                        <g class="pn-parser" data-tt-title="parse_table_1x.py"
+                           data-tt-body="Parses Tables 1.1, 1.2, 1.4 — return counts, AGI totals, income items, and tax by AGI bin. Uses agi_bins.py for fuzzy label matching.">
+                            <rect x="229" y="125" width="140" height="36" rx="6"/>
+                            <text x="299" y="147" text-anchor="middle" font-size="12">parse_table_1x</text>
+                        </g>
+                        <g class="pn-parser" data-tt-title="parse_table_14a.py"
+                           data-tt-body="Parses Table 1.4A — Schedule D capital gains: short-term gains/losses, long-term gains/losses, and total net capital gains by AGI bin.">
+                            <rect x="229" y="166" width="140" height="36" rx="6"/>
+                            <text x="299" y="188" text-anchor="middle" font-size="12">parse_table_14a</text>
+                        </g>
+                        <g class="pn-parser" data-tt-title="parse_table_3x.py"
+                           data-tt-body="Parses Tables 3.4-3.6 — tax generated at each marginal rate bracket, organized by filing status (Single, MFJ, MFS, HoH).">
+                            <rect x="229" y="207" width="140" height="36" rx="6"/>
+                            <text x="299" y="229" text-anchor="middle" font-size="12">parse_table_3x</text>
+                        </g>
+                        <!-- Parser → SQLite edges -->
+                        <g data-tt-title="INSERT rows" data-tt-body="Parsers call db.insert_rows() to load parsed data into raw SQLite tables. All monetary values multiplied ×1,000 (IRS reports in thousands).">
+                            <line x1="369" y1="183" x2="444" y2="183" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+                        <g class="pn-database" data-tt-title="SQLite DB"
+                           data-tt-body="tax_review.db — 8 raw tables storing parsed IRS data for 5 tax years (2018-2022). Schema defined in schema.sql. File is gitignored.">
+                            <rect x="448" y="155" width="150" height="55" rx="6"/>
+                            <text x="523" y="179" text-anchor="middle" font-size="12" font-weight="600">SQLite DB</text>
+                            <text x="523" y="197" text-anchor="middle" font-size="10" fill="#7f8c8d">tax_review.db</text>
+                        </g>
+
+                        <!-- Edge: Stage 2 → Stage 3 -->
+                        <g data-tt-title="Raw tables → SQL Views" data-tt-body="schema.sql CREATE VIEW statements query raw tables to produce canonical, CPI-adjusted, and validation views.">
+                            <line x1="523" y1="210" x2="523" y2="270" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+
+                        <!-- ══ Stage 3: SQL Views ══ -->
+                        <text x="16" y="290" class="stage-label">3. SQL Views</text>
+                        <g class="pn-view" data-tt-title="4 Canonical Views"
+                           data-tt-body="AGI_BINS (19 brackets), RETURNS_AGGREGATE (counts, AGI, tax by bin/status), CAPITAL_GAINS (ST/LT by bin), BRACKET_DISTRIBUTION (tax per rate).">
+                            <rect x="80" y="300" width="170" height="36" rx="6"/>
+                            <text x="165" y="322" text-anchor="middle" font-size="12">4 Canonical Views</text>
+                        </g>
+                        <g class="pn-view" data-tt-title="3 CPI-Adjusted Views"
+                           data-tt-body="cpi_adjust.py applies CPI-U factors (2018: 251.107, 2019: 255.657, 2020: 258.811, 2021: 270.970, 2022: 292.655) to convert nominal dollars to constant 2022 dollars.">
+                            <rect x="300" y="300" width="170" height="36" rx="6"/>
+                            <text x="385" y="322" text-anchor="middle" font-size="12">3 CPI-Adjusted Views</text>
+                        </g>
+                        <g class="pn-view" data-tt-title="7 Validation Views"
+                           data-tt-body="Cross-table reconciliation views defined in schema.sql. Compare overlapping aggregates between Tables 1.1, 1.2, 1.4, 1.4A, and 3.x.">
+                            <rect x="520" y="300" width="170" height="36" rx="6"/>
+                            <text x="605" y="322" text-anchor="middle" font-size="12">7 Validation Views</text>
+                        </g>
+                        <!-- Edges between views -->
+                        <g data-tt-title="CPI-U multiplication" data-tt-body="Canonical view values × (292.655 / year_cpi) to produce real 2022 dollar equivalents.">
+                            <line x1="250" y1="318" x2="296" y2="318" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+
+                        <!-- Edge: Stage 3 → Stage 4 -->
+                        <g data-tt-title="Views → Export &amp; Validation" data-tt-body="pd.read_sql queries views into DataFrames. Parquet files written for both nominal and CPI-adjusted series.">
+                            <line x1="390" y1="336" x2="390" y2="395" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+
+                        <!-- ══ Stage 4: Export + Validation ══ -->
+                        <text x="16" y="415" class="stage-label">4. Export &amp; Validate</text>
+                        <g class="pn-export" data-tt-title="Parquet Export"
+                           data-tt-body="data/processed/nominal/ and data/processed/real_2022/ — columnar Parquet files for each canonical table, ready for analysis.">
+                            <rect x="60" y="425" width="150" height="36" rx="6"/>
+                            <text x="135" y="447" text-anchor="middle" font-size="12">Parquet Export</text>
+                        </g>
+                        <g class="pn-script" data-tt-title="export_data.py"
+                           data-tt-body="5-step microsimulation reform pipeline: (1) identify LT gains held &lt;5yr, (2) reclassify as ordinary, (3) rate differential, (4) stranded losses, (5) net revenue.">
+                            <rect x="260" y="425" width="170" height="36" rx="6"/>
+                            <text x="345" y="447" text-anchor="middle" font-size="12">export_data.py</text>
+                        </g>
+                        <g data-tt-title="Reform pipeline" data-tt-body="export_data.py reads canonical views, runs the 5-step microsim, and writes dashboard.json with all chart data.">
+                            <line x1="210" y1="443" x2="256" y2="443" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+                        <g class="pn-validate" data-tt-title="reconcile.py"
+                           data-tt-body="6 cross-table validation checks via SQL views. Ensures overlapping aggregates match within &lt;0.05% tolerance. Run with python -m src.validation.reconcile.">
+                            <rect x="480" y="425" width="150" height="36" rx="6"/>
+                            <text x="555" y="447" text-anchor="middle" font-size="12">reconcile.py</text>
+                        </g>
+                        <g data-tt-title="Validation queries" data-tt-body="reconcile.py reads the 7 validation views from SQLite and reports any discrepancies exceeding 0.05%.">
+                            <path d="M605 336 L605 360 L605 421" fill="none" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+
+                        <!-- Edge: Stage 4 → Output -->
+                        <g data-tt-title="JSON output" data-tt-body="export_data.py writes data/dashboard.json containing summary metrics, reform estimates, capital gains, bracket distributions, and trend data.">
+                            <line x1="345" y1="461" x2="345" y2="525" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+
+                        <!-- ══ Stage 5: Output ══ -->
+                        <text x="16" y="545" class="stage-label">5. Dashboard</text>
+                        <g class="pn-output" data-tt-title="dashboard.json"
+                           data-tt-body="Single JSON file with all chart data: summary metrics, reform_estimate (per bin), capital_gains_by_bin, bracket_distribution, trends, and reform_metadata.">
+                            <rect x="160" y="550" width="160" height="36" rx="6"/>
+                            <text x="240" y="572" text-anchor="middle" font-size="12">dashboard.json</text>
+                        </g>
+                        <g data-tt-title="fetch() at page load" data-tt-body="Browser fetches dashboard.json via the Fetch API. Chart.js renders 7 interactive visualizations from the loaded data.">
+                            <line x1="320" y1="568" x2="410" y2="568" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+                        <g class="pn-output" data-tt-title="This Dashboard"
+                           data-tt-body="Single-page HTML dashboard using Chart.js for interactive charts. All data loaded client-side from dashboard.json — no server required.">
+                            <rect x="414" y="550" width="170" height="36" rx="6"/>
+                            <text x="499" y="572" text-anchor="middle" font-size="12">This Dashboard</text>
+                        </g>
+
+                        <!-- Color legend -->
+                        <g transform="translate(40, 610)" font-size="10" fill="#7f8c8d">
+                            <rect x="0" y="0" width="10" height="10" rx="2" fill="#fef9e7" stroke="#d4ac0d"/>
+                            <text x="14" y="9">External</text>
+                            <rect x="80" y="0" width="10" height="10" rx="2" fill="#eef6fc" stroke="#5dade2"/>
+                            <text x="94" y="9">Script</text>
+                            <rect x="145" y="0" width="10" height="10" rx="2" fill="#f0f4f8" stroke="#aab7c4"/>
+                            <text x="159" y="9">Storage</text>
+                            <rect x="215" y="0" width="10" height="10" rx="2" fill="#ebf5fb" stroke="#3498db"/>
+                            <text x="229" y="9">Parser</text>
+                            <rect x="285" y="0" width="10" height="10" rx="2" fill="#e8f8f5" stroke="#1abc9c"/>
+                            <text x="299" y="9">Database</text>
+                            <rect x="370" y="0" width="10" height="10" rx="2" fill="#fdf2e9" stroke="#e67e22"/>
+                            <text x="384" y="9">SQL View</text>
+                            <rect x="450" y="0" width="10" height="10" rx="2" fill="#f4ecf7" stroke="#8e44ad"/>
+                            <text x="464" y="9">Export</text>
+                            <rect x="515" y="0" width="10" height="10" rx="2" fill="#fdedec" stroke="#e74c3c"/>
+                            <text x="529" y="9">Validation</text>
+                            <rect x="605" y="0" width="10" height="10" rx="2" fill="#eafaf1" stroke="#27ae60"/>
+                            <text x="619" y="9">Output</text>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="pipeline-intro" style="margin-top:1.2rem;">
+                <p><strong>Stage 1 &mdash; Download.</strong> The <code>download.py</code> script fetches 60 files
+                    (11 Excel workbooks per tax year across 2018&ndash;2022, plus 5 Revenue Procedure PDFs) from
+                    <code>irs.gov/pub/irs-soi</code>. Each file is verified against a SHA-256 checksum manifest
+                    to ensure data integrity. The Excel files use the legacy <code>.xls</code> (BIFF) format.</p>
+
+                <p><strong>Stage 2 &mdash; Parse &amp; Load.</strong> The pipeline orchestrator (<code>pipeline.py</code>)
+                    calls three specialized parsers. <code>parse_table_1x</code> handles Tables 1.1, 1.2, 3.2, and 3.3
+                    (return counts, AGI, taxable income, and tax items). <code>parse_table_14a</code> handles
+                    Table 1.4A (Schedule D capital gains: short-term, long-term, and total by AGI bin).
+                    <code>parse_table_3x</code> handles Tables 3.4&ndash;3.6 (tax generated at each marginal rate
+                    bracket by filing status). All parsers use <code>xlrd</code> to read the BIFF-format files,
+                    strip footnote markers, and multiply monetary values by 1,000 (IRS reports in thousands).
+                    Parsed rows are loaded into 8 raw tables in a SQLite database.</p>
+
+                <p><strong>Stage 3 &mdash; SQL Views.</strong> The <code>schema.sql</code> file defines three
+                    layers of views on top of the raw tables. Four <em>canonical views</em> present the data model:
+                    AGI_BINS (19 income brackets), RETURNS_AGGREGATE (return counts and tax by bin and filing status),
+                    CAPITAL_GAINS (short-term and long-term gains by bin), and BRACKET_DISTRIBUTION (tax per marginal
+                    rate). Three <em>CPI-adjusted views</em> convert nominal dollars to constant 2022 dollars using
+                    Bureau of Labor Statistics CPI-U annual averages. Seven <em>validation views</em> enable
+                    cross-table reconciliation checks.</p>
+
+                <p><strong>Stage 4 &mdash; Export &amp; Validate.</strong> <code>export_data.py</code> reads the
+                    canonical views into DataFrames, runs the five-step microsimulation reform pipeline (identify
+                    affected gains, reclassify as ordinary income, compute rate differential, estimate stranded losses,
+                    sum net revenue), and writes <code>dashboard.json</code>. Separately, <code>reconcile.py</code>
+                    runs 6 cross-table validation checks against the validation views, ensuring all overlapping
+                    aggregates match within 0.05% tolerance. Parquet files are also exported in both nominal and
+                    CPI-adjusted formats.</p>
+
+                <p><strong>Stage 5 &mdash; Dashboard.</strong> This single-page HTML dashboard fetches
+                    <code>dashboard.json</code> at page load and renders seven interactive Chart.js visualizations.
+                    All computation happens server-side in Python; the browser only handles presentation and
+                    interactivity.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Model Assumptions (collapsible, at bottom) -->
     <div class="section">
@@ -1026,6 +1368,24 @@ unless otherwise noted.</p>
                 <span class="analysis-toggle" id="assumptions-toggle">Expand</span>
             </div>
             <div class="analysis-body" id="assumptions-body">
+                <div class="read-aloud-bar ra-bar">
+                    <button class="ra-btn ra-play" title="Play">&#9654;</button>
+                    <button class="ra-btn ra-pause" title="Pause" disabled>&#10074;&#10074;</button>
+                    <button class="ra-btn ra-stop" title="Stop" disabled>&#9632;</button>
+                    <span class="ra-sep"></span>
+                    <button class="ra-btn ra-prev" title="Previous paragraph">&#9664;&#9664;</button>
+                    <button class="ra-btn ra-next" title="Next paragraph">&#9654;&#9654;</button>
+                    <span class="ra-sep"></span>
+                    <select class="ra-select ra-speed" title="Speed">
+                        <option value="0.75">0.75&times;</option>
+                        <option value="1" selected>1&times;</option>
+                        <option value="1.25">1.25&times;</option>
+                        <option value="1.5">1.5&times;</option>
+                        <option value="2">2&times;</option>
+                    </select>
+                    <select class="ra-select ra-voice" title="Voice"></select>
+                    <span class="ra-progress ra-status"></span>
+                </div>
                 <div class="assumptions-grid">
                     <div>
                         <h4>Holding Period Fractions</h4>
@@ -1057,6 +1417,24 @@ unless otherwise noted.</p>
                 <span class="analysis-toggle" id="relevant-data-toggle">Expand</span>
             </div>
             <div class="analysis-body" id="relevant-data-body">
+                <div class="read-aloud-bar ra-bar">
+                    <button class="ra-btn ra-play" title="Play">&#9654;</button>
+                    <button class="ra-btn ra-pause" title="Pause" disabled>&#10074;&#10074;</button>
+                    <button class="ra-btn ra-stop" title="Stop" disabled>&#9632;</button>
+                    <span class="ra-sep"></span>
+                    <button class="ra-btn ra-prev" title="Previous paragraph">&#9664;&#9664;</button>
+                    <button class="ra-btn ra-next" title="Next paragraph">&#9654;&#9654;</button>
+                    <span class="ra-sep"></span>
+                    <select class="ra-select ra-speed" title="Speed">
+                        <option value="0.75">0.75&times;</option>
+                        <option value="1" selected>1&times;</option>
+                        <option value="1.25">1.25&times;</option>
+                        <option value="1.5">1.5&times;</option>
+                        <option value="2">2&times;</option>
+                    </select>
+                    <select class="ra-select ra-voice" title="Voice"></select>
+                    <span class="ra-progress ra-status"></span>
+                </div>
                 <h4 class="glossary-subsection">Key Statistics</h4>
                 <table class="reference-stats-table" id="relevant-stats-table">
                     <thead>
@@ -1101,6 +1479,24 @@ unless otherwise noted.</p>
                 <span class="analysis-toggle" id="glossary-toggle">Expand</span>
             </div>
             <div class="analysis-body" id="glossary-body">
+                <div class="read-aloud-bar ra-bar">
+                    <button class="ra-btn ra-play" title="Play">&#9654;</button>
+                    <button class="ra-btn ra-pause" title="Pause" disabled>&#10074;&#10074;</button>
+                    <button class="ra-btn ra-stop" title="Stop" disabled>&#9632;</button>
+                    <span class="ra-sep"></span>
+                    <button class="ra-btn ra-prev" title="Previous paragraph">&#9664;&#9664;</button>
+                    <button class="ra-btn ra-next" title="Next paragraph">&#9654;&#9654;</button>
+                    <span class="ra-sep"></span>
+                    <select class="ra-select ra-speed" title="Speed">
+                        <option value="0.75">0.75&times;</option>
+                        <option value="1" selected>1&times;</option>
+                        <option value="1.25">1.25&times;</option>
+                        <option value="1.5">1.5&times;</option>
+                        <option value="2">2&times;</option>
+                    </select>
+                    <select class="ra-select ra-voice" title="Voice"></select>
+                    <span class="ra-progress ra-status"></span>
+                </div>
 
                 <h4 class="glossary-subsection">Tax &amp; Model Terms</h4>
                 <table class="glossary-table">
@@ -1170,6 +1566,12 @@ let DATA = null;
 let selectedYear = 2021;
 const charts = {};
 let FORECAST_YEARS = [];
+
+// Federal individual income tax collections by year (billions, nominal)
+const FED_INCOME_TAX = {
+    2018: 1700, 2019: 1700, 2020: 1600,
+    2021: 2000, 2022: 2600, 2023: 2200,
+};
 
 const FS_COLORS = {
     single:                    { bg: 'rgba(52, 152, 219, 0.7)',  border: 'rgba(52, 152, 219, 1)' },
@@ -1340,8 +1742,10 @@ function renderOverview() {
     // Metric 1: Reform Revenue
     const netReform = reform.reduce((a, r) => a + r.net_additional_revenue, 0);
     document.getElementById('ov-revenue').textContent = fmtDollars(netReform);
+    const fedTax = FED_INCOME_TAX[selectedYear];
+    const taxPctStr = fedTax ? ' (' + (netReform / (fedTax * 1e9) * 100).toFixed(0) + '% of income tax)' : '';
     document.getElementById('ov-revenue-sub').textContent =
-        'Net additional revenue' + (isForecastYear() ? ' (forecast)' : '') + ' \u2014 TY' + selectedYear;
+        'Net additional revenue' + (isForecastYear() ? ' (forecast)' : '') + taxPctStr + ' \u2014 TY' + selectedYear;
 
     // Metric 2: Paid by $1M+ Filers
     const topRev = reform.filter(r => r.agi_bin_id >= 15)
@@ -2320,19 +2724,33 @@ function renderAnalysisCharts() {
         }
     });
 
-    // Chart-ref links: expand target section if collapsed, then scroll to the chart
+    // Chart-ref links: expand all ancestor groups/sections, then scroll to the chart
     document.querySelectorAll('.chart-ref[data-scroll]').forEach(link => {
         link.addEventListener('click', (e) => {
             e.stopPropagation();
             const target = document.getElementById(link.dataset.scroll);
             if (!target) return;
-            // Find the enclosing collapsible-section-body and expand it if collapsed
+            let needsRender = false;
+            // Walk up and expand any collapsed section-group-body ancestors
+            const groupBody = target.closest('.section-group-body');
+            if (groupBody && !groupBody.classList.contains('visible')) {
+                groupBody.classList.add('visible');
+                const groupToggle = groupBody.previousElementSibling
+                    ? groupBody.previousElementSibling.querySelector('.analysis-toggle')
+                    : null;
+                if (groupToggle) groupToggle.textContent = 'Collapse';
+                needsRender = true;
+            }
+            // Expand the immediate collapsible-section-body
             const sectionBody = target.closest('.collapsible-section-body');
             if (sectionBody && !sectionBody.classList.contains('visible')) {
                 sectionBody.classList.add('visible');
                 const sectionHeader = sectionBody.previousElementSibling;
                 const toggle = sectionHeader ? sectionHeader.querySelector('.analysis-toggle') : null;
                 if (toggle) toggle.textContent = 'Collapse';
+                needsRender = true;
+            }
+            if (needsRender) {
                 setTimeout(() => {
                     renderAll();
                     setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
@@ -2347,8 +2765,8 @@ function renderAnalysisCharts() {
 // ── Collapsible section headers ──────────────────────────────────────────────
 document.querySelectorAll('.collapsible-section-header').forEach(header => {
     header.addEventListener('click', (e) => {
-        // Don't toggle if clicking the year dropdown or analysis-ref link
-        if (e.target.closest('.year-select-wrap') || e.target.closest('.analysis-ref')) return;
+        // Don't toggle if clicking the year dropdown
+        if (e.target.closest('.year-select-wrap')) return;
         const body = header.nextElementSibling;
         const toggle = header.querySelector('.analysis-toggle');
         const showing = body.classList.contains('visible');
@@ -2373,100 +2791,265 @@ document.querySelectorAll('.metric-expand-header').forEach(header => {
     });
 });
 
-// ── Analysis-ref links: expand analysis + scroll to section ──────────────────
-document.querySelectorAll('.analysis-ref[data-analysis-section]').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const sectionId = link.dataset.analysisSection;
-        const analysisBody = document.getElementById('analysis-body');
-        const analysisToggle = document.getElementById('analysis-toggle');
-        // Expand analysis if collapsed
-        if (!analysisBody.classList.contains('visible')) {
-            analysisBody.classList.add('visible');
-            analysisToggle.textContent = 'Collapse';
-            setTimeout(renderAnalysisCharts, 50);
-        }
-        // Scroll to the target section within the analysis
-        setTimeout(() => {
-            const target = document.getElementById(sectionId);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }, 100);
-    });
-});
-
 // ── Read Aloud (Web Speech API) ──────────────────────────────────────────────
 (function() {
-    const btn = document.getElementById('read-aloud-btn');
-    const stopBtn = document.getElementById('read-aloud-stop');
-    const iconEl = document.getElementById('read-aloud-icon');
-    const labelEl = document.getElementById('read-aloud-label');
+    // Shared state
+    let activeBar = null;   // the .ra-bar currently playing
+    let paragraphs = [];    // text chunks for active section
+    let currentIdx = 0;     // index into paragraphs
     let speaking = false;
     let paused = false;
+    let currentUtterance = null;
+    let selectedVoice = null;
+    let voicesLoaded = false;
 
-    function getAnalysisText() {
-        const body = document.getElementById('analysis-body');
-        // Get text from paragraphs, headings, list items — skip buttons, charts, footnotes
-        const els = body.querySelectorAll('p, h2, h3, li, .pullquote, .stat-callout .stat-label');
-        const parts = [];
-        for (const el of els) {
-            if (el.closest('.read-aloud-bar') || el.closest('.footnote')) continue;
-            const text = el.textContent.trim();
-            if (text) parts.push(text);
+    // ── Voice loading ────────────────────────────────────────────────────────
+    // Prefer high-quality voices: Google, Microsoft Neural, Apple enhanced
+    const QUALITY_KEYWORDS = [
+        'Google', 'Neural', 'Enhanced', 'Premium', 'Natural',
+        'Microsoft', 'Samantha', 'Daniel', 'Zira', 'David'
+    ];
+
+    function scoreVoice(v) {
+        let s = 0;
+        if (!v.localService) s += 5; // remote/cloud voices often higher quality
+        const name = v.name;
+        for (const kw of QUALITY_KEYWORDS) {
+            if (name.includes(kw)) { s += 10; break; }
         }
-        return parts.join('. ');
+        if (v.lang.startsWith('en')) s += 3;
+        if (v.default) s += 1;
+        return s;
     }
 
-    btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (paused) {
-            // Resume
-            speechSynthesis.resume();
-            paused = false;
-            iconEl.innerHTML = '&#10074;&#10074;';
-            labelEl.textContent = 'Pause';
-            return;
-        }
-        if (speaking) {
-            // Pause
-            speechSynthesis.pause();
-            paused = true;
-            iconEl.innerHTML = '&#9654;';
-            labelEl.textContent = 'Resume';
-            return;
-        }
-        // Start
-        const text = getAnalysisText();
-        if (!text) return;
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 1;
-        utterance.pitch = 1;
-        utterance.onend = () => {
-            speaking = false;
-            paused = false;
-            iconEl.innerHTML = '&#9654;';
-            labelEl.textContent = 'Read Aloud';
-            stopBtn.style.display = 'none';
-        };
-        speechSynthesis.cancel();
-        speechSynthesis.speak(utterance);
-        speaking = true;
-        paused = false;
-        iconEl.innerHTML = '&#10074;&#10074;';
-        labelEl.textContent = 'Pause';
-        stopBtn.style.display = 'inline-flex';
-    });
+    function populateVoiceSelects() {
+        const voices = speechSynthesis.getVoices();
+        if (!voices.length) return;
+        voicesLoaded = true;
 
-    stopBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
+        // Filter to English, sort by quality score descending
+        const enVoices = voices
+            .filter(v => v.lang.startsWith('en'))
+            .sort((a, b) => scoreVoice(b) - scoreVoice(a));
+
+        if (!enVoices.length) return;
+        selectedVoice = enVoices[0]; // best quality default
+
+        document.querySelectorAll('.ra-voice').forEach(sel => {
+            sel.innerHTML = '';
+            enVoices.forEach((v, i) => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                const tag = v.lang.replace('en-', '').replace('en_', '');
+                opt.textContent = v.name.replace(/Microsoft |Google |Apple /, '')
+                    + (tag && tag !== 'US' ? ' (' + tag + ')' : '');
+                sel.appendChild(opt);
+            });
+            sel.addEventListener('change', () => {
+                selectedVoice = enVoices[parseInt(sel.value)] || enVoices[0];
+                // Sync all voice selects
+                document.querySelectorAll('.ra-voice').forEach(s => { s.value = sel.value; });
+            });
+        });
+    }
+
+    speechSynthesis.addEventListener('voiceschanged', populateVoiceSelects);
+    populateVoiceSelects(); // some browsers populate synchronously
+
+    // ── Extract readable paragraphs from a section body ──────────────────────
+    function getParagraphs(body) {
+        const els = body.querySelectorAll(
+            'p, h2, h3, h4, li, .pullquote, .stat-callout .stat-label, td'
+        );
+        const parts = [];
+        for (const el of els) {
+            if (el.closest('.read-aloud-bar') || el.closest('.ra-bar') ||
+                el.closest('.footnote') || el.closest('.chart-card') ||
+                el.closest('.pipeline-svg-wrap')) continue;
+            const text = el.textContent.trim();
+            if (text && text.length > 2) parts.push(text);
+        }
+        return parts;
+    }
+
+    // ── Lazy paragraph discovery (enables skip-before-play) ────────────────
+    function ensureParagraphs(bar) {
+        const body = bar.closest('.analysis-body');
+        if (!body) return [];
+        // Already active for this bar — reuse cached paragraphs
+        if (activeBar === bar && paragraphs.length) return paragraphs;
+        // Switch to this bar (stop any other)
+        if (activeBar && activeBar !== bar) fullStop();
+        activeBar = bar;
+        paragraphs = getParagraphs(body);
+        currentIdx = 0;
+        return paragraphs;
+    }
+
+    // ── UI state helpers ─────────────────────────────────────────────────────
+    function updateUI(bar) {
+        if (!bar) return;
+        const playBtn = bar.querySelector('.ra-play');
+        const pauseBtn = bar.querySelector('.ra-pause');
+        const stopBtn = bar.querySelector('.ra-stop');
+        const status = bar.querySelector('.ra-status');
+
+        if (speaking && !paused) {
+            playBtn.disabled = true;
+            pauseBtn.disabled = false;
+            stopBtn.disabled = false;
+        } else if (paused) {
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            stopBtn.disabled = false;
+        } else {
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            stopBtn.disabled = true;
+        }
+        // Skip buttons are always enabled — they lazily discover content
+        // and begin playing at the target paragraph.
+
+        if (speaking || paused) {
+            status.textContent = (currentIdx + 1) + ' / ' + paragraphs.length;
+        } else {
+            status.textContent = '';
+        }
+    }
+
+    function resetAllBars() {
+        document.querySelectorAll('.ra-bar').forEach(bar => {
+            bar.querySelector('.ra-play').disabled = false;
+            bar.querySelector('.ra-pause').disabled = true;
+            bar.querySelector('.ra-stop').disabled = true;
+            // prev/next stay enabled — skip-before-play is intentional
+            const st = bar.querySelector('.ra-status');
+            if (st) st.textContent = '';
+        });
+    }
+
+    function fullStop() {
         speechSynthesis.cancel();
         speaking = false;
         paused = false;
-        iconEl.innerHTML = '&#9654;';
-        labelEl.textContent = 'Read Aloud';
-        stopBtn.style.display = 'none';
+        currentUtterance = null;
+        paragraphs = [];
+        currentIdx = 0;
+        resetAllBars();
+        activeBar = null;
+    }
+
+    // ── Speak a specific paragraph index ─────────────────────────────────────
+    function speakIndex(idx) {
+        if (idx < 0 || idx >= paragraphs.length) {
+            fullStop();
+            return;
+        }
+        speechSynthesis.cancel();
+        currentIdx = idx;
+        const bar = activeBar;
+        const speedSel = bar.querySelector('.ra-speed');
+        const rate = parseFloat(speedSel.value) || 1;
+
+        const utt = new SpeechSynthesisUtterance(paragraphs[idx]);
+        utt.rate = rate;
+        utt.pitch = 1;
+        if (selectedVoice) utt.voice = selectedVoice;
+        utt.onend = () => {
+            if (currentIdx < paragraphs.length - 1) {
+                speakIndex(currentIdx + 1);
+            } else {
+                fullStop();
+            }
+        };
+        utt.onerror = () => fullStop();
+        currentUtterance = utt;
+        speechSynthesis.speak(utt);
+        speaking = true;
+        paused = false;
+        updateUI(bar);
+    }
+
+    // ── Wire up each .ra-bar ─────────────────────────────────────────────────
+    document.querySelectorAll('.ra-bar').forEach(bar => {
+        const body = bar.closest('.analysis-body');
+        if (!body) return;
+
+        const playBtn = bar.querySelector('.ra-play');
+        const pauseBtn = bar.querySelector('.ra-pause');
+        const stopBtn = bar.querySelector('.ra-stop');
+        const prevBtn = bar.querySelector('.ra-prev');
+        const nextBtn = bar.querySelector('.ra-next');
+        const speedSel = bar.querySelector('.ra-speed');
+
+        playBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Resume from pause
+            if (paused && activeBar === bar) {
+                speechSynthesis.resume();
+                paused = false;
+                speaking = true;
+                updateUI(bar);
+                return;
+            }
+            // If another section is playing, stop it
+            if (speaking && activeBar !== bar) fullStop();
+
+            // Start fresh
+            activeBar = bar;
+            paragraphs = getParagraphs(body);
+            if (!paragraphs.length) return;
+            currentIdx = 0;
+            speakIndex(0);
+        });
+
+        pauseBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (speaking && activeBar === bar) {
+                speechSynthesis.pause();
+                paused = true;
+                speaking = true; // still "active"
+                updateUI(bar);
+            }
+        });
+
+        stopBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fullStop();
+        });
+
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const ps = ensureParagraphs(bar);
+            if (!ps.length) return;
+            speakIndex(Math.max(0, currentIdx - 1));
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const ps = ensureParagraphs(bar);
+            if (!ps.length) return;
+            speakIndex(Math.min(currentIdx + 1, paragraphs.length - 1));
+        });
+
+        // Speed change applies immediately by restarting current paragraph
+        speedSel.addEventListener('change', (e) => {
+            e.stopPropagation();
+            // Sync all speed selects
+            const val = speedSel.value;
+            document.querySelectorAll('.ra-speed').forEach(s => { s.value = val; });
+            if (speaking && activeBar === bar) {
+                speakIndex(currentIdx);
+            }
+        });
+    });
+
+    // Sync speed selects globally on any change
+    document.querySelectorAll('.ra-speed').forEach(sel => {
+        sel.addEventListener('click', (e) => e.stopPropagation());
+    });
+    document.querySelectorAll('.ra-voice').forEach(sel => {
+        sel.addEventListener('click', (e) => e.stopPropagation());
     });
 })();
 
@@ -2560,6 +3143,48 @@ fetch('data/dashboard.json')
                 const showing = bdy.classList.contains('visible');
                 bdy.classList.toggle('visible', !showing);
                 tgl.textContent = showing ? 'Expand' : 'Collapse';
+            });
+        })();
+
+        // Toggle: Architecture & Methodology
+        (function() {
+            const hdr = document.getElementById('architecture-header');
+            const bdy = document.getElementById('architecture-body');
+            const tgl = document.getElementById('architecture-toggle');
+            hdr.addEventListener('click', () => {
+                const showing = bdy.classList.contains('visible');
+                bdy.classList.toggle('visible', !showing);
+                tgl.textContent = showing ? 'Expand' : 'Collapse';
+            });
+        })();
+
+        // Pipeline diagram tooltips
+        (function() {
+            const wrap = document.querySelector('.pipeline-svg-wrap');
+            if (!wrap) return;
+            const tip = document.getElementById('pipeline-tooltip');
+            const tipTitle = tip.querySelector('.tt-title');
+            const tipBody = tip.querySelector('.tt-body');
+
+            wrap.querySelectorAll('[data-tt-body]').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    tipTitle.textContent = el.getAttribute('data-tt-title') || '';
+                    tipBody.textContent = el.getAttribute('data-tt-body') || '';
+                    tip.classList.add('visible');
+                });
+                el.addEventListener('mousemove', (e) => {
+                    const rect = wrap.getBoundingClientRect();
+                    let x = e.clientX - rect.left + 12;
+                    let y = e.clientY - rect.top + 12;
+                    // Keep tooltip inside wrapper
+                    if (x + 280 > rect.width) x = Math.max(0, x - 300);
+                    if (y + 80 > rect.height) y = Math.max(0, y - 80);
+                    tip.style.left = x + 'px';
+                    tip.style.top = y + 'px';
+                });
+                el.addEventListener('mouseleave', () => {
+                    tip.classList.remove('visible');
+                });
             });
         })();
 

@@ -1,6 +1,6 @@
 """Parse IRS SOI Tables 1.1, 1.2, 3.2, 3.3 into RETURNS_AGGREGATE records.
 
-Verified column layouts (consistent across Tax Years 2020-2022):
+Verified column layouts (consistent across Tax Years 2018-2022):
 
 Table 1.1 (21 cols, row 9 = first data row):
   col 0  = AGI label

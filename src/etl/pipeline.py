@@ -1,7 +1,7 @@
 """Main ETL pipeline: raw IRS Excel files -> SQLite -> canonical Parquet tables.
 
 Usage:
-    python -m src.etl.pipeline [--years 2020 2021 2022]
+    python -m src.etl.pipeline [--years 2018 2019 2020 2021 2022]
 """
 
 import argparse

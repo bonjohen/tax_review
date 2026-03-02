@@ -5,22 +5,7 @@ from pathlib import Path
 
 from src.etl.db import get_connection, init_schema
 
-FIXTURES_DIR = Path(__file__).parent / "fixtures"
-
-
-@pytest.fixture
-def fixtures_dir():
-    """Path to test fixtures directory."""
-    return FIXTURES_DIR
-
-
-@pytest.fixture
-def raw_2020_dir():
-    """Path to real 2020 data (skips if not downloaded)."""
-    path = Path("data") / "raw" / "2020"
-    if not path.exists() or not any(path.glob("*.xls")):
-        pytest.skip("Real IRS data not downloaded (run: python -m src.etl.download)")
-    return path
+RAW_DIR = Path("data") / "raw"
 
 
 @pytest.fixture
@@ -31,3 +16,21 @@ def db(tmp_path):
     init_schema(conn)
     yield conn
     conn.close()
+
+
+@pytest.fixture
+def raw_2020_dir():
+    """Path to real 2020 IRS data."""
+    return RAW_DIR / "2020"
+
+
+@pytest.fixture
+def raw_2021_dir():
+    """Path to real 2021 IRS data."""
+    return RAW_DIR / "2021"
+
+
+@pytest.fixture
+def raw_2022_dir():
+    """Path to real 2022 IRS data."""
+    return RAW_DIR / "2022"

@@ -4,6 +4,7 @@
       "Bash(cd:)",
       "Bash(cd:*)",
       "Bash(cd /c/Projects/tax_review && git:*)",
+      "Bash(cd C:/Projects/tax_review && git:*)",
       "WebFetch(domain:www.irs.gov)",
       "WebSearch",
       "WebFetch(domain:www.minneapolisfed.org)",
@@ -31,7 +32,15 @@
       "WebFetch(domain:fred.stlouisfed.org)",
       "WebFetch(domain:www.ssa.gov)",
       "WebFetch(domain:dlt.ri.gov)",
-      "WebFetch(domain:api.bls.gov)"
+      "WebFetch(domain:api.bls.gov)",
+      "WebFetch(domain:www.law.cornell.edu)",
+      "WebFetch(domain:codes.findlaw.com)",
+      "WebFetch(domain:uscode.house.gov)",
+      "WebFetch(domain:irc.bloombergtax.com)",
+      "Bash(source:*)",
+      "Bash(ls -la tests/test_*.py)",
+      "Bash(cat:*)",
+      "WebFetch(domain:fiscaldata.treasury.gov)"
     ]
   }
 }

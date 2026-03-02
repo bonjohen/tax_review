@@ -3,7 +3,7 @@
 Table 1.4A: Returns with Income or Loss from Sales of Capital Assets
 (Form 1040, Schedule D). 120 columns, row 9 = first data row.
 
-Verified column layout (consistent across Tax Years 2020-2022):
+Verified column layout (consistent across Tax Years 2018-2022):
   col 0  = AGI label
   col 1  = Taxable net gain: Number of returns
   col 2  = Taxable net gain: Amount (thousands)
