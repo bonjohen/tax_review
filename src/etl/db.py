@@ -22,6 +22,11 @@ _RAW_TABLES = [
     "raw_table_14a", "raw_table_14", "raw_table_34", "raw_table_36",
 ]
 
+# SOCA tables (separate from main Pub 1304 tables, different year range)
+_SOCA_TABLES = [
+    "raw_soca_t4",
+]
+
 
 def get_connection(db_path: Path | str | None = None) -> sqlite3.Connection:
     """Open (or create) a SQLite database and return a connection.
@@ -50,6 +55,14 @@ def reset_year(conn: sqlite3.Connection, year: int) -> None:
         conn.execute(f"DELETE FROM {table} WHERE year = ?", (year,))
     conn.commit()
     logger.info(f"Reset data for TY{year}")
+
+
+def reset_soca_year(conn: sqlite3.Connection, year: int) -> None:
+    """Delete all SOCA data for a given year (idempotent re-runs)."""
+    for table in _SOCA_TABLES:
+        conn.execute(f"DELETE FROM {table} WHERE year = ?", (year,))
+    conn.commit()
+    logger.info(f"Reset SOCA data for TY{year}")
 
 
 def insert_rows(conn: sqlite3.Connection, table: str,

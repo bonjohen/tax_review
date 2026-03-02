@@ -13,12 +13,16 @@ from pathlib import Path
 
 import requests
 
-from .url_registry import get_all_downloads, get_excel_files, get_pdf_file, YEARS
+from .url_registry import (
+    get_all_downloads, get_excel_files, get_pdf_file, YEARS,
+    get_soca_files, get_soca_bulletin, SOCA_YEARS,
+)
 
 logger = logging.getLogger(__name__)
 
 DATA_ROOT = Path("data")
 RAW_DIR = DATA_ROOT / "raw"
+SOCA_DIR = RAW_DIR / "soca"
 PARAMS_DIR = DATA_ROOT / "parameters"
 MANIFEST_PATH = DATA_ROOT / "manifest.json"
 
@@ -120,6 +124,42 @@ def download_year(year: int, force: bool = False) -> list[dict]:
     return entries
 
 
+def download_soca(year: int, force: bool = False) -> list[dict]:
+    """Download SOCA files for a given year. Returns manifest entries."""
+    entries = []
+
+    # SOCA Excel files -> data/raw/soca/{year}/
+    for table_id, info in get_soca_files(year).items():
+        dest = SOCA_DIR / str(year) / info["filename"]
+        meta = download_file(info["url"], dest, force=force)
+        entries.append({
+            "url": info["url"],
+            "filename": info["filename"],
+            "year": year,
+            "table_id": table_id,
+            "local_path": str(dest),
+            "file_type": "soca_excel",
+            **meta,
+        })
+
+    # Bulletin PDF -> data/raw/soca/
+    bulletin = get_soca_bulletin(year)
+    if bulletin:
+        dest = SOCA_DIR / bulletin["filename"]
+        meta = download_file(bulletin["url"], dest, force=force)
+        entries.append({
+            "url": bulletin["url"],
+            "filename": bulletin["filename"],
+            "year": year,
+            "table_id": "soca_bulletin",
+            "local_path": str(dest),
+            "file_type": "soca_pdf",
+            **meta,
+        })
+
+    return entries
+
+
 def write_manifest(entries: list[dict]) -> None:
     """Write the download manifest to data/manifest.json."""
     manifest = {
@@ -163,6 +203,10 @@ def main():
     parser.add_argument("--years", nargs="+", type=int, default=YEARS)
     parser.add_argument("--force", action="store_true", help="Re-download even if file exists")
     parser.add_argument("--verify-only", action="store_true", help="Only verify existing manifest")
+    parser.add_argument("--soca", action="store_true",
+                        help="Download SOCA (Sales of Capital Assets) data for 2013-2015")
+    parser.add_argument("--soca-years", nargs="+", type=int, default=SOCA_YEARS,
+                        help="SOCA years to download (default: 2013-2015)")
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
@@ -172,9 +216,15 @@ def main():
         raise SystemExit(0 if ok else 1)
 
     all_entries = []
-    for year in args.years:
-        entries = download_year(year, force=args.force)
-        all_entries.extend(entries)
+
+    if args.soca:
+        for year in args.soca_years:
+            entries = download_soca(year, force=args.force)
+            all_entries.extend(entries)
+    else:
+        for year in args.years:
+            entries = download_year(year, force=args.force)
+            all_entries.extend(entries)
 
     write_manifest(all_entries)
     logger.info("Download complete.")

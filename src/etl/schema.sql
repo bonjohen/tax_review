@@ -62,12 +62,17 @@ CREATE TABLE IF NOT EXISTS raw_table_33 (
 );
 
 CREATE TABLE IF NOT EXISTS raw_table_14a (
-    year              INTEGER NOT NULL,
-    agi_bin_id        INTEGER NOT NULL,
-    schedule_d_count  REAL,
-    short_term_gain   REAL,
-    long_term_gain    REAL,
-    total_gain        REAL,
+    year                INTEGER NOT NULL,
+    agi_bin_id          INTEGER NOT NULL,
+    schedule_d_count    REAL,
+    short_term_gain     REAL,
+    short_term_loss     REAL,
+    long_term_gain      REAL,
+    long_term_loss      REAL,
+    total_gain          REAL,
+    total_loss          REAL,
+    st_loss_carryover   REAL,
+    lt_loss_carryover   REAL,
     PRIMARY KEY (year, agi_bin_id)
 );
 
@@ -109,6 +114,24 @@ CREATE TABLE IF NOT EXISTS raw_table_36 (
     PRIMARY KEY (year, filing_status, marginal_rate)
 );
 
+-- SOCA (Sales of Capital Assets) Raw Tables --------------------------------
+
+-- SOCA Table 4: Gains by holding duration and asset type
+-- Source: IRS SOI Sales of Capital Assets, Table 4A-4E
+CREATE TABLE IF NOT EXISTS raw_soca_t4 (
+    year                        INTEGER NOT NULL,
+    asset_type                  TEXT NOT NULL,
+    holding_period              TEXT NOT NULL,     -- 'short_term' or 'long_term'
+    holding_duration            TEXT NOT NULL,     -- e.g. 'Under 1 month', '2 years under 3 years'
+    number_of_gain_transactions REAL,
+    gross_sales_price           REAL,
+    cost_basis                  REAL,
+    gain_amount                 REAL,
+    loss_amount                 REAL,
+    net_gain_loss               REAL,
+    PRIMARY KEY (year, asset_type, holding_period, holding_duration)
+);
+
 -- Canonical Views ---------------------------------------------------------
 
 CREATE VIEW IF NOT EXISTS v_returns_aggregate AS
@@ -123,7 +146,10 @@ LEFT JOIN raw_table_32 t32
 
 CREATE VIEW IF NOT EXISTS v_capital_gains AS
 SELECT year, agi_bin_id, schedule_d_count,
-       short_term_gain, long_term_gain, total_gain
+       short_term_gain, short_term_loss,
+       long_term_gain, long_term_loss,
+       total_gain, total_loss,
+       st_loss_carryover, lt_loss_carryover
 FROM raw_table_14a;
 
 CREATE VIEW IF NOT EXISTS v_income_sources AS
@@ -159,8 +185,13 @@ JOIN cpi_factors c ON r.year = c.year;
 CREATE VIEW IF NOT EXISTS v_capital_gains_real2022 AS
 SELECT g.year, g.agi_bin_id, g.schedule_d_count,
        g.short_term_gain * c.factor_to_2022 AS short_term_gain,
+       g.short_term_loss * c.factor_to_2022 AS short_term_loss,
        g.long_term_gain * c.factor_to_2022 AS long_term_gain,
-       g.total_gain * c.factor_to_2022 AS total_gain
+       g.long_term_loss * c.factor_to_2022 AS long_term_loss,
+       g.total_gain * c.factor_to_2022 AS total_gain,
+       g.total_loss * c.factor_to_2022 AS total_loss,
+       g.st_loss_carryover * c.factor_to_2022 AS st_loss_carryover,
+       g.lt_loss_carryover * c.factor_to_2022 AS lt_loss_carryover
 FROM v_capital_gains g
 JOIN cpi_factors c ON g.year = c.year;
 
@@ -247,6 +278,8 @@ GROUP BY year;
 CREATE VIEW IF NOT EXISTS v_check_capital_gains AS
 SELECT year,
        SUM(COALESCE(short_term_gain, 0)) + SUM(COALESCE(long_term_gain, 0)) AS st_plus_lt,
-       SUM(COALESCE(total_gain, 0)) AS total
+       SUM(COALESCE(total_gain, 0)) AS total,
+       SUM(COALESCE(long_term_loss, 0)) AS total_lt_loss,
+       SUM(COALESCE(lt_loss_carryover, 0)) AS total_lt_carryover
 FROM raw_table_14a
 GROUP BY year;

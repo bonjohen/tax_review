@@ -15,7 +15,19 @@
       {"agi_bin_ids": [14],                    "fraction": 0.30},
       {"agi_bin_ids": [15, 16, 17],            "fraction": 0.25},
       {"agi_bin_ids": [18, 19],                "fraction": 0.20}
-    ]
+    ],
+    "empirical": {
+      "source": "IRS SOI Sales of Capital Assets, Table 4A (2015)",
+      "soca_year": 2015,
+      "method": "Ratio of classifiable LT gains held 1-5yr to total classifiable LT gains. SOCA does not provide AGI breakdowns for holding periods, so a single aggregate fraction is used.",
+      "limitations": [
+        "71% of LT gains have 'Period not determinable' — fraction computed from 29% of classifiable gains only",
+        "Data is from 2015 (most recent SOCA available); structural ratios assumed stable",
+        "No AGI-level stratification available from SOCA Table 4"
+      ],
+      "aggregate_fraction_1_to_5yr": null,
+      "note": "Run 'python -m src.validation.calibration_validate' to populate empirical values"
+    }
   },
   "gross_loss_ratio": {
     "description": "Fraction of gross LT gains offset by harvested losses. If 0.85, only 15% of gross gains survive as net — the rest are deliberately sold losers used to offset.",
@@ -27,6 +39,16 @@
       {"agi_bin_ids": [12, 13],                  "ratio": 0.80},
       {"agi_bin_ids": [14, 15, 16, 17],          "ratio": 0.85},
       {"agi_bin_ids": [18, 19],                  "ratio": 0.90}
-    ]
+    ],
+    "empirical": {
+      "source": "IRS SOI Publication 1304, Table 1.4A (2018-2022)",
+      "method": "Implied_Loss_Ratio = (LT_Loss + LT_Loss_Carryover) / (LT_Gain + LT_Loss + LT_Loss_Carryover). This is a lower-bound estimate of harvesting intensity computed from net amounts reported on Schedule D.",
+      "limitations": [
+        "Table 1.4A reports NET gains and NET losses, not gross transaction-level data",
+        "Loss carryover reflects prior-year activity, not current-year harvesting alone",
+        "Netting within ST/LT categories obscures true gross loss volume"
+      ],
+      "note": "Run 'python -m src.validation.calibration_validate' to populate empirical values"
+    }
   }
 }

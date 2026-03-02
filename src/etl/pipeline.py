@@ -10,17 +10,19 @@ from pathlib import Path
 
 import pandas as pd
 
-from .db import get_connection, init_schema, reset_year, load_agi_bins, load_cpi_factors
+from .db import get_connection, init_schema, reset_year, reset_soca_year, load_agi_bins, load_cpi_factors
 from .parse_table_1x import load_table_11, load_table_12, load_table_32, load_table_33
 from .parse_table_14a import load_table_14a
 from .parse_table_14 import load_table_14
 from .parse_table_3x import load_table_34, load_table_36
-from .url_registry import YEARS
+from .parse_soca import load_soca_t4
+from .url_registry import YEARS, SOCA_YEARS
 
 logger = logging.getLogger(__name__)
 
 DATA_ROOT = Path("data")
 RAW_DIR = DATA_ROOT / "raw"
+SOCA_DIR = RAW_DIR / "soca"
 NOMINAL_DIR = DATA_ROOT / "processed" / "nominal"
 REAL_DIR = DATA_ROOT / "processed" / "real_2022"
 DB_PATH = DATA_ROOT / "tax_review.db"
@@ -80,6 +82,16 @@ def run_pipeline(years: list[int] | None = None,
 
     conn.commit()
     logger.info("All raw tables loaded into SQLite")
+
+    # Load SOCA data if available (separate download via --soca flag)
+    for soca_year in SOCA_YEARS:
+        yy = str(soca_year)[2:]
+        soca_file = SOCA_DIR / str(soca_year) / f"{yy}in04soca.xlsx"
+        if soca_file.exists():
+            reset_soca_year(conn, soca_year)
+            n = load_soca_t4(conn, soca_file, soca_year)
+            logger.info(f"SOCA Table 4 TY{soca_year}: loaded {n} rows")
+    conn.commit()
 
     # Export canonical views to Parquet
     NOMINAL_DIR.mkdir(parents=True, exist_ok=True)

@@ -7,10 +7,20 @@ Verified column layout (consistent across Tax Years 2018-2022):
   col 0  = AGI label
   col 1  = Taxable net gain: Number of returns
   col 2  = Taxable net gain: Amount (thousands)
+  col 3  = Taxable net loss: Number of returns
+  col 4  = Taxable net loss: Amount (thousands)
   col 5  = Net short-term capital gain: Number of returns
   col 6  = Net short-term capital gain: Amount (thousands)
+  col 7  = Net short-term capital loss: Number of returns
+  col 8  = Net short-term capital loss: Amount (thousands)
+  col 59 = Short-term loss carryover: Number of returns
+  col 60 = Short-term loss carryover: Amount (thousands)
   col 61 = Net long-term capital gain: Number of returns
   col 62 = Net long-term capital gain: Amount (thousands)
+  col 63 = Net long-term capital loss: Number of returns
+  col 64 = Net long-term capital loss: Amount (thousands)
+  col 117 = Long-term loss carryover: Number of returns
+  col 118 = Long-term loss carryover: Amount (thousands)
 """
 
 import logging
@@ -58,8 +68,13 @@ def parse_capital_gains(filepath: Path, year: int) -> pd.DataFrame:
             "agi_bin_id": bin_id,
             "schedule_d_count": _clean_cell(sh.cell_value(r, 1)),
             "short_term_gain": _money(sh.cell_value(r, 6)),
+            "short_term_loss": _money(sh.cell_value(r, 8)),
             "long_term_gain": _money(sh.cell_value(r, 62)),
+            "long_term_loss": _money(sh.cell_value(r, 64)),
             "total_gain": _money(sh.cell_value(r, 2)),
+            "total_loss": _money(sh.cell_value(r, 4)),
+            "st_loss_carryover": _money(sh.cell_value(r, 60)),
+            "lt_loss_carryover": _money(sh.cell_value(r, 118)),
         }
         rows.append(row)
 

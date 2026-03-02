@@ -1147,7 +1147,7 @@ unless otherwise noted.</p>
                         <div class="tt-title"></div>
                         <div class="tt-body"></div>
                     </div>
-                    <svg viewBox="0 0 780 660" xmlns="http://www.w3.org/2000/svg" role="img"
+                    <svg viewBox="0 0 780 680" xmlns="http://www.w3.org/2000/svg" role="img"
                          aria-label="ETL pipeline architecture diagram">
                         <defs>
                             <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
@@ -1157,148 +1157,161 @@ unless otherwise noted.</p>
 
                         <!-- ══ Stage 1: Download ══ -->
                         <text x="16" y="30" class="stage-label">1. Download</text>
-                        <g class="pn-external" data-tt-title="IRS Website"
-                           data-tt-body="irs.gov/statistics — SOI Publication 1304. Source of all 55 Excel workbooks (11 per year × 5 years) and 5 Revenue Procedure PDFs.">
+                        <g class="pn-external" data-tt-title="IRS SOI Data"
+                           data-tt-body="irs.gov/statistics — SOI Publication 1304 (11 Excel workbooks per year × 5 years + 5 PDFs) and Sales of Capital Assets (SOCA) study (3 Excel workbooks for TY2013-2015).">
                             <rect x="40" y="42" width="130" height="36" rx="6"/>
-                            <text x="105" y="64" text-anchor="middle" font-size="12">IRS Website</text>
+                            <text x="105" y="64" text-anchor="middle" font-size="12">IRS SOI Data</text>
                         </g>
-                        <g data-tt-title="HTTP download" data-tt-body="download.py fetches 60 files (11 per year × 5 years + 5 PDFs) and verifies SHA-256 checksums against data/manifest.json.">
+                        <g data-tt-title="HTTP download" data-tt-body="download.py fetches 63 files (55 Pub 1304 Excel + 5 PDFs + 3 SOCA Excel) and verifies SHA-256 checksums against data/manifest.json.">
                             <line x1="170" y1="60" x2="240" y2="60" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
                         <g class="pn-script" data-tt-title="download.py"
-                           data-tt-body="python -m src.etl.download — Downloads all IRS source files. Supports --years filter and --verify-only mode. SHA-256 manifest ensures data integrity.">
+                           data-tt-body="python -m src.etl.download — Downloads all IRS source files. Supports --years filter, --soca flag for SOCA data, and --verify-only mode. SHA-256 manifest ensures data integrity.">
                             <rect x="244" y="42" width="130" height="36" rx="6"/>
                             <text x="309" y="64" text-anchor="middle" font-size="12">download.py</text>
                         </g>
-                        <g data-tt-title="Save to disk" data-tt-body="Files written to data/raw/{2018,2019,2020,2021,2022}/ preserving original IRS filenames (e.g. 21in14acg.xls).">
+                        <g data-tt-title="Save to disk" data-tt-body="Pub 1304 files written to data/raw/{year}/ preserving original IRS filenames. SOCA files written to data/raw/soca/{year}/.">
                             <line x1="374" y1="60" x2="444" y2="60" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
                         <g class="pn-storage" data-tt-title="data/raw/"
-                           data-tt-body="55 Excel (.xls) files in BIFF format + 5 Revenue Procedure PDFs. Organized by tax year subdirectory. All files gitignored.">
+                           data-tt-body="55 Pub 1304 Excel (.xls) files + 5 Revenue Procedure PDFs in data/raw/{year}/. 3 SOCA Excel (.xlsx) files in data/raw/soca/{year}/. All gitignored.">
                             <rect x="448" y="42" width="130" height="36" rx="6"/>
                             <text x="513" y="64" text-anchor="middle" font-size="12">data/raw/</text>
                         </g>
 
                         <!-- Edge: Stage 1 → Stage 2 -->
-                        <g data-tt-title="Raw files → Parsers" data-tt-body="Excel files read with xlrd (BIFF format). Multi-row headers (rows 1-5), footnote markers, and merged cells handled per parser.">
-                            <line x1="390" y1="78" x2="390" y2="115" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        <g data-tt-title="Raw files → Parsers" data-tt-body="Pub 1304 files read with xlrd (BIFF .xls format). SOCA files read with openpyxl (.xlsx format). Multi-row headers, footnote markers, and merged cells handled per parser.">
+                            <line x1="390" y1="78" x2="390" y2="118" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
 
                         <!-- ══ Stage 2: Parse & Load ══ -->
-                        <text x="16" y="135" class="stage-label">2. Parse &amp; Load</text>
+                        <text x="16" y="138" class="stage-label">2. Parse &amp; Load</text>
                         <g class="pn-script" data-tt-title="pipeline.py"
-                           data-tt-body="python -m src.etl.pipeline — Orchestrator that runs all parsers for each tax year, loads into SQLite, then exports to Parquet.">
-                            <rect x="40" y="145" width="130" height="36" rx="6"/>
-                            <text x="105" y="167" text-anchor="middle" font-size="12">pipeline.py</text>
+                           data-tt-body="python -m src.etl.pipeline — Orchestrator that runs all parsers for each tax year, loads into SQLite, then exports to Parquet. Conditionally loads SOCA data if files exist.">
+                            <rect x="40" y="190" width="130" height="36" rx="6"/>
+                            <text x="105" y="212" text-anchor="middle" font-size="12">pipeline.py</text>
                         </g>
-                        <g data-tt-title="Calls parsers" data-tt-body="pipeline.py imports and calls load_table_*() functions from each parser module for years 2018-2022.">
-                            <line x1="170" y1="163" x2="225" y2="163" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        <g data-tt-title="Calls parsers" data-tt-body="pipeline.py imports and calls load_table_*() functions from each parser module for years 2018-2022, plus load_soca_t4() for SOCA years 2013-2015.">
+                            <line x1="170" y1="208" x2="225" y2="208" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
                         <g class="pn-parser" data-tt-title="parse_table_1x.py"
                            data-tt-body="Parses Tables 1.1, 1.2, 1.4 — return counts, AGI totals, income items, and tax by AGI bin. Uses agi_bins.py for fuzzy label matching.">
-                            <rect x="229" y="125" width="140" height="36" rx="6"/>
-                            <text x="299" y="147" text-anchor="middle" font-size="12">parse_table_1x</text>
+                            <rect x="229" y="128" width="140" height="36" rx="6"/>
+                            <text x="299" y="150" text-anchor="middle" font-size="12">parse_table_1x</text>
                         </g>
                         <g class="pn-parser" data-tt-title="parse_table_14a.py"
-                           data-tt-body="Parses Table 1.4A — Schedule D capital gains: short-term gains/losses, long-term gains/losses, and total net capital gains by AGI bin.">
-                            <rect x="229" y="166" width="140" height="36" rx="6"/>
-                            <text x="299" y="188" text-anchor="middle" font-size="12">parse_table_14a</text>
+                           data-tt-body="Parses Table 1.4A — Schedule D capital gains detail: ST/LT gains, ST/LT losses, loss carryovers, and net capital gains by AGI bin. Extended loss columns enable calibration validation.">
+                            <rect x="229" y="169" width="140" height="36" rx="6"/>
+                            <text x="299" y="191" text-anchor="middle" font-size="12">parse_table_14a</text>
                         </g>
                         <g class="pn-parser" data-tt-title="parse_table_3x.py"
                            data-tt-body="Parses Tables 3.4-3.6 — tax generated at each marginal rate bracket, organized by filing status (Single, MFJ, MFS, HoH).">
-                            <rect x="229" y="207" width="140" height="36" rx="6"/>
-                            <text x="299" y="229" text-anchor="middle" font-size="12">parse_table_3x</text>
+                            <rect x="229" y="210" width="140" height="36" rx="6"/>
+                            <text x="299" y="232" text-anchor="middle" font-size="12">parse_table_3x</text>
+                        </g>
+                        <g class="pn-parser" data-tt-title="parse_soca.py"
+                           data-tt-body="Parses SOCA Table 4 — long-term capital gains by holding duration and asset type. Uses openpyxl for .xlsx format. Classifies durations into 1-5yr and 5+yr bins for holding period validation.">
+                            <rect x="229" y="251" width="140" height="36" rx="6"/>
+                            <text x="299" y="273" text-anchor="middle" font-size="12">parse_soca</text>
                         </g>
                         <!-- Parser → SQLite edges -->
                         <g data-tt-title="INSERT rows" data-tt-body="Parsers call db.insert_rows() to load parsed data into raw SQLite tables. All monetary values multiplied ×1,000 (IRS reports in thousands).">
-                            <line x1="369" y1="183" x2="444" y2="183" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                            <line x1="369" y1="208" x2="444" y2="208" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
                         <g class="pn-database" data-tt-title="SQLite DB"
-                           data-tt-body="tax_review.db — 8 raw tables storing parsed IRS data for 5 tax years (2018-2022). Schema defined in schema.sql. File is gitignored.">
-                            <rect x="448" y="155" width="150" height="55" rx="6"/>
-                            <text x="523" y="179" text-anchor="middle" font-size="12" font-weight="600">SQLite DB</text>
-                            <text x="523" y="197" text-anchor="middle" font-size="10" fill="#7f8c8d">tax_review.db</text>
+                           data-tt-body="tax_review.db — 9 raw tables: 8 Pub 1304 tables for TY2018-2022, plus SOCA Table 4 for TY2013-2015. Schema defined in schema.sql. File is gitignored.">
+                            <rect x="448" y="181" width="150" height="55" rx="6"/>
+                            <text x="523" y="205" text-anchor="middle" font-size="12" font-weight="600">SQLite DB</text>
+                            <text x="523" y="223" text-anchor="middle" font-size="10" fill="#7f8c8d">tax_review.db</text>
                         </g>
 
                         <!-- Edge: Stage 2 → Stage 3 -->
                         <g data-tt-title="Raw tables → SQL Views" data-tt-body="schema.sql CREATE VIEW statements query raw tables to produce canonical, CPI-adjusted, and validation views.">
-                            <line x1="523" y1="210" x2="523" y2="270" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                            <line x1="523" y1="236" x2="523" y2="308" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
 
                         <!-- ══ Stage 3: SQL Views ══ -->
-                        <text x="16" y="290" class="stage-label">3. SQL Views</text>
+                        <text x="16" y="312" class="stage-label">3. SQL Views</text>
                         <g class="pn-view" data-tt-title="4 Canonical Views"
-                           data-tt-body="AGI_BINS (19 brackets), RETURNS_AGGREGATE (counts, AGI, tax by bin/status), CAPITAL_GAINS (ST/LT by bin), BRACKET_DISTRIBUTION (tax per rate).">
-                            <rect x="80" y="300" width="170" height="36" rx="6"/>
-                            <text x="165" y="322" text-anchor="middle" font-size="12">4 Canonical Views</text>
+                           data-tt-body="AGI_BINS (19 brackets), RETURNS_AGGREGATE (counts, AGI, tax by bin/status), CAPITAL_GAINS (ST/LT gains, losses, carryovers by bin), BRACKET_DISTRIBUTION (tax per rate).">
+                            <rect x="80" y="322" width="170" height="36" rx="6"/>
+                            <text x="165" y="344" text-anchor="middle" font-size="12">4 Canonical Views</text>
                         </g>
                         <g class="pn-view" data-tt-title="3 CPI-Adjusted Views"
                            data-tt-body="cpi_adjust.py applies CPI-U factors (2018: 251.107, 2019: 255.657, 2020: 258.811, 2021: 270.970, 2022: 292.655) to convert nominal dollars to constant 2022 dollars.">
-                            <rect x="300" y="300" width="170" height="36" rx="6"/>
-                            <text x="385" y="322" text-anchor="middle" font-size="12">3 CPI-Adjusted Views</text>
+                            <rect x="300" y="322" width="170" height="36" rx="6"/>
+                            <text x="385" y="344" text-anchor="middle" font-size="12">3 CPI-Adjusted Views</text>
                         </g>
                         <g class="pn-view" data-tt-title="7 Validation Views"
                            data-tt-body="Cross-table reconciliation views defined in schema.sql. Compare overlapping aggregates between Tables 1.1, 1.2, 1.4, 1.4A, and 3.x.">
-                            <rect x="520" y="300" width="170" height="36" rx="6"/>
-                            <text x="605" y="322" text-anchor="middle" font-size="12">7 Validation Views</text>
+                            <rect x="520" y="322" width="170" height="36" rx="6"/>
+                            <text x="605" y="344" text-anchor="middle" font-size="12">7 Validation Views</text>
                         </g>
                         <!-- Edges between views -->
                         <g data-tt-title="CPI-U multiplication" data-tt-body="Canonical view values × (292.655 / year_cpi) to produce real 2022 dollar equivalents.">
-                            <line x1="250" y1="318" x2="296" y2="318" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                            <line x1="250" y1="340" x2="296" y2="340" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
 
                         <!-- Edge: Stage 3 → Stage 4 -->
                         <g data-tt-title="Views → Export &amp; Validation" data-tt-body="pd.read_sql queries views into DataFrames. Parquet files written for both nominal and CPI-adjusted series.">
-                            <line x1="390" y1="336" x2="390" y2="395" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                            <line x1="390" y1="358" x2="390" y2="430" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
 
                         <!-- ══ Stage 4: Export + Validation ══ -->
-                        <text x="16" y="415" class="stage-label">4. Export &amp; Validate</text>
+                        <text x="16" y="428" class="stage-label">4. Export &amp; Validate</text>
                         <g class="pn-export" data-tt-title="Parquet Export"
                            data-tt-body="data/processed/nominal/ and data/processed/real_2022/ — columnar Parquet files for each canonical table, ready for analysis.">
-                            <rect x="60" y="425" width="150" height="36" rx="6"/>
-                            <text x="135" y="447" text-anchor="middle" font-size="12">Parquet Export</text>
+                            <rect x="60" y="438" width="150" height="36" rx="6"/>
+                            <text x="135" y="460" text-anchor="middle" font-size="12">Parquet Export</text>
                         </g>
                         <g class="pn-script" data-tt-title="export_data.py"
                            data-tt-body="5-step microsimulation reform pipeline: (1) identify LT gains held &lt;5yr, (2) reclassify as ordinary, (3) rate differential, (4) stranded losses, (5) net revenue.">
-                            <rect x="260" y="425" width="170" height="36" rx="6"/>
-                            <text x="345" y="447" text-anchor="middle" font-size="12">export_data.py</text>
+                            <rect x="260" y="438" width="170" height="36" rx="6"/>
+                            <text x="345" y="460" text-anchor="middle" font-size="12">export_data.py</text>
                         </g>
                         <g data-tt-title="Reform pipeline" data-tt-body="export_data.py reads canonical views, runs the 5-step microsim, and writes dashboard.json with all chart data.">
-                            <line x1="210" y1="443" x2="256" y2="443" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                            <line x1="210" y1="456" x2="256" y2="456" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
                         <g class="pn-validate" data-tt-title="reconcile.py"
                            data-tt-body="6 cross-table validation checks via SQL views. Ensures overlapping aggregates match within &lt;0.05% tolerance. Run with python -m src.validation.reconcile.">
-                            <rect x="480" y="425" width="150" height="36" rx="6"/>
-                            <text x="555" y="447" text-anchor="middle" font-size="12">reconcile.py</text>
+                            <rect x="480" y="438" width="150" height="36" rx="6"/>
+                            <text x="555" y="460" text-anchor="middle" font-size="12">reconcile.py</text>
                         </g>
                         <g data-tt-title="Validation queries" data-tt-body="reconcile.py reads the 7 validation views from SQLite and reports any discrepancies exceeding 0.05%.">
-                            <path d="M605 336 L605 360 L605 421" fill="none" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                            <path d="M605 358 L605 434" fill="none" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                        </g>
+                        <g class="pn-validate" data-tt-title="calibrate.py"
+                           data-tt-body="python -m src.validation.calibration_validate — Compares empirical loss ratios (from Table 1.4A loss columns) and holding period fractions (from SOCA Table 4) against model assumptions in reform_assumptions.json. Reads raw tables directly from SQLite.">
+                            <rect x="480" y="482" width="150" height="36" rx="6"/>
+                            <text x="555" y="504" text-anchor="middle" font-size="12">calibrate.py</text>
+                        </g>
+                        <g data-tt-title="Calibration data" data-tt-body="calibrate.py reads raw_table_14a (LT loss + carryover columns) and raw_soca_t4 (holding durations) directly from SQLite to compute empirical ratios.">
+                            <line x1="555" y1="474" x2="555" y2="478" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
 
                         <!-- Edge: Stage 4 → Output -->
                         <g data-tt-title="JSON output" data-tt-body="export_data.py writes data/dashboard.json containing summary metrics, reform estimates, capital gains, bracket distributions, and trend data.">
-                            <line x1="345" y1="461" x2="345" y2="525" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                            <line x1="345" y1="474" x2="345" y2="552" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
 
                         <!-- ══ Stage 5: Output ══ -->
-                        <text x="16" y="545" class="stage-label">5. Dashboard</text>
+                        <text x="16" y="560" class="stage-label">5. Dashboard</text>
                         <g class="pn-output" data-tt-title="dashboard.json"
                            data-tt-body="Single JSON file with all chart data: summary metrics, reform_estimate (per bin), capital_gains_by_bin, bracket_distribution, trends, and reform_metadata.">
-                            <rect x="160" y="550" width="160" height="36" rx="6"/>
-                            <text x="240" y="572" text-anchor="middle" font-size="12">dashboard.json</text>
+                            <rect x="160" y="568" width="160" height="36" rx="6"/>
+                            <text x="240" y="590" text-anchor="middle" font-size="12">dashboard.json</text>
                         </g>
                         <g data-tt-title="fetch() at page load" data-tt-body="Browser fetches dashboard.json via the Fetch API. Chart.js renders 7 interactive visualizations from the loaded data.">
-                            <line x1="320" y1="568" x2="410" y2="568" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                            <line x1="320" y1="586" x2="410" y2="586" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrowhead)"/>
                         </g>
                         <g class="pn-output" data-tt-title="This Dashboard"
                            data-tt-body="Single-page HTML dashboard using Chart.js for interactive charts. All data loaded client-side from dashboard.json — no server required.">
-                            <rect x="414" y="550" width="170" height="36" rx="6"/>
-                            <text x="499" y="572" text-anchor="middle" font-size="12">This Dashboard</text>
+                            <rect x="414" y="568" width="170" height="36" rx="6"/>
+                            <text x="499" y="590" text-anchor="middle" font-size="12">This Dashboard</text>
                         </g>
 
                         <!-- Color legend -->
-                        <g transform="translate(40, 610)" font-size="10" fill="#7f8c8d">
+                        <g transform="translate(40, 630)" font-size="10" fill="#7f8c8d">
                             <rect x="0" y="0" width="10" height="10" rx="2" fill="#fef9e7" stroke="#d4ac0d"/>
                             <text x="14" y="9">External</text>
                             <rect x="80" y="0" width="10" height="10" rx="2" fill="#eef6fc" stroke="#5dade2"/>
@@ -1322,35 +1335,41 @@ unless otherwise noted.</p>
                 </div>
 
                 <div class="pipeline-intro" style="margin-top:1.2rem;">
-                <p><strong>Stage 1 &mdash; Download.</strong> The <code>download.py</code> script fetches 60 files
-                    (11 Excel workbooks per tax year across 2018&ndash;2022, plus 5 Revenue Procedure PDFs) from
-                    <code>irs.gov/pub/irs-soi</code>. Each file is verified against a SHA-256 checksum manifest
-                    to ensure data integrity. The Excel files use the legacy <code>.xls</code> (BIFF) format.</p>
+                <p><strong>Stage 1 &mdash; Download.</strong> The <code>download.py</code> script fetches 63 files
+                    from <code>irs.gov/pub/irs-soi</code>: 55 Pub&nbsp;1304 Excel workbooks (11 per tax year across
+                    2018&ndash;2022), 5 Revenue Procedure PDFs, and 3 Sales of Capital Assets (SOCA) Excel workbooks
+                    (Table 4 for TY2013&ndash;2015). Each file is verified against a SHA-256 checksum manifest.
+                    Pub&nbsp;1304 files use the legacy <code>.xls</code> (BIFF) format; SOCA files use <code>.xlsx</code>.</p>
 
                 <p><strong>Stage 2 &mdash; Parse &amp; Load.</strong> The pipeline orchestrator (<code>pipeline.py</code>)
-                    calls three specialized parsers. <code>parse_table_1x</code> handles Tables 1.1, 1.2, 3.2, and 3.3
+                    calls four specialized parsers. <code>parse_table_1x</code> handles Tables 1.1, 1.2, 3.2, and 3.3
                     (return counts, AGI, taxable income, and tax items). <code>parse_table_14a</code> handles
-                    Table 1.4A (Schedule D capital gains: short-term, long-term, and total by AGI bin).
+                    Table 1.4A (Schedule D capital gains detail: ST/LT gains, ST/LT losses, loss carryovers, and net
+                    capital gains by AGI bin&mdash;the loss and carryover columns enable calibration validation).
                     <code>parse_table_3x</code> handles Tables 3.4&ndash;3.6 (tax generated at each marginal rate
-                    bracket by filing status). All parsers use <code>xlrd</code> to read the BIFF-format files,
-                    strip footnote markers, and multiply monetary values by 1,000 (IRS reports in thousands).
-                    Parsed rows are loaded into 8 raw tables in a SQLite database.</p>
+                    bracket by filing status). <code>parse_soca</code> handles SOCA Table 4 (long-term gains by
+                    holding duration and asset type, using <code>openpyxl</code> for the <code>.xlsx</code> format).
+                    All Pub&nbsp;1304 parsers use <code>xlrd</code> to read BIFF-format files, strip footnote markers,
+                    and multiply monetary values by 1,000. Parsed rows are loaded into 9 raw tables in a SQLite database.</p>
 
                 <p><strong>Stage 3 &mdash; SQL Views.</strong> The <code>schema.sql</code> file defines three
                     layers of views on top of the raw tables. Four <em>canonical views</em> present the data model:
                     AGI_BINS (19 income brackets), RETURNS_AGGREGATE (return counts and tax by bin and filing status),
-                    CAPITAL_GAINS (short-term and long-term gains by bin), and BRACKET_DISTRIBUTION (tax per marginal
-                    rate). Three <em>CPI-adjusted views</em> convert nominal dollars to constant 2022 dollars using
-                    Bureau of Labor Statistics CPI-U annual averages. Seven <em>validation views</em> enable
-                    cross-table reconciliation checks.</p>
+                    CAPITAL_GAINS (short-term and long-term gains, losses, and carryovers by bin), and
+                    BRACKET_DISTRIBUTION (tax per marginal rate). Three <em>CPI-adjusted views</em> convert nominal
+                    dollars to constant 2022 dollars using Bureau of Labor Statistics CPI-U annual averages. Seven
+                    <em>validation views</em> enable cross-table reconciliation checks.</p>
 
                 <p><strong>Stage 4 &mdash; Export &amp; Validate.</strong> <code>export_data.py</code> reads the
                     canonical views into DataFrames, runs the five-step microsimulation reform pipeline (identify
                     affected gains, reclassify as ordinary income, compute rate differential, estimate stranded losses,
-                    sum net revenue), and writes <code>dashboard.json</code>. Separately, <code>reconcile.py</code>
-                    runs 6 cross-table validation checks against the validation views, ensuring all overlapping
-                    aggregates match within 0.05% tolerance. Parquet files are also exported in both nominal and
-                    CPI-adjusted formats.</p>
+                    sum net revenue), and writes <code>dashboard.json</code>. Two validation modules run independently:
+                    <code>reconcile.py</code> runs 6 cross-table validation checks against the validation views,
+                    ensuring all overlapping aggregates match within 0.05% tolerance; <code>calibration_validate.py</code>
+                    compares empirical loss ratios (computed from Table 1.4A loss and carryover columns) and holding
+                    period fractions (computed from SOCA Table 4 duration bins) against the model&rsquo;s assumed
+                    calibration values in <code>reform_assumptions.json</code>. Parquet files are also exported in
+                    both nominal and CPI-adjusted formats.</p>
 
                 <p><strong>Stage 5 &mdash; Dashboard.</strong> This single-page HTML dashboard fetches
                     <code>dashboard.json</code> at page load and renders seven interactive Chart.js visualizations.
@@ -1400,11 +1419,32 @@ unless otherwise noted.</p>
                     reform&rsquo;s tax base: the holding period fraction selects which gains are affected, and the
                     loss ratio reveals the hidden gross gains that become fully taxable once stranded-loss rules apply.
                 </p>
+                <p style="font-size:0.88rem; line-height:1.7; margin-bottom:1rem;">
+                    Both parameters vary by income level. The values below are applied in Step 3 (holding period
+                    filter) and Step 2 (gross gain estimation) of the five-step reform pipeline described in the
+                    methodology footer.
+                </p>
+                <p style="font-size:0.88rem; line-height:1.7; margin-bottom:0.5rem;">
+                    <strong>What the published data shows.</strong>&ensp;IRS SOI Table 1.4A (2018&ndash;2022) publishes
+                    net long-term capital gains and losses by AGI group. For the $10&thinsp;M+ group, effective tax
+                    rates <em>drop</em> (from 27.5% at $5&ndash;10&thinsp;M to 25.1% at $10&thinsp;M+) because 47%
+                    of their AGI consists of long-term capital gains taxed at 23.8% instead of the 37% top ordinary
+                    rate. This preferential-rate gap is the mechanism the reform targets.
+                </p>
                 <p style="font-size:0.88rem; line-height:1.7; margin-bottom:1.2rem;">
-                    Both parameters vary by income level. High-AGI filers hold a larger share of short-duration gains
-                    (active portfolio rebalancing) and engage in more aggressive tax-loss harvesting, so their fractions
-                    are higher. The values below are applied in Step 3 (holding period filter) and Step 2 (gross gain
-                    estimation) of the five-step reform pipeline described in the methodology footer.
+                    <strong>Why the gross capital-loss percentage is not included.</strong>&ensp;Table 1.4A columns 62
+                    and 64 report <em>per-return net</em> long-term gains and losses&mdash;not gross transaction-level
+                    amounts. A filer with $500K of gross gains and $400K of harvested losses appears as just $100K in
+                    column 62; the $400K of harvested activity is invisible. Furthermore, for the $10&thinsp;M+ group,
+                    only 28% of net LT gains come from direct sales (where individual transactions are visible).
+                    The remaining 72% flows through partnerships, S&nbsp;corporations, and other pass-through forms that
+                    report only a single net K-1 figure&mdash;all internal trading and loss harvesting within
+                    hedge funds, private equity funds, and similar vehicles is netted away before it reaches the
+                    individual return. As a result, the observable &ldquo;implied loss ratios&rdquo; from Table 1.4A
+                    (5&ndash;84% by AGI group) run in the <em>opposite</em> direction from expected harvesting
+                    intensity, showing low ratios for high-income filers precisely because their harvesting is the
+                    most thoroughly hidden by per-return and partnership-level netting. The gross loss ratios assumed
+                    below are structural estimates that cannot be validated from published Schedule&nbsp;D aggregates alone.
                 </p>
                 <div class="assumptions-grid">
                     <div>
@@ -1419,8 +1459,13 @@ unless otherwise noted.</p>
                     </div>
                 </div>
                 <p class="assumptions-note" style="margin-top:0.75rem;">
-                    Sources: IRS SOI Capital Assets Study (2007&ndash;2012), JCT estimates. Values are calibration placeholders.
-                    Reform uses bracket-based marginal rates weighted by filing status return counts.
+                    Sources: IRS SOI Capital Assets Study (2007&ndash;2012), JCT estimates. Holding period fractions
+                    cross-checked against SOCA Table 4 holding duration bins (TY2015); the aggregate fraction
+                    (37.9% at 1&ndash;5&thinsp;yr) brackets the model&rsquo;s assumed range (20&ndash;55%). Loss
+                    harvesting ratios are structural estimates informed by the same studies. Published Table 1.4A
+                    data (2018&ndash;2022) confirms the overall gain-vs-loss pattern by AGI but cannot validate
+                    the gross ratios directly, for the netting and pass-through reasons described above. Run
+                    <code>python -m src.validation.calibration_validate</code> for the full comparison report.
                 </p>
             </div>
         </div>
@@ -1456,13 +1501,16 @@ unless otherwise noted.</p>
                     <span class="ra-progress ra-status"></span>
                 </div>
                 <p style="font-size:0.88rem; line-height:1.7; margin-bottom:1rem;">
-                    Every number in this dashboard traces back to IRS Statistics of Income (SOI) Publication 1304,
-                    the most detailed publicly available breakdown of individual income tax returns. The model
-                    ingests seven SOI table families&mdash;covering income by AGI bracket, filing status, capital
-                    asset transactions, and marginal rate distributions&mdash;for tax years 2018 through 2022,
-                    with a trend-based 2023 forecast. These tables supply the raw inputs to the five-step reform
-                    pipeline: AGI and return counts establish population weights, Table 1.4A provides the capital
-                    gains base, and Tables 3.4&ndash;3.6 anchor the bracket-based marginal rate calculation.
+                    Every number in this dashboard traces back to IRS Statistics of Income (SOI) data. The primary
+                    source is Publication 1304, the most detailed publicly available breakdown of individual income
+                    tax returns. The model ingests seven SOI table families&mdash;covering income by AGI bracket,
+                    filing status, capital asset transactions, and marginal rate distributions&mdash;for tax years
+                    2018 through 2022, with a trend-based 2023 forecast. Additionally, the Sales of Capital Assets
+                    (SOCA) study provides holding period duration data for TY2013&ndash;2015 used in calibration
+                    validation. These tables supply the raw inputs to the five-step reform pipeline: AGI and return
+                    counts establish population weights, Table 1.4A provides the capital gains base (including loss
+                    and carryover columns for calibration), and Tables 3.4&ndash;3.6 anchor the bracket-based
+                    marginal rate calculation.
                 </p>
                 <p style="font-size:0.88rem; line-height:1.7; margin-bottom:1.2rem;">
                     The Key Statistics table below summarizes the headline aggregates for the currently selected
@@ -1480,10 +1528,15 @@ unless otherwise noted.</p>
 
                 <h4 class="glossary-subsection">IRS Source References</h4>
                 <p style="font-size:0.82rem; margin-bottom:0.75rem;">
-                    All data sourced from
+                    Data sourced from
                     <a href="https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-returns-complete-report-publication-1304" target="_blank" style="color:var(--accent);">
                         IRS SOI Publication 1304
                     </a>
+                    (TY2018&ndash;2022) and
+                    <a href="https://www.irs.gov/statistics/soi-tax-stats-sales-of-capital-assets" target="_blank" style="color:var(--accent);">
+                        Sales of Capital Assets (SOCA)
+                    </a>
+                    (TY2013&ndash;2015)
                 </p>
                 <table class="reference-sources-table">
                     <thead>
@@ -1493,10 +1546,11 @@ unless otherwise noted.</p>
                         <tr><td>1.1</td><td><code>{yy}in11si.xls</code></td><td>Selected Income and Tax Items</td></tr>
                         <tr><td>1.2</td><td><code>{yy}in12ms.xls</code></td><td>Income and Tax Items by Filing Status</td></tr>
                         <tr><td>1.4</td><td><code>{yy}in14ar.xls</code></td><td>Sources of Income by Size of AGI</td></tr>
-                        <tr><td>1.4A</td><td><code>{yy}in14acg.xls</code></td><td>Capital Asset Sales (Schedule D)</td></tr>
+                        <tr><td>1.4A</td><td><code>{yy}in14acg.xls</code></td><td>Capital Asset Sales (Schedule D) &mdash; incl. losses &amp; carryovers</td></tr>
                         <tr><td>3.2</td><td><code>{yy}in32tt.xls</code></td><td>Income Tax as Percentage of AGI</td></tr>
                         <tr><td>3.3</td><td><code>{yy}in33ar.xls</code></td><td>Tax Liability and Credits by AGI</td></tr>
                         <tr><td>3.4&ndash;3.6</td><td><code>{yy}in3{4,5,6}tr.xls</code></td><td>Tax by Marginal Rate and Filing Status</td></tr>
+                        <tr><td>SOCA T4</td><td><code>{yy}in04soca.xlsx</code></td><td>Sales of Capital Assets &mdash; LT gains by holding duration (TY2013&ndash;2015)</td></tr>
                     </tbody>
                 </table>
             </div>
