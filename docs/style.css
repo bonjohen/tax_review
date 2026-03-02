@@ -263,6 +263,40 @@ body {
     border-radius: 2px;
 }
 
+/* Per-chart year pill selectors */
+.chart-year-pills {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.chart-year-pill {
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--card-bg);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    user-select: none;
+}
+
+.chart-year-pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.chart-year-pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
 /* Chart containers */
 .chart-card {
     background: var(--card-bg);
@@ -899,6 +933,11 @@ body {
     .analysis-header-right {
         flex-wrap: wrap;
         gap: 0.5rem;
+    }
+
+    .chart-year-pill {
+        padding: 0.2rem 0.55rem;
+        font-size: 0.72rem;
     }
 }
 

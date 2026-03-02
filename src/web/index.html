@@ -558,6 +558,7 @@ unless otherwise noted.</p>
             </div>
             <div class="analysis-body collapsible-section-body" id="filing-status-body">
                 <p class="section-narrative">Married filing jointly dominates reform revenue at every income level, reflecting the concentration of investment portfolios in joint-filing households. Single filers contribute a secondary share, while head-of-household and married-filing-separately filers bear minimal impact.</p>
+                <div class="chart-year-pills" id="years-filing-status"></div>
                 <div class="chart-card">
                     <div class="chart-wrapper"><canvas id="chart-filing-status"></canvas></div>
                     <div class="fs-legend" id="fs-legend"></div>
@@ -579,6 +580,7 @@ unless otherwise noted.</p>
             </div>
             <div class="analysis-body collapsible-section-body" id="concentration-body">
                 <p class="section-narrative">Capital gains are among the most concentrated forms of income in the U.S. tax base. The curve below rises slowly through the lower and middle AGI bins, then climbs steeply above $1 million. Filers with AGI above $2 million routinely account for more than 60% of all reported long-term gains.</p>
+                <div class="chart-year-pills" id="years-concentration"></div>
                 <div class="chart-card">
                     <div class="chart-wrapper"><canvas id="chart-concentration"></canvas></div>
                     <p class="chart-note">Cumulative % of LT gains from lowest to highest AGI bin</p>
@@ -599,6 +601,7 @@ unless otherwise noted.</p>
             </div>
             <div class="analysis-body collapsible-section-body" id="income-body">
                 <p class="section-narrative">Below $200,000 AGI, wages and salaries account for the vast majority of income. Above $1 million, the composition flips: capital gains, partnership and S-corporation income, and other investment returns dominate. This structural shift is what makes the preferential capital gains rate so consequential&mdash;it applies precisely where income is largest.</p>
+                <div class="chart-year-pills" id="years-income-sources"></div>
                 <div class="chart-card">
                     <div class="chart-wrapper chart-wrapper-tall"><canvas id="chart-income-sources"></canvas></div>
                     <p class="chart-note">How AGI is composed across income levels &mdash; wages dominate below $200K, investment income dominates above $1M</p>
@@ -619,6 +622,7 @@ unless otherwise noted.</p>
             </div>
             <div class="analysis-body collapsible-section-body" id="brackets-body">
                 <p class="section-narrative">The 22% and 24% brackets generate the most total income tax by volume, but the reform&rsquo;s additional revenue concentrates in the 35% and 37% brackets&mdash;where the wealthiest filers&rsquo; reclassified gains land. The stacked bars show current-law tax alongside the reform increment at each rate.</p>
+                <div class="chart-year-pills" id="years-brackets"></div>
                 <div class="chart-card">
                     <div class="chart-wrapper"><canvas id="chart-brackets"></canvas></div>
                     <p class="chart-note">Ordinary income tax generated at each statutory marginal rate</p>
@@ -1630,6 +1634,99 @@ function fmtPct(val) {
     return val.toFixed(1) + '%';
 }
 
+// ── Per-chart year multi-select ───────────────────────────────────────────────
+const CHART_IDS = ['filing-status', 'concentration', 'income-sources', 'brackets'];
+const YEARS = [2018, 2019, 2020, 2021, 2022, 2023];
+// null = follow global selectedYear; otherwise Set of selected years
+const chartYears = {};
+CHART_IDS.forEach(id => chartYears[id] = null);
+
+// Multi-year color palette (6 distinct colors for up to 6 years)
+const YEAR_COLORS = [
+    'rgba(41, 128, 185, 1)',    // 2018 blue
+    'rgba(230, 126, 34, 1)',    // 2019 orange
+    'rgba(39, 174, 96, 1)',     // 2020 green
+    'rgba(155, 89, 182, 1)',    // 2021 purple
+    'rgba(231, 76, 60, 1)',     // 2022 red
+    'rgba(52, 73, 94, 1)',      // 2023 dark gray
+];
+function yearColor(year, alpha) {
+    const idx = YEARS.indexOf(year);
+    const base = YEAR_COLORS[idx >= 0 ? idx : 0];
+    if (alpha != null) return base.replace(/[\d.]+\)$/, alpha + ')');
+    return base;
+}
+
+function getChartYears(chartId) {
+    const cy = chartYears[chartId];
+    if (cy && cy.size > 0) return Array.from(cy).sort();
+    return [selectedYear];
+}
+
+function createYearPills(chartId) {
+    const container = document.getElementById('years-' + chartId);
+    if (!container) return;
+    const active = getChartYears(chartId);
+    container.innerHTML = YEARS.map(y => {
+        const isActive = active.includes(y);
+        const forecast = FORECAST_YEARS.includes(y) ? ' (F)' : '';
+        return '<span class="chart-year-pill' + (isActive ? ' active' : '') +
+            '" data-chart="' + chartId + '" data-year="' + y + '">' + y + forecast + '</span>';
+    }).join('');
+    container.querySelectorAll('.chart-year-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+            toggleChartYear(chartId, parseInt(pill.dataset.year));
+        });
+    });
+}
+
+function toggleChartYear(chartId, year) {
+    if (!chartYears[chartId]) {
+        // First click: initialize from global year
+        chartYears[chartId] = new Set([selectedYear]);
+    }
+    const set = chartYears[chartId];
+    if (set.has(year)) {
+        // Don't allow deselecting the last year
+        if (set.size > 1) set.delete(year);
+    } else {
+        set.add(year);
+    }
+    renderChart(chartId);
+}
+
+function renderChart(chartId) {
+    switch (chartId) {
+        case 'filing-status': renderFilingStatus(); break;
+        case 'concentration': renderConcentration(); break;
+        case 'income-sources': renderIncomeSources(); break;
+        case 'brackets': renderBrackets(); break;
+    }
+    // Update section title
+    updateChartTitle(chartId);
+}
+
+function updateChartTitle(chartId) {
+    const years = getChartYears(chartId);
+    let ys;
+    if (years.length === 1) {
+        ys = years[0] + (FORECAST_YEARS.includes(years[0]) ? ' (Forecast)' : '');
+    } else {
+        ys = years[0] + '\u2013' + years[years.length - 1];
+    }
+    const titleMap = {
+        'filing-status': ['filing-status-title', 'Reform Revenue by Filing Status (' + ys + ')'],
+        'concentration': ['concentration-title', 'Capital Gains Concentration (' + ys + ')'],
+        'income-sources': ['income-title', 'Income Composition by AGI Bin (' + ys + ')'],
+        'brackets': ['brackets-title', 'Tax Generated by Marginal Rate Bracket (' + ys + ')'],
+    };
+    const entry = titleMap[chartId];
+    if (entry) {
+        const el = document.getElementById(entry[0]);
+        if (el) el.textContent = entry[1];
+    }
+}
+
 // ── Data helpers ─────────────────────────────────────────────────────────────
 function isForecastYear(year) {
     return FORECAST_YEARS.includes(year || selectedYear);
@@ -2020,25 +2117,84 @@ function renderRevenue() {
     });
 }
 
-// ── Chart: Filing Status (stacked bar) ──────────────────────────────────────
+// ── Chart: Filing Status (stacked bar + filer count lines) ──────────────────
 function renderFilingStatus() {
     if (!DATA.reform_by_filing_status) return;
 
-    const fsData = yearData(DATA.reform_by_filing_status);
+    const years = getChartYears('filing-status');
+    const multiYear = years.length > 1;
     const statuses = ['single', 'married_filing_jointly', 'married_filing_separately', 'head_of_household'];
-
-    // Aggregate allocated_revenue by AGI group and filing status
     const labels = AGI_GROUPS.map(g => g.label);
-    const datasets = statuses.map(fs => ({
-        label: FS_LABELS[fs],
-        data: AGI_GROUPS.map(g => {
-            const matched = fsData.filter(r => g.ids.includes(r.agi_bin_id) && r.filing_status === fs);
-            return matched.reduce((a, r) => a + (r.allocated_revenue || 0), 0) / 1e9;
-        }),
-        backgroundColor: FS_COLORS[fs].bg,
-        borderColor: FS_COLORS[fs].border,
-        borderWidth: 1,
-    }));
+    const datasets = [];
+
+    // Bar datasets: one per (year × filing_status), grouped by year stack
+    years.forEach(yr => {
+        const fsData = yearData(DATA.reform_by_filing_status, yr);
+        const suffix = multiYear ? ' (' + yr + ')' : '';
+        statuses.forEach(fs => {
+            datasets.push({
+                label: FS_LABELS[fs] + suffix,
+                data: AGI_GROUPS.map(g => {
+                    const matched = fsData.filter(r => g.ids.includes(r.agi_bin_id) && r.filing_status === fs);
+                    return matched.reduce((a, r) => a + (r.allocated_revenue || 0), 0) / 1e9;
+                }),
+                backgroundColor: multiYear
+                    ? FS_COLORS[fs].bg.replace('0.7', String(0.4 + 0.3 * (years.indexOf(yr) / Math.max(years.length - 1, 1))))
+                    : FS_COLORS[fs].bg,
+                borderColor: FS_COLORS[fs].border,
+                borderWidth: 1,
+                stack: 'rev-' + yr,
+            });
+        });
+    });
+
+    // Line datasets: filer counts on right y-axis
+    if (!multiYear) {
+        // Single year: one dashed line per filing status
+        const yr = years[0];
+        const fsData = yearData(DATA.reform_by_filing_status, yr);
+        statuses.forEach(fs => {
+            datasets.push({
+                label: FS_LABELS[fs] + ' Filers',
+                data: AGI_GROUPS.map(g => {
+                    const matched = fsData.filter(r => g.ids.includes(r.agi_bin_id) && r.filing_status === fs);
+                    return matched.reduce((a, r) => a + (r.return_count || 0), 0);
+                }),
+                type: 'line',
+                yAxisID: 'y1',
+                borderColor: FS_COLORS[fs].border,
+                backgroundColor: 'transparent',
+                borderDash: [5, 3],
+                borderWidth: 2,
+                pointRadius: 3,
+                pointBackgroundColor: FS_COLORS[fs].border,
+                tension: 0.3,
+                order: 0,
+            });
+        });
+    } else {
+        // Multi-year: one total filer line per year to avoid clutter
+        years.forEach(yr => {
+            const aggData = yearData(DATA.returns_aggregate, yr);
+            datasets.push({
+                label: 'Total Filers (' + yr + ')',
+                data: AGI_GROUPS.map(g => {
+                    const matched = aggData.filter(r => g.ids.includes(r.agi_bin_id));
+                    return matched.reduce((a, r) => a + (r.return_count || 0), 0);
+                }),
+                type: 'line',
+                yAxisID: 'y1',
+                borderColor: yearColor(yr),
+                backgroundColor: 'transparent',
+                borderDash: [5, 3],
+                borderWidth: 2,
+                pointRadius: 3,
+                pointBackgroundColor: yearColor(yr),
+                tension: 0.3,
+                order: 0,
+            });
+        });
+    }
 
     if (charts.filingStatus) charts.filingStatus.destroy();
     charts.filingStatus = new Chart(document.getElementById('chart-filing-status'), {
@@ -2046,10 +2202,32 @@ function renderFilingStatus() {
         data: { labels, datasets },
         options: {
             responsive: true,
+            interaction: { mode: 'index', intersect: false },
             plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 10,
+                        font: { size: 11 },
+                        filter: multiYear
+                            ? (item) => {
+                                // Show only first year's categories + all line datasets
+                                const ds = datasets[item.datasetIndex];
+                                if (ds.type === 'line') return true;
+                                return item.text.includes('(' + years[0] + ')');
+                            }
+                            : undefined,
+                    },
+                },
                 tooltip: {
                     callbacks: {
-                        label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(2) + 'B'
+                        label: function(ctx) {
+                            if (ctx.dataset.yAxisID === 'y1')
+                                return ctx.dataset.label + ': ' + fmtCount(ctx.parsed.y);
+                            return ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(2) + 'B';
+                        }
                     }
                 }
             },
@@ -2059,55 +2237,68 @@ function renderFilingStatus() {
                     stacked: true,
                     title: { display: true, text: '$ Billions' },
                     ticks: { callback: v => '$' + v + 'B' }
+                },
+                y1: {
+                    position: 'right',
+                    title: { display: true, text: 'Number of Filers' },
+                    ticks: { callback: v => fmtCount(v) },
+                    grid: { drawOnChartArea: false },
+                    beginAtZero: true,
                 }
             }
         }
     });
 
-    // Legend
+    // Hide custom legend — now using Chart.js built-in legend with click-to-toggle
     const legendEl = document.getElementById('fs-legend');
-    legendEl.innerHTML = statuses.map(fs =>
-        `<span class="fs-legend-item"><span class="fs-swatch" style="background:${FS_COLORS[fs].bg}"></span>${FS_LABELS[fs]}</span>`
-    ).join('');
+    legendEl.innerHTML = '';
+
+    updateChartTitle('filing-status');
+    createYearPills('filing-status');
 }
 
-// ── Chart: Concentration (cumulative line) ───────────────────────────────────
+// ── Chart: Concentration (cumulative line — multi-year overlay) ──────────────
 function renderConcentration() {
-    const rows = yearData(DATA.concentration);
-    // Aggregate LT gains per AGI group, then compute cumulative %
-    const grouped = aggregateByAgiGroup(rows, ['long_term_gain']);
-    const totalLT = grouped.reduce((a, g) => a + g.long_term_gain, 0);
-    let cumSum = 0;
-    const values = grouped.map(g => {
-        cumSum += g.long_term_gain;
-        return totalLT > 0 ? (cumSum / totalLT * 100) : 0;
+    const years = getChartYears('concentration');
+    const multiYear = years.length > 1;
+    const labels = AGI_GROUPS.map(g => g.label);
+    const datasets = [];
+
+    years.forEach(yr => {
+        const rows = yearData(DATA.concentration, yr);
+        const grouped = aggregateByAgiGroup(rows, ['long_term_gain']);
+        const totalLT = grouped.reduce((a, g) => a + g.long_term_gain, 0);
+        let cumSum = 0;
+        const values = grouped.map(g => {
+            cumSum += g.long_term_gain;
+            return totalLT > 0 ? (cumSum / totalLT * 100) : 0;
+        });
+
+        const color = multiYear ? yearColor(yr) : 'rgba(41, 128, 185, 1)';
+        datasets.push({
+            label: multiYear ? 'Cumulative % (' + yr + ')' : 'Cumulative % of LT Gains',
+            data: values,
+            fill: !multiYear,
+            backgroundColor: multiYear ? 'transparent' : 'rgba(41, 128, 185, 0.15)',
+            borderColor: color,
+            borderWidth: 2,
+            pointRadius: 5,
+            pointBackgroundColor: color,
+            tension: 0.3,
+        });
     });
-    const labels = grouped.map(g => g.label);
 
     if (charts.concentration) charts.concentration.destroy();
     charts.concentration = new Chart(document.getElementById('chart-concentration'), {
         type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Cumulative % of LT Gains',
-                data: values,
-                fill: true,
-                backgroundColor: 'rgba(41, 128, 185, 0.15)',
-                borderColor: 'rgba(41, 128, 185, 1)',
-                borderWidth: 2,
-                pointRadius: 5,
-                pointBackgroundColor: 'rgba(41, 128, 185, 1)',
-                tension: 0.3,
-            }]
-        },
+        data: { labels, datasets },
         options: {
             responsive: true,
             plugins: {
-                legend: { display: false },
+                legend: { display: multiYear, position: 'top', labels: { usePointStyle: true, padding: 10 } },
                 tooltip: {
                     callbacks: {
-                        label: ctx => ctx.parsed.y.toFixed(1) + '% of LT gains'
+                        label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + '%'
                     }
                 }
             },
@@ -2121,6 +2312,9 @@ function renderConcentration() {
             }
         }
     });
+
+    updateChartTitle('concentration');
+    createYearPills('concentration');
 }
 
 // ── Chart: Year-over-Year Trends (line) ──────────────────────────────────────
@@ -2218,25 +2412,61 @@ const IC_GROUPS = [
 
 function renderIncomeSources() {
     if (!DATA.income_sources) return;
-    const rows = yearData(DATA.income_sources);
-    if (!rows.length) return;
 
-    // Collect all income fields used by IC_GROUPS
+    const years = getChartYears('income-sources');
+    const multiYear = years.length > 1;
     const allFields = IC_GROUPS.flatMap(g => g.fields);
-    const grouped = aggregateByAgiGroup(rows, allFields);
-    const labels = grouped.map(g => g.label);
+    const labels = AGI_GROUPS.map(g => g.label);
+    const datasets = [];
 
-    const datasets = IC_GROUPS.map(g => ({
-        label: g.label,
-        data: grouped.map(row => {
-            let sum = 0;
-            for (const f of g.fields) sum += Math.max(row[f] || 0, 0);
-            return sum / 1e9;
-        }),
-        backgroundColor: g.color,
-        borderColor: g.color.replace('0.75', '1'),
-        borderWidth: 1,
-    }));
+    // Bar datasets: one per (year × income group), grouped by year stack
+    years.forEach(yr => {
+        const rows = yearData(DATA.income_sources, yr);
+        if (!rows.length) return;
+        const grouped = aggregateByAgiGroup(rows, allFields);
+        const suffix = multiYear ? ' (' + yr + ')' : '';
+
+        IC_GROUPS.forEach(g => {
+            const alpha = multiYear
+                ? String(0.45 + 0.3 * (years.indexOf(yr) / Math.max(years.length - 1, 1)))
+                : '0.75';
+            datasets.push({
+                label: g.label + suffix,
+                data: grouped.map(row => {
+                    let sum = 0;
+                    for (const f of g.fields) sum += Math.max(row[f] || 0, 0);
+                    return sum / 1e9;
+                }),
+                backgroundColor: g.color.replace('0.75', alpha),
+                borderColor: g.color.replace('0.75', '1'),
+                borderWidth: 1,
+                stack: 'inc-' + yr,
+            });
+        });
+    });
+
+    // Line datasets: total filer count per year on right y-axis
+    years.forEach(yr => {
+        const aggData = yearData(DATA.returns_aggregate, yr);
+        const suffix = multiYear ? ' (' + yr + ')' : '';
+        datasets.push({
+            label: 'Total Filers' + suffix,
+            data: AGI_GROUPS.map(g => {
+                const matched = aggData.filter(r => g.ids.includes(r.agi_bin_id));
+                return matched.reduce((a, r) => a + (r.return_count || 0), 0);
+            }),
+            type: 'line',
+            yAxisID: 'y1',
+            borderColor: multiYear ? yearColor(yr) : 'rgba(52, 73, 94, 1)',
+            backgroundColor: 'transparent',
+            borderDash: [5, 3],
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: multiYear ? yearColor(yr) : 'rgba(52, 73, 94, 1)',
+            tension: 0.3,
+            order: 0,
+        });
+    });
 
     if (charts.incomeSources) charts.incomeSources.destroy();
     charts.incomeSources = new Chart(document.getElementById('chart-income-sources'), {
@@ -2244,15 +2474,30 @@ function renderIncomeSources() {
         data: { labels, datasets },
         options: {
             responsive: true,
+            interaction: { mode: 'index', intersect: false },
             plugins: {
-                legend: { display: true, position: 'top', labels: { usePointStyle: true, padding: 12 } },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 10,
+                        font: { size: 11 },
+                        filter: multiYear
+                            ? (item) => {
+                                const ds = datasets[item.datasetIndex];
+                                if (ds.type === 'line') return true;
+                                return item.text.includes('(' + years[0] + ')');
+                            }
+                            : undefined,
+                    },
+                },
                 tooltip: {
                     callbacks: {
-                        label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(1) + 'B',
-                        afterBody: function(tooltipItems) {
-                            const idx = tooltipItems[0].dataIndex;
-                            const total = datasets.reduce((a, ds) => a + ds.data[idx], 0);
-                            return ['Total: $' + total.toFixed(1) + 'B'];
+                        label: function(ctx) {
+                            if (ctx.dataset.yAxisID === 'y1')
+                                return ctx.dataset.label + ': ' + fmtCount(ctx.parsed.y);
+                            return ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(1) + 'B';
                         }
                     }
                 }
@@ -2263,70 +2508,122 @@ function renderIncomeSources() {
                     stacked: true,
                     title: { display: true, text: '$ Billions' },
                     ticks: { callback: v => '$' + v + 'B' }
+                },
+                y1: {
+                    position: 'right',
+                    title: { display: true, text: 'Number of Filers' },
+                    ticks: { callback: v => fmtCount(v) },
+                    grid: { drawOnChartArea: false },
+                    beginAtZero: true,
                 }
             }
         }
     });
+
+    updateChartTitle('income-sources');
+    createYearPills('income-sources');
 }
 
-// ── Chart: Brackets (stacked bar) ────────────────────────────────────────────
+// ── Chart: Brackets (stacked bar + filer count line) ─────────────────────────
 function renderBrackets() {
-    const rows = yearData(DATA.bracket_distribution);
-    const bracketRates = rows.map(r => r.marginal_rate);
-    const labels = rows.map(r => (r.marginal_rate * 100).toFixed(0) + '%');
-    const currentTax = rows.map(r => r.bracket_tax / 1e9);
+    const years = getChartYears('brackets');
+    const multiYear = years.length > 1;
 
-    // Aggregate reform revenue by bracket: map each AGI bin's weighted_marginal_rate
-    // to the nearest bracket rate, then sum net_additional_revenue per bracket
-    const reformRows = yearData(DATA.reform_estimate);
-    const reformByBracket = new Array(bracketRates.length).fill(0);
-    for (const r of reformRows) {
-        const wmr = r.weighted_marginal_rate;
-        // Find closest bracket rate
-        let bestIdx = 0, bestDist = Math.abs(wmr - bracketRates[0]);
-        for (let i = 1; i < bracketRates.length; i++) {
-            const dist = Math.abs(wmr - bracketRates[i]);
-            if (dist < bestDist) { bestDist = dist; bestIdx = i; }
+    // Use first year to get bracket labels (rates are the same across years)
+    const refRows = yearData(DATA.bracket_distribution, years[0]);
+    const bracketRates = refRows.map(r => r.marginal_rate);
+    const labels = refRows.map(r => (r.marginal_rate * 100).toFixed(0) + '%');
+    const datasets = [];
+
+    // Bar datasets: current tax + reform revenue per year
+    years.forEach(yr => {
+        const rows = yearData(DATA.bracket_distribution, yr);
+        const currentTax = rows.map(r => r.bracket_tax / 1e9);
+
+        const reformRows = yearData(DATA.reform_estimate, yr);
+        const reformByBracket = new Array(bracketRates.length).fill(0);
+        for (const r of reformRows) {
+            const wmr = r.weighted_marginal_rate;
+            let bestIdx = 0, bestDist = Math.abs(wmr - bracketRates[0]);
+            for (let i = 1; i < bracketRates.length; i++) {
+                const dist = Math.abs(wmr - bracketRates[i]);
+                if (dist < bestDist) { bestDist = dist; bestIdx = i; }
+            }
+            reformByBracket[bestIdx] += (r.net_additional_revenue || 0) / 1e9;
         }
-        reformByBracket[bestIdx] += (r.net_additional_revenue || 0) / 1e9;
-    }
+
+        const suffix = multiYear ? ' (' + yr + ')' : '';
+        const curAlpha = multiYear ? String(0.4 + 0.3 * (years.indexOf(yr) / Math.max(years.length - 1, 1))) : '0.7';
+        const refAlpha = curAlpha;
+
+        datasets.push({
+            label: 'Current Tax' + suffix,
+            data: currentTax,
+            backgroundColor: 'rgba(52, 152, 219, ' + curAlpha + ')',
+            borderColor: 'rgba(52, 152, 219, 1)',
+            borderWidth: 1,
+            stack: 'brk-' + yr,
+        });
+        datasets.push({
+            label: 'Reform Revenue' + suffix,
+            data: reformByBracket,
+            backgroundColor: 'rgba(231, 76, 60, ' + refAlpha + ')',
+            borderColor: 'rgba(231, 76, 60, 1)',
+            borderWidth: 1,
+            stack: 'brk-' + yr,
+        });
+    });
+
+    // Line datasets: bracket filer count on right y-axis
+    years.forEach(yr => {
+        const rows = yearData(DATA.bracket_distribution, yr);
+        const suffix = multiYear ? ' (' + yr + ')' : '';
+        datasets.push({
+            label: 'Returns' + suffix,
+            data: rows.map(r => r.bracket_return_count || 0),
+            type: 'line',
+            yAxisID: 'y1',
+            borderColor: multiYear ? yearColor(yr) : 'rgba(52, 73, 94, 1)',
+            backgroundColor: 'transparent',
+            borderDash: [5, 3],
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: multiYear ? yearColor(yr) : 'rgba(52, 73, 94, 1)',
+            tension: 0.3,
+            order: 0,
+        });
+    });
 
     if (charts.brackets) charts.brackets.destroy();
     charts.brackets = new Chart(document.getElementById('chart-brackets'), {
         type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Current Tax',
-                    data: currentTax,
-                    backgroundColor: 'rgba(52, 152, 219, 0.7)',
-                    borderColor: 'rgba(52, 152, 219, 1)',
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Additional Reform Revenue',
-                    data: reformByBracket,
-                    backgroundColor: 'rgba(231, 76, 60, 0.7)',
-                    borderColor: 'rgba(231, 76, 60, 1)',
-                    borderWidth: 1,
-                }
-            ]
-        },
+        data: { labels, datasets },
         options: {
             responsive: true,
+            interaction: { mode: 'index', intersect: false },
             plugins: {
-                legend: { display: true, position: 'top' },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 10,
+                        font: { size: 11 },
+                        filter: multiYear
+                            ? (item) => {
+                                const ds = datasets[item.datasetIndex];
+                                if (ds.type === 'line') return true;
+                                return item.text.includes('(' + years[0] + ')');
+                            }
+                            : undefined,
+                    },
+                },
                 tooltip: {
                     callbacks: {
-                        label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(1) + 'B',
-                        afterBody: function(tooltipItems) {
-                            const idx = tooltipItems[0].dataIndex;
-                            const cur = currentTax[idx];
-                            const ref = reformByBracket[idx];
-                            const total = cur + ref;
-                            return ['Total: $' + total.toFixed(1) + 'B',
-                                    'Reform +' + (ref > 0 ? (ref/cur*100).toFixed(0) : '0') + '% over current'];
+                        label: function(ctx) {
+                            if (ctx.dataset.yAxisID === 'y1')
+                                return ctx.dataset.label + ': ' + fmtCount(ctx.parsed.y);
+                            return ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(1) + 'B';
                         }
                     }
                 }
@@ -2340,10 +2637,20 @@ function renderBrackets() {
                     stacked: true,
                     title: { display: true, text: 'Tax Generated ($ Billions)' },
                     ticks: { callback: v => '$' + v + 'B' }
+                },
+                y1: {
+                    position: 'right',
+                    title: { display: true, text: 'Returns in Bracket' },
+                    ticks: { callback: v => fmtCount(v) },
+                    grid: { drawOnChartArea: false },
+                    beginAtZero: true,
                 }
             }
         }
     });
+
+    updateChartTitle('brackets');
+    createYearPills('brackets');
 }
 
 // ── Relevant Data: key stats table ───────────────────────────────────────────
@@ -2378,20 +2685,17 @@ function renderAll() {
         banner.classList.toggle('visible', isForecastYear());
     }
 
-    // Update year in all section titles
+    // Update year in non-pill section titles (burden + revenue follow global year only)
     const ys = selectedYear + forecastSuffix();
     const titles = {
         'burden-title': 'Who Bears the Burden? (' + ys + ')',
         'revenue-title': 'Revenue Impact by Income Segment (' + ys + ')',
-        'filing-status-title': 'Reform Revenue by Filing Status (' + ys + ')',
-        'concentration-title': 'Capital Gains Concentration (' + ys + ')',
-        'income-title': 'Income Composition by AGI Bin (' + ys + ')',
-        'brackets-title': 'Tax Generated by Marginal Rate Bracket (' + ys + ')',
     };
     for (const [id, text] of Object.entries(titles)) {
         const el = document.getElementById(id);
         if (el) el.textContent = text;
     }
+    // Chart-pill section titles are updated inside each render function via updateChartTitle()
 
     renderOverview();
     updateMetrics();
@@ -2408,6 +2712,8 @@ function renderAll() {
 // ── Year selector ────────────────────────────────────────────────────────────
 document.getElementById('year-select').addEventListener('change', (e) => {
     selectedYear = parseInt(e.target.value);
+    // Reset all per-chart year overrides on global year change
+    CHART_IDS.forEach(id => chartYears[id] = null);
     renderAll();
 });
 

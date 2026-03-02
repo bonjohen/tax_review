@@ -79,6 +79,15 @@ def compute_reform_by_filing_status(
         allocated = allocate_gains_by_filing_status(net_rev, shares)
 
         for fs in FILING_STATUSES:
+            # Fetch return count for this (year, bin, filing_status)
+            cur = conn.execute("""
+                SELECT return_count
+                FROM raw_table_12
+                WHERE year = ? AND agi_bin_id = ? AND filing_status = ?
+            """, (year, bin_id, fs))
+            rc_row = cur.fetchone()
+            rc = rc_row["return_count"] if rc_row and rc_row["return_count"] else 0
+
             results.append({
                 "year": year,
                 "agi_bin_id": bin_id,
@@ -86,6 +95,7 @@ def compute_reform_by_filing_status(
                 "filing_status": fs,
                 "agi_share": round(shares[fs], 6),
                 "allocated_revenue": round(allocated[fs]),
+                "return_count": rc,
             })
 
     return results
