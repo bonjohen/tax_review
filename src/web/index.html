@@ -1390,15 +1390,31 @@ unless otherwise noted.</p>
                     <select class="ra-select ra-voice" title="Voice"></select>
                     <span class="ra-progress ra-status"></span>
                 </div>
+                <p style="font-size:0.88rem; line-height:1.7; margin-bottom:1rem;">
+                    The reform model relies on two key calibration parameters that cannot be observed directly in IRS
+                    Statistics of Income data. <strong>Holding period fractions</strong> estimate what share of reported
+                    long-term gains were held between one and five years&mdash;the gains that would lose their
+                    preferential rate under the reform. <strong>Loss harvesting ratios</strong> estimate how much of
+                    each AGI group&rsquo;s gross long-term gains are offset by intentionally realized losses before
+                    appearing as the net figures in SOI tables. Together, these two parameters determine the
+                    reform&rsquo;s tax base: the holding period fraction selects which gains are affected, and the
+                    loss ratio reveals the hidden gross gains that become fully taxable once stranded-loss rules apply.
+                </p>
+                <p style="font-size:0.88rem; line-height:1.7; margin-bottom:1.2rem;">
+                    Both parameters vary by income level. High-AGI filers hold a larger share of short-duration gains
+                    (active portfolio rebalancing) and engage in more aggressive tax-loss harvesting, so their fractions
+                    are higher. The values below are applied in Step 3 (holding period filter) and Step 2 (gross gain
+                    estimation) of the five-step reform pipeline described in the methodology footer.
+                </p>
                 <div class="assumptions-grid">
                     <div>
                         <h4>Holding Period Fractions</h4>
-                        <p class="assumptions-note">Fraction of LT gains held 1&ndash;5 years (remainder held 5+).</p>
+                        <p class="assumptions-note">Fraction of LT gains held 1&ndash;5 years (remainder held 5+). Applied in Step 3 to determine which gains lose preferential treatment.</p>
                         <table class="assumptions-table" id="hp-table"></table>
                     </div>
                     <div>
                         <h4>Loss Harvesting Offset</h4>
-                        <p class="assumptions-note">Fraction of gross LT gains offset by harvested losses. At 0.85, only 15% survives as net gains.</p>
+                        <p class="assumptions-note">Fraction of gross LT gains offset by harvested losses. At 0.85, only 15% survives as net gains. Applied in Step 2 to reconstruct gross gains from SOI net figures.</p>
                         <table class="assumptions-table" id="gl-table"></table>
                     </div>
                 </div>
@@ -1439,7 +1455,22 @@ unless otherwise noted.</p>
                     <select class="ra-select ra-voice" title="Voice"></select>
                     <span class="ra-progress ra-status"></span>
                 </div>
-                <h4 class="glossary-subsection">Key Statistics</h4>
+                <p style="font-size:0.88rem; line-height:1.7; margin-bottom:1rem;">
+                    Every number in this dashboard traces back to IRS Statistics of Income (SOI) Publication 1304,
+                    the most detailed publicly available breakdown of individual income tax returns. The model
+                    ingests seven SOI table families&mdash;covering income by AGI bracket, filing status, capital
+                    asset transactions, and marginal rate distributions&mdash;for tax years 2018 through 2022,
+                    with a trend-based 2023 forecast. These tables supply the raw inputs to the five-step reform
+                    pipeline: AGI and return counts establish population weights, Table 1.4A provides the capital
+                    gains base, and Tables 3.4&ndash;3.6 anchor the bracket-based marginal rate calculation.
+                </p>
+                <p style="font-size:0.88rem; line-height:1.7; margin-bottom:1.2rem;">
+                    The Key Statistics table below summarizes the headline aggregates for the currently selected
+                    tax year. Use the Tax Year selector in the Reform Analysis header to switch years&mdash;all
+                    figures in this section will update accordingly. The IRS Source References table identifies
+                    the specific SOI files downloaded and parsed by the ETL pipeline.
+                </p>
+                <h4 class="glossary-subsection" id="key-stats-heading">Key Statistics</h4>
                 <table class="reference-stats-table" id="relevant-stats-table">
                     <thead>
                         <tr><th>Metric</th><th>Value</th></tr>
@@ -2657,6 +2688,12 @@ function renderBrackets() {
 function renderRelevantData() {
     const tbody = document.getElementById('relevant-stats-tbody');
     if (!tbody || !DATA) return;
+
+    // Update heading to show which year is displayed
+    const heading = document.getElementById('key-stats-heading');
+    if (heading) {
+        heading.textContent = 'Key Statistics (' + selectedYear + forecastSuffix() + ')';
+    }
 
     const summary = summaryFor();
     const reform = yearData(DATA.reform_estimate);
