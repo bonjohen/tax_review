@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The $718 Billion Question: Why Capital Gains Tax Reform Can't Wait</title>
+    <style>
+        :root {
+            --bg: #fafbfc;
+            --text: #1a1a2e;
+            --text-muted: #5a5a7a;
+            --accent: #1a5276;
+            --accent-light: #2980b9;
+            --green: #1e8449;
+            --border: #e0e3e8;
+            --highlight-bg: #eef6fc;
+            --callout-bg: #f0faf0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--accent);
+            margin-bottom: 0.3rem;
+        }
+        .byline {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+        .lede {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+        h2 {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 2.5rem;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid var(--accent-light);
+        }
+        h3 {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-top: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        p {
+            margin-bottom: 1rem;
+        }
+        .pullquote {
+            border-left: 4px solid var(--accent-light);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: var(--highlight-bg);
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--accent);
+        }
+        .stat-callout {
+            background: var(--callout-bg);
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        .stat-callout .big-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--green);
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+        .stat-callout .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .chart-ref {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.82rem;
+            color: var(--accent-light);
+            font-style: normal;
+            display: inline-block;
+            background: #eef6fc;
+            padding: 0.15rem 0.5rem;
+            border-radius: 3px;
+            margin-left: 0.2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.88rem;
+            margin: 1rem 0 1.5rem;
+        }
+        th, td {
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+            text-align: right;
+        }
+        th {
+            text-align: right;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.3px;
+        }
+        th:first-child, td:first-child { text-align: left; }
+        tr:hover td { background: #f8f9fa; }
+        .footnote {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        .footnote p { margin-bottom: 0.4rem; }
+        .section-number {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.75rem;
+            color: var(--accent-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+        strong { color: var(--accent); }
+        em.term { font-style: italic; color: var(--text); }
+    </style>
+</head>
+<body>
+
+<h1>The $1.1 Trillion Question: Why Capital Gains Tax Reform Can't Wait</h1>
+<p class="byline">A microsimulation analysis of IRS Statistics of Income data, Tax Years 2018&ndash;2023</p>
+
+<p class="lede">
+Every year, the wealthiest Americans legally eliminate hundreds of billions of dollars in capital gains
+from their tax obligations. Not through exotic offshore schemes or illegal tax evasion&mdash;but
+through a structural feature of the tax code that rewards sophisticated portfolio management with a
+tax rate roughly half what ordinary workers pay. This analysis quantifies that gap and shows what
+closing it would look like.
+</p>
+
+<h2><span class="section-number">Section 1</span>The Scale of the Problem</h2>
+
+<p>
+In tax year 2022, American taxpayers reported <strong>$1.35 trillion</strong> in net long-term
+capital gains on 12.9 million Schedule D filings. That figure alone is staggering&mdash;roughly
+equal to the entire GDP of Australia. But it's the number you <em>don't</em> see on the IRS
+Statistics of Income tables that tells the real story.
+<span class="chart-ref">See: Year-over-Year Trends</span>
+</p>
+
+<p>
+Our model estimates that before tax-loss harvesting, gross long-term gains were substantially
+larger than the net figures reported to the IRS. Across all income levels, investors strategically
+realize losses to offset gains, reducing their taxable capital income. This is perfectly legal.
+It is also enormously expensive for the public fisc.
+</p>
+
+<div class="stat-callout">
+    <span class="big-number">$717.6 billion</span>
+    <span class="stat-label">Estimated additional federal revenue in TY2022 from eliminating preferential treatment for gains held under 5 years</span>
+</div>
+
+<p>
+That number&mdash;$718 billion in a single year&mdash;is not a theoretical maximum. It is the
+result of a conservative, five-step microsimulation applied to actual IRS data at all 19 income
+levels, using real tax bracket schedules and calibrated loss ratios. It accounts for the $3,000
+annual cap on capital loss deductions against ordinary income (IRC &sect;1211(b)), the composition
+of gains by holding period, and the return-count-weighted marginal rates across all filing statuses.
+</p>
+
+<h2><span class="section-number">Section 2</span>Where the Money Is</h2>
+
+<p>
+The concentration of capital gains income in America is extreme, and growing.
+In 2022, filers with AGI above $2 million held <strong>56.7%</strong> of all long-term gains,
+despite representing a tiny fraction of total filers. The $10 million-and-above cohort alone
+held 36.6% of all long-term gains&mdash;$494.7 billion in net reported gains from just
+25,066 returns.
+<span class="chart-ref">See: Capital Gains Concentration</span>
+</p>
+
+<div class="pullquote">
+25,066 filers reported $494.7 billion in long-term gains. That is $19.7 million per return&mdash;
+more than most Americans will earn in a lifetime.
+</div>
+
+<p>
+This concentration is not merely an artifact of income inequality. It reflects a feedback loop:
+the preferential rate on capital gains incentivizes holding assets in forms that generate capital
+gains rather than ordinary income. The lower the rate, the greater the incentive to shift income
+into capital form. The result is a tax system that collects less from those with the greatest
+ability to pay.
+<span class="chart-ref">See: Who Bears the Burden?</span>
+</p>
+
+<h2><span class="section-number">Section 3</span>The Two Engines of Revenue</h2>
+
+<p>
+Our reform model identifies two distinct revenue channels, and their relative size is surprising.
+</p>
+
+<h3>Channel 1: The Rate Differential (7&ndash;8% of revenue)</h3>
+
+<p>
+The straightforward channel: long-term gains currently taxed at a preferential rate (modeled at 15%)
+would instead face the filer's ordinary marginal rate (typically 24&ndash;37% for high-income
+filers). In 2022, this rate-differential channel generated <strong>$53.8 billion</strong>. Substantial,
+but not the main story.
+<span class="chart-ref">See: Revenue Impact by Income Segment</span>
+</p>
+
+<h3>Channel 2: Stranded Losses (92&ndash;93% of revenue)</h3>
+
+<p>
+The larger and less obvious channel involves what happens to <em class="term">tax-loss harvesting</em> under the reform.
+Today, investors routinely sell losing positions to generate capital losses that offset their capital
+gains dollar-for-dollar. In a good year, a portfolio might generate $10 million in gross gains and
+$9 million in gross losses, leaving only $1 million in net taxable gains at the 15% preferential rate.
+</p>
+
+<p>
+Under the reform, those gains become ordinary income. But the corresponding losses are
+<em class="term">stranded</em>&mdash;capital losses can only offset other capital gains or, failing that,
+a maximum of $3,000 per year of ordinary income under IRC &sect;1211(b). The losses that previously
+sheltered $9 million from taxation are now nearly worthless. The full $10 million faces taxation
+at ordinary rates.
+</p>
+
+<p>
+In 2022, this stranded-loss channel generated <strong>$664.6 billion</strong>&mdash;twelve times
+the rate-differential channel. This is the mechanism that most reform discussions miss entirely.
+</p>
+
+<div class="pullquote">
+The preferential rate is not just a lower tax rate. It is the keystone of a loss-harvesting
+architecture that shelters the vast majority of gross gains from any taxation at all.
+Removing the preferential rate doesn't just raise the rate&mdash;it collapses the shelter.
+</div>
+
+<h2><span class="section-number">Section 4</span>Who Pays?</h2>
+
+<p>
+This reform is steeply progressive. In 2022, <strong>76.6%</strong> of additional revenue came
+from filers with AGI above $1 million. The $10 million-plus cohort alone accounted for
+<strong>46.3%</strong> of the total&mdash;$332 billion from 25,066 returns, an average of
+<strong>$13.3 million per filer</strong>.
+<span class="chart-ref">See: Who Bears the Burden?</span>
+</p>
+
+<table>
+<tr><th>AGI Group</th><th>Additional Revenue</th><th>Share of Total</th></tr>
+<tr><td>Under $200K</td><td>$11.0B</td><td>1.5%</td></tr>
+<tr><td>$200K &ndash; $1M</td><td>$156.6B</td><td>21.8%</td></tr>
+<tr><td>$1M &ndash; $5M</td><td>$143.5B</td><td>20.0%</td></tr>
+<tr><td>$5M &ndash; $10M</td><td>$74.2B</td><td>10.3%</td></tr>
+<tr><td>$10M+</td><td>$332.4B</td><td>46.3%</td></tr>
+<tr style="font-weight:600;border-top:2px solid #333;"><td>Total</td><td>$717.6B</td><td>100%</td></tr>
+</table>
+
+<p>
+The reason for this concentration is mechanical: the wealthiest filers have the largest
+portfolios, harvest losses most aggressively (their gross loss ratios approach 90%),
+and face the highest marginal rates (37%). Every dollar of previously sheltered gain faces
+the steepest possible ordinary tax rate. Filers below $200,000 bear just 1.5% of the
+additional burden.
+</p>
+
+<h2><span class="section-number">Section 5</span>The Filing Status Story</h2>
+
+<p>
+Breaking reform revenue by filing status reveals another dimension of concentration.
+Married filing jointly accounts for <strong>77.8%</strong> of additional revenue ($558 billion
+in 2022), reflecting the reality that high-net-worth capital gains income is overwhelmingly
+held by joint filers. Single filers contribute 14.6%, while head-of-household filers&mdash;a
+proxy for single parents&mdash;contribute just 2.8%.
+<span class="chart-ref">See: Reform Revenue by Filing Status</span>
+</p>
+
+<p>
+This is not a reform that falls on working families. It falls on joint-filing households
+with multi-million-dollar investment portfolios executing sophisticated tax strategies.
+</p>
+
+<h2><span class="section-number">Section 6</span>How the Brackets Drive It</h2>
+
+<p>
+The existing tax bracket distribution tells us where ordinary income tax revenue comes from
+today. In 2022, the 22% and 24% brackets generated the largest share of current-law tax
+revenue&mdash;the broad middle of the American tax base.
+<span class="chart-ref">See: Tax Generated by Marginal Rate Bracket</span>
+</p>
+
+<p>
+Under the reform, additional revenue concentrates at the top brackets: the 35% and 37% rates.
+This is because the capital gains being reclassified as ordinary income belong predominantly
+to filers already in the top brackets. The reform essentially fills in the gap between what
+those filers would pay on all income at their marginal rate and what they actually pay on
+their capital gains at 15%.
+</p>
+
+<h2><span class="section-number">Section 7</span>The Five-Year Trajectory</h2>
+
+<p>
+The reform's revenue impact moves with capital markets. In the bull market of 2021, when
+long-term gains reached $1.92 trillion, estimated revenue topped <strong>$1.1 trillion</strong>.
+In the 2022 correction, when gains fell to $1.35 trillion, revenue dropped to $718 billion.
+Our 2023 forecast, based on linear trend projection, estimates <strong>$1.0 trillion</strong>
+as gains recover to $1.79 trillion.
+<span class="chart-ref">See: Year-over-Year Trends</span>
+</p>
+
+<table>
+<tr><th>Tax Year</th><th>LT Gains</th><th>Reform Revenue</th><th>% from $1M+ Filers</th></tr>
+<tr><td>2018</td><td>$951B</td><td>$507B</td><td>72.5%</td></tr>
+<tr><td>2019</td><td>$849B</td><td>$464B</td><td>73.2%</td></tr>
+<tr><td>2020</td><td>$1,064B</td><td>$582B</td><td>75.6%</td></tr>
+<tr><td>2021</td><td>$1,922B</td><td>$1,119B</td><td>78.2%</td></tr>
+<tr><td>2022</td><td>$1,351B</td><td>$718B</td><td>76.6%</td></tr>
+<tr style="font-style:italic; color:#7d6608;"><td>2023 (F)</td><td>$1,789B</td><td>$1,003B</td><td>78.2%</td></tr>
+</table>
+
+<p>
+Two patterns emerge. First, the share of revenue from million-dollar-plus filers has
+trended upward, from 72.5% in 2018 to 78.2% in 2023&mdash;capital gains are concentrating
+further at the top. Second, even in a down year (2022), the reform generates more than
+$700 billion, providing a substantial and relatively stable revenue base.
+</p>
+
+<h2><span class="section-number">Section 8</span>What This Means</h2>
+
+<p>
+The current preferential treatment of capital gains is not merely a lower tax rate. It is the
+foundation of an architecture that permits the wealthiest Americans to shelter the vast majority
+of their investment income from taxation through systematic loss harvesting. Our analysis shows that
+the income currently invisible to the IRS&mdash;netted away through strategically realized
+losses&mdash;dwarfs the income that is merely taxed at a lower rate.
+</p>
+
+<p>
+Eliminating preferential treatment for gains held fewer than five years would:
+</p>
+
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+<li style="margin-bottom: 0.5rem;">Generate $500&ndash;1,100 billion per year depending on market conditions</li>
+<li style="margin-bottom: 0.5rem;">Draw 73&ndash;78% of that revenue from filers with AGI above $1 million</li>
+<li style="margin-bottom: 0.5rem;">Leave filers below $200,000 AGI bearing less than 2% of the additional burden</li>
+<li style="margin-bottom: 0.5rem;">Preserve preferential treatment for truly long-term holdings (5+ years)</li>
+<li style="margin-bottom: 0.5rem;">Substantially reduce the tax incentive for aggressive loss harvesting</li>
+</ul>
+
+<p>
+A reform of this design is not about punishing investors. It is about recognizing that a
+one-year holding period is not meaningfully different from ordinary income activity, and that
+the loss-harvesting architecture it enables has grown far beyond what the preferential rate's
+original proponents envisioned.
+</p>
+
+<div class="pullquote">
+The question is not whether $718 billion in foregone revenue is defensible. The question is
+whether a tax preference that overwhelmingly benefits 25,000 households&mdash;at a cost exceeding
+the entire federal education budget ten times over&mdash;represents the best use of the tax code.
+</div>
+
+<div class="footnote">
+<p><strong>Methodology:</strong> Microsimulation using IRS SOI Publication 1304 data, Tax Years
+2018&ndash;2022. TY2023 values are linear trend-based forecasts; actual SOI data expected
+March 2026. Five-step pipeline: (1) cross-category loss netting, (2) gross gain estimation
+from calibrated loss ratios, (3) holding period filter, (4) bracket-based marginal rate
+weighted by filing status return counts, (5) revenue with stranded-loss accounting per
+IRC &sect;1211(b). Static estimate; does not model behavioral responses, realization
+elasticities, or general equilibrium effects.</p>
+<p><strong>Model Assumptions &mdash; Calibration Values:</strong> The model relies on two key
+parameters that cannot be observed directly from published IRS data: the gross loss ratio
+(how much of gross LT activity is offset by harvested losses) and the holding period fraction
+(what share of LT gains were held under 5 years). Multiple empirical approaches were used to
+narrow these values. The tables below show the initial predictions alongside the calibrated
+estimates derived from IRS data.</p>
+
+<p style="font-size: 0.85rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.3rem;">
+Loss Harvesting Offset Ratios</p>
+<table style="font-size: 0.78rem; border-collapse: collapse; width: 100%; margin-bottom: 0.3rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+<thead>
+<tr style="border-bottom: 2px solid var(--accent);">
+  <th style="text-align: left; padding: 4px 8px;">AGI Group</th>
+  <th style="text-align: center; padding: 4px 8px;">Initial<br>Prediction</th>
+  <th style="text-align: center; padding: 4px 8px;">Net-Based<br>Lower Bound</th>
+  <th style="text-align: center; padding: 4px 8px;">3-Approach<br>Calibrated</th>
+  <th style="text-align: center; padding: 4px 8px;">Conf.</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">Under $30K</td>
+  <td style="text-align: center; padding: 3px 8px;">0.70</td>
+  <td style="text-align: center; padding: 3px 8px;">0.88</td>
+  <td style="text-align: center; padding: 3px 8px; font-weight: 600;">0.84</td>
+  <td style="text-align: center; padding: 3px 8px; color: #b8860b;">med</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$30K&ndash;$100K</td>
+  <td style="text-align: center; padding: 3px 8px;">0.75</td>
+  <td style="text-align: center; padding: 3px 8px;">0.77</td>
+  <td style="text-align: center; padding: 3px 8px; font-weight: 600;">0.74</td>
+  <td style="text-align: center; padding: 3px 8px; color: #b8860b;">med</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$100K&ndash;$500K</td>
+  <td style="text-align: center; padding: 3px 8px;">0.80</td>
+  <td style="text-align: center; padding: 3px 8px;">0.50</td>
+  <td style="text-align: center; padding: 3px 8px; font-weight: 600;">0.48</td>
+  <td style="text-align: center; padding: 3px 8px; color: #b8860b;">med</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$500K&ndash;$5M</td>
+  <td style="text-align: center; padding: 3px 8px;">0.85</td>
+  <td style="text-align: center; padding: 3px 8px;">0.20</td>
+  <td style="text-align: center; padding: 3px 8px; font-weight: 600;">0.20</td>
+  <td style="text-align: center; padding: 3px 8px; color: var(--green);">high</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$5M+</td>
+  <td style="text-align: center; padding: 3px 8px;">0.90</td>
+  <td style="text-align: center; padding: 3px 8px;">0.07</td>
+  <td style="text-align: center; padding: 3px 8px; font-weight: 600;">0.05</td>
+  <td style="text-align: center; padding: 3px 8px; color: var(--green);">high</td>
+</tr>
+</tbody>
+</table>
+<p style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1rem;">
+<em>Initial Prediction</em> = model starting assumption (reform_assumptions.json).
+<em>Net-Based Lower Bound</em> = (LT loss + LT carryover) / (LT gain + LT loss + LT carryover)
+from Table 1.4A, 5-year average 2018&ndash;2022.
+<em>3-Approach Calibrated</em> = combined estimate from component reconstruction (sub-category
+transaction data + partnership/S-corp internal netting), non-taxable gain adjustment (&minus;0.5%),
+and PDF-validated coverage bounds. Source: <code>calibration_summary.json</code>.</p>
+
+<p style="font-size: 0.85rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.3rem;">
+Loss Harvesting Offset &mdash; Calibrated Ratios by Tax Year</p>
+<table style="font-size: 0.78rem; border-collapse: collapse; width: 100%; margin-bottom: 0.3rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+<thead>
+<tr style="border-bottom: 2px solid var(--accent);">
+  <th style="text-align: left; padding: 4px 8px;">AGI Group</th>
+  <th style="text-align: center; padding: 4px 6px;">TY2018</th>
+  <th style="text-align: center; padding: 4px 6px;">TY2019</th>
+  <th style="text-align: center; padding: 4px 6px;">TY2020</th>
+  <th style="text-align: center; padding: 4px 6px;">TY2021</th>
+  <th style="text-align: center; padding: 4px 6px;">TY2022</th>
+  <th style="text-align: center; padding: 4px 8px;">Mean</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">Under $30K</td>
+  <td style="text-align: center; padding: 3px 6px;">0.85</td>
+  <td style="text-align: center; padding: 3px 6px;">0.83</td>
+  <td style="text-align: center; padding: 3px 6px;">0.84</td>
+  <td style="text-align: center; padding: 3px 6px;">0.83</td>
+  <td style="text-align: center; padding: 3px 6px;">0.84</td>
+  <td style="text-align: center; padding: 3px 8px; font-weight: 600;">0.84</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$30K&ndash;$100K</td>
+  <td style="text-align: center; padding: 3px 6px;">0.75</td>
+  <td style="text-align: center; padding: 3px 6px;">0.76</td>
+  <td style="text-align: center; padding: 3px 6px;">0.75</td>
+  <td style="text-align: center; padding: 3px 6px;">0.69</td>
+  <td style="text-align: center; padding: 3px 6px;">0.76</td>
+  <td style="text-align: center; padding: 3px 8px; font-weight: 600;">0.74</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$100K&ndash;$500K</td>
+  <td style="text-align: center; padding: 3px 6px;">0.50</td>
+  <td style="text-align: center; padding: 3px 6px;">0.54</td>
+  <td style="text-align: center; padding: 3px 6px;">0.50</td>
+  <td style="text-align: center; padding: 3px 6px;">0.38</td>
+  <td style="text-align: center; padding: 3px 6px;">0.49</td>
+  <td style="text-align: center; padding: 3px 8px; font-weight: 600;">0.48</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$500K&ndash;$5M</td>
+  <td style="text-align: center; padding: 3px 6px;">0.22</td>
+  <td style="text-align: center; padding: 3px 6px;">0.24</td>
+  <td style="text-align: center; padding: 3px 6px;">0.23</td>
+  <td style="text-align: center; padding: 3px 6px;">0.15</td>
+  <td style="text-align: center; padding: 3px 6px;">0.20</td>
+  <td style="text-align: center; padding: 3px 8px; font-weight: 600;">0.20</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$5M+</td>
+  <td style="text-align: center; padding: 3px 6px;">0.05</td>
+  <td style="text-align: center; padding: 3px 6px;">0.06</td>
+  <td style="text-align: center; padding: 3px 6px;">0.05</td>
+  <td style="text-align: center; padding: 3px 6px;">0.04</td>
+  <td style="text-align: center; padding: 3px 6px;">0.06</td>
+  <td style="text-align: center; padding: 3px 8px; font-weight: 600;">0.05</td>
+</tr>
+</tbody>
+</table>
+<p style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1rem;">
+Year-to-year variation is modest for low/mid-income groups. TY2021 shows lower ratios across
+all groups, reflecting the bull market that concentrated LT activity in gains rather than losses.
+Calibrated via 3-layer reconstruction from Table 1.4A sub-category columns (4 transaction
+types + partnership/S-corp + other-form sources).</p>
+
+<p style="font-size: 0.85rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.3rem;">
+Holding Period Fractions (Share of LT Gains Held &lt;5 Years)</p>
+<table style="font-size: 0.78rem; border-collapse: collapse; width: 100%; margin-bottom: 0.3rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+<thead>
+<tr style="border-bottom: 2px solid var(--accent);">
+  <th style="text-align: left; padding: 4px 8px;">AGI Group</th>
+  <th style="text-align: center; padding: 4px 8px;">Initial<br>Prediction</th>
+  <th style="text-align: center; padding: 4px 8px;">SOCA Empirical<br>(TY2015)</th>
+  <th style="text-align: center; padding: 4px 8px;">Diff</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">Under $30K</td>
+  <td style="text-align: center; padding: 3px 8px;">0.55</td>
+  <td style="text-align: center; padding: 3px 8px; font-weight: 600;" rowspan="8">0.379</td>
+  <td style="text-align: center; padding: 3px 8px; color: #c0392b;">&minus;0.17</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$30K&ndash;$50K</td>
+  <td style="text-align: center; padding: 3px 8px;">0.50</td>
+  <td style="text-align: center; padding: 3px 8px; color: #c0392b;">&minus;0.12</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$50K&ndash;$100K</td>
+  <td style="text-align: center; padding: 3px 8px;">0.45</td>
+  <td style="text-align: center; padding: 3px 8px; color: #c0392b;">&minus;0.07</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$100K&ndash;$200K</td>
+  <td style="text-align: center; padding: 3px 8px;">0.40</td>
+  <td style="text-align: center; padding: 3px 8px; color: #c0392b;">&minus;0.02</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$200K&ndash;$500K</td>
+  <td style="text-align: center; padding: 3px 8px;">0.35</td>
+  <td style="text-align: center; padding: 3px 8px; color: var(--green);">+0.03</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$500K&ndash;$1M</td>
+  <td style="text-align: center; padding: 3px 8px;">0.30</td>
+  <td style="text-align: center; padding: 3px 8px; color: var(--green);">+0.08</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$1M&ndash;$5M</td>
+  <td style="text-align: center; padding: 3px 8px;">0.25</td>
+  <td style="text-align: center; padding: 3px 8px; color: var(--green);">+0.13</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+  <td style="padding: 3px 8px;">$5M+</td>
+  <td style="text-align: center; padding: 3px 8px;">0.20</td>
+  <td style="text-align: center; padding: 3px 8px; color: var(--green);">+0.18</td>
+</tr>
+</tbody>
+</table>
+<p style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1rem;">
+SOCA empirical value is 37.9% of classifiable LT gains held 1&ndash;5 years (TY2015,
+the most recent available). SOCA does not provide AGI-stratified holding period data,
+so a single aggregate fraction is shown. 71% of LT gains have &ldquo;Period not
+determinable&rdquo; (mutual fund distributions, passthrough entities); the fraction
+is computed from the 29% of classifiable transactions. By asset type: corporate stock
+skews shorter (46.4% at 1&ndash;5yr), real estate skews longer (17.7%).</p>
+
+<p style="font-size: 0.85rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.3rem;">
+Interpretation</p>
+<p style="font-size: 0.8rem;">The calibration reveals a striking pattern: the initial loss
+ratio predictions were reasonable for low-income groups (Under $30K: predicted 0.70,
+calibrated 0.84) but significantly overstated for high-income groups ($5M+: predicted 0.90,
+calibrated 0.05). This is because high-income filers receive the majority of their
+long-term gains from partnership/S-corporation K-1 flows and capital gain distributions,
+where gains vastly exceed losses. In TY2020, filers above $5M AGI received $328B in
+partnership LT gains against only $7B in partnership LT losses&mdash;a 47:1 gain-to-loss ratio.
+By contrast, low-income filers rely primarily on direct sales of capital assets, where
+loss harvesting is more prevalent relative to gain volume. The model&rsquo;s initial
+predictions inverted this relationship, assuming that higher-income filers harvest
+<em>more</em> aggressively. The data shows they do harvest in absolute terms, but their
+gain base is so large that losses represent a much smaller fraction of total gross activity.</p>
+
+<p><strong>Calibration Approaches &mdash; Methodology Detail:</strong>
+Five approaches were investigated to derive calibration parameters from published IRS data.
+Each produced bounds rather than point estimates; the three most informative were combined
+into the &ldquo;3-Approach Calibrated&rdquo; values shown above.</p>
+<ol style="font-size: 0.8rem; margin: 0.4rem 0 0.4rem 1.5rem;">
+<li style="margin-bottom: 0.4rem;"><em>Component reconstruction (Table 1.4A, 120 columns).</em>
+Reconstructs gross LT activity from four transaction sub-categories (Form 8949 boxes A&ndash;D),
+partnership/S-corp K-1 flows, other-form gains (4797, 8824, etc.), and capital gain
+distributions. Partnership gains are expanded by income-graduated internal netting rates
+(5% for Under $30K to 40% for $5M+) to estimate hidden losses netted before K-1 reporting.
+In TY2020: gross LT gain from sales $493B, partnership LT gain $291B, other-form LT gain
+$289B, capital gain distributions $56B. <strong>Used as</strong> the primary calibrated
+estimate (Approach 1 in the pipeline).</li>
+<li style="margin-bottom: 0.4rem;"><em>Non-taxable gain adjustment (Table 1.4A &times;
+High-Income PDF cross-check).</em> Table 1.4A reports &ldquo;Taxable net gain&rdquo;&mdash;the
+subset of filers whose net gain increased tax liability. Cross-checking against SOI
+High-Income data revealed ~10% of gain filers are non-taxable but carry only ~0.5% of
+gain dollars; loss data matched exactly. A 0.5% upward adjustment to gains produces a
+small downward shift (~0.3%) in the loss ratio. <strong>Used as</strong> a correction
+factor applied to Approach 1 (Approach 2 in the pipeline).</li>
+<li style="margin-bottom: 0.4rem;"><em>Coverage bounds from PDF validation.</em>
+For $200K+ bins (high confidence): gain undercount &le;0.5%, producing tight empirical
+bounds. For &lt;$200K bins (medium confidence): wider bounds allowing up to 2% undercount.
+Loss data is exact across all bins. <strong>Used as</strong> clipping bounds on the
+combined estimate (Approach 3 in the pipeline).</li>
+<li style="margin-bottom: 0.4rem;"><em>Sales price and cost basis reconstruction
+(Table 1.4A, cols 70&ndash;72, 78&ndash;80, 88&ndash;90, 98&ndash;100).</em>
+TY2020 LT proceeds were $3.2T against $2.6T basis. <strong>Limitation:</strong> the
+&ldquo;no basis reported&rdquo; category has unreliable basis figures, and the data
+excludes passthrough flows and distributions ($346B net LT gain in TY2020). Provides a
+directional check but was not incorporated into the combined estimate.</li>
+<li style="margin-bottom: 0.4rem;"><em>Loss carryover stock as harvesting proxy
+(Table 1.4A, cols 117&ndash;118).</em> LT loss carryover was $278B in TY2020 against
+$19.3B in annual taxable net loss&mdash;a 14&times; ratio. Confirms large latent loss
+supply but is a cumulative balance, not an annual flow. <strong>Not incorporated</strong>
+into the combined estimate.</li>
+</ol>
+<p><strong>Limitations:</strong> This is an upper-bound static estimate, not a dynamic score. Actual
+behavioral response to the reform (reduced harvesting, deferred realization, asset reallocation)
+would reduce revenue. The SOCA holding period data is from 2015 (most recent available); structural
+ratios are assumed stable over the 2018&ndash;2022 analysis period. SOCA does not provide AGI-stratified
+holding period breakdowns, so a single aggregate fraction is applied with model-assumed AGI variation.</p>
+<p><strong>Data sources:</strong> IRS Statistics of Income Division &mdash; Publication 1304 Excel tables
+(Tables 1.1&ndash;1.4A, 3.2&ndash;3.6, TY2018&ndash;2022); Sales of Capital Assets tables
+(Table 4, TY2015); Revenue Procedure PDFs for statutory tax parameters. All figures in nominal
+dollars unless otherwise noted. Analysis code and data pipeline available in the accompanying
+repository.</p>
+</div>
+
+</body>
+</html>
