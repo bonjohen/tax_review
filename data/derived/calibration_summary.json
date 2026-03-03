@@ -1,0 +1,138 @@
+{
+  "description": "Calibrated gross loss ratios from 3-approach pipeline",
+  "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+  ],
+  "by_agi_group": {
+    "Under 30K": {
+      "agi_bin_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "by_year": {
+        "2018": 0.8476,
+        "2019": 0.8326,
+        "2020": 0.8359,
+        "2021": 0.8263,
+        "2022": 0.8417
+      },
+      "mean_calibrated_ratio": 0.8368,
+      "current_assumption": 0.7,
+      "difference": 0.1368,
+      "confidence": "medium"
+    },
+    "30K-100K": {
+      "agi_bin_ids": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "by_year": {
+        "2018": 0.746,
+        "2019": 0.7643,
+        "2020": 0.7548,
+        "2021": 0.6865,
+        "2022": 0.7598
+      },
+      "mean_calibrated_ratio": 0.7423,
+      "current_assumption": 0.75,
+      "difference": -0.0077,
+      "confidence": "medium"
+    },
+    "100K-500K": {
+      "agi_bin_ids": [
+        12,
+        13
+      ],
+      "by_year": {
+        "2018": 0.5009,
+        "2019": 0.5387,
+        "2020": 0.497,
+        "2021": 0.3845,
+        "2022": 0.4909
+      },
+      "mean_calibrated_ratio": 0.4824,
+      "current_assumption": 0.8,
+      "difference": -0.3176,
+      "confidence": "medium"
+    },
+    "500K-5M": {
+      "agi_bin_ids": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "by_year": {
+        "2018": 0.2193,
+        "2019": 0.2352,
+        "2020": 0.2253,
+        "2021": 0.1482,
+        "2022": 0.195
+      },
+      "mean_calibrated_ratio": 0.2046,
+      "current_assumption": 0.85,
+      "difference": -0.6454,
+      "confidence": "high"
+    },
+    "5M+": {
+      "agi_bin_ids": [
+        18,
+        19
+      ],
+      "by_year": {
+        "2018": 0.0549,
+        "2019": 0.0581,
+        "2020": 0.0476,
+        "2021": 0.0363,
+        "2022": 0.0594
+      },
+      "mean_calibrated_ratio": 0.0513,
+      "current_assumption": 0.9,
+      "difference": -0.8487,
+      "confidence": "high"
+    }
+  },
+  "vs_current_assumptions": {
+    "Under 30K": {
+      "current": 0.7,
+      "calibrated": 0.8368,
+      "diff": 0.1368,
+      "confidence": "medium"
+    },
+    "30K-100K": {
+      "current": 0.75,
+      "calibrated": 0.7423,
+      "diff": -0.0077,
+      "confidence": "medium"
+    },
+    "100K-500K": {
+      "current": 0.8,
+      "calibrated": 0.4824,
+      "diff": -0.3176,
+      "confidence": "medium"
+    },
+    "500K-5M": {
+      "current": 0.85,
+      "calibrated": 0.2046,
+      "diff": -0.6454,
+      "confidence": "high"
+    },
+    "5M+": {
+      "current": 0.9,
+      "calibrated": 0.0513,
+      "diff": -0.8487,
+      "confidence": "high"
+    }
+  }
+}

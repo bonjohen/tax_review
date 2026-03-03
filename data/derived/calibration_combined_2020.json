@@ -1,0 +1,74 @@
+{
+  "year": 2020,
+  "groups": {
+    "Under 30K": {
+      "bin_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "approach1_raw": 0.367023,
+      "approach2_adjustment": -0.000679,
+      "approach3_lower": 0.835884,
+      "approach3_upper": 0.838637,
+      "calibrated_ratio": 0.835884,
+      "confidence": "medium"
+    },
+    "30K-100K": {
+      "bin_ids": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "approach1_raw": 0.302566,
+      "approach2_adjustment": -0.000919,
+      "approach3_lower": 0.754756,
+      "approach3_upper": 0.758476,
+      "calibrated_ratio": 0.754756,
+      "confidence": "medium"
+    },
+    "100K-500K": {
+      "bin_ids": [
+        12,
+        13
+      ],
+      "approach1_raw": 0.207004,
+      "approach2_adjustment": -0.001253,
+      "approach3_lower": 0.496981,
+      "approach3_upper": 0.502031,
+      "calibrated_ratio": 0.496981,
+      "confidence": "medium"
+    },
+    "500K-5M": {
+      "bin_ids": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "approach1_raw": 0.21116,
+      "approach2_adjustment": -0.000876,
+      "approach3_lower": 0.225342,
+      "approach3_upper": 0.226218,
+      "calibrated_ratio": 0.225342,
+      "confidence": "high"
+    },
+    "5M+": {
+      "bin_ids": [
+        18,
+        19
+      ],
+      "approach1_raw": 0.243957,
+      "approach2_adjustment": -0.000227,
+      "approach3_lower": 0.047372,
+      "approach3_upper": 0.047599,
+      "calibrated_ratio": 0.047599,
+      "confidence": "high"
+    }
+  }
+}

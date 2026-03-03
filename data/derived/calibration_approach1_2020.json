@@ -1,0 +1,174 @@
+{
+  "year": 2020,
+  "groups": {
+    "Under 30K": {
+      "bin_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "default_internal_rate": 0.05,
+      "best_estimate_ratio": 0.367023,
+      "txn_loss_ratio": 0.52875,
+      "total_gross_gain": 44189586789.47369,
+      "total_gross_loss": 25622699789.473682,
+      "layers": {
+        "gross_lt_gain_txn": 15950997000.0,
+        "gross_lt_loss_txn": 17897258000.0,
+        "netting_L2": 1539335000.0,
+        "ps_gross_gain": 8716338947.368422,
+        "ps_hidden_loss": 435816947.368421,
+        "ps_visible_loss": 5313767000.0,
+        "other_gross_gain": 16475336842.105265,
+        "other_hidden_loss": 823766842.105263,
+        "other_visible_loss": 1152091000.0,
+        "cap_gain_dist": 3046914000.0
+      },
+      "sensitivity": {
+        "0%": 0.362045,
+        "10%": 0.372149,
+        "20%": 0.382872,
+        "30%": 0.394274,
+        "40%": 0.406419,
+        "50%": 0.419385,
+        "60%": 0.433256
+      }
+    },
+    "30K-100K": {
+      "bin_ids": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "default_internal_rate": 0.1,
+      "best_estimate_ratio": 0.302566,
+      "txn_loss_ratio": 0.416364,
+      "total_gross_gain": 50238150777.77778,
+      "total_gross_loss": 21794638777.77778,
+      "layers": {
+        "gross_lt_gain_txn": 26756209000.0,
+        "gross_lt_loss_txn": 19087830000.0,
+        "netting_L2": 1846386000.0,
+        "ps_gross_gain": 3191768888.888889,
+        "ps_hidden_loss": 319176888.888889,
+        "ps_visible_loss": 815180000.0,
+        "other_gross_gain": 11311398888.88889,
+        "other_hidden_loss": 1131139888.888889,
+        "other_visible_loss": 441312000.0,
+        "cap_gain_dist": 8978774000.0
+      },
+      "sensitivity": {
+        "0%": 0.294282,
+        "10%": 0.302566,
+        "20%": 0.312027,
+        "30%": 0.322937,
+        "40%": 0.335655,
+        "50%": 0.350671,
+        "60%": 0.368671
+      }
+    },
+    "100K-500K": {
+      "bin_ids": [
+        12,
+        13
+      ],
+      "default_internal_rate": 0.2,
+      "best_estimate_ratio": 0.207004,
+      "txn_loss_ratio": 0.246251,
+      "total_gross_gain": 253762421750.0,
+      "total_gross_loss": 66242186750.0,
+      "layers": {
+        "gross_lt_gain_txn": 126701910000.0,
+        "gross_lt_loss_txn": 41393703000.0,
+        "netting_L2": 6959812000.0,
+        "ps_gross_gain": 22474678750.0,
+        "ps_hidden_loss": 4494935750.0,
+        "ps_visible_loss": 3707199000.0,
+        "other_gross_gain": 76811290000.0,
+        "other_hidden_loss": 15362258000.0,
+        "other_visible_loss": 1284091000.0,
+        "cap_gain_dist": 27774543000.0
+      },
+      "sensitivity": {
+        "0%": 0.165489,
+        "10%": 0.185306,
+        "20%": 0.207004,
+        "30%": 0.230862,
+        "40%": 0.257221,
+        "50%": 0.286495,
+        "60%": 0.319197
+      }
+    },
+    "500K-5M": {
+      "bin_ids": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "default_internal_rate": 0.3,
+      "best_estimate_ratio": 0.21116,
+      "txn_loss_ratio": 0.164788,
+      "total_gross_gain": 396391904857.1429,
+      "total_gross_loss": 106107900857.14285,
+      "layers": {
+        "gross_lt_gain_txn": 155833350000.0,
+        "gross_lt_loss_txn": 30745974000.0,
+        "netting_L2": 7038107000.0,
+        "ps_gross_gain": 92596380000.0,
+        "ps_hidden_loss": 27778914000.0,
+        "ps_visible_loss": 5425676000.0,
+        "other_gross_gain": 135254402857.14287,
+        "other_hidden_loss": 40576320857.14286,
+        "other_visible_loss": 1581016000.0,
+        "cap_gain_dist": 12707772000.0
+      },
+      "sensitivity": {
+        "0%": 0.103209,
+        "10%": 0.13826,
+        "20%": 0.174231,
+        "30%": 0.21116,
+        "40%": 0.249085,
+        "50%": 0.288046,
+        "60%": 0.328087
+      }
+    },
+    "5M+": {
+      "bin_ids": [
+        18,
+        19
+      ],
+      "default_internal_rate": 0.4,
+      "best_estimate_ratio": 0.243957,
+      "txn_loss_ratio": 0.076156,
+      "total_gross_gain": 700981101000.0,
+      "total_gross_loss": 226189981000.00003,
+      "layers": {
+        "gross_lt_gain_txn": 190418203000.0,
+        "gross_lt_loss_txn": 15696939000.0,
+        "netting_L2": 5192421000.0,
+        "ps_gross_gain": 328037311666.6667,
+        "ps_hidden_loss": 131214924666.66667,
+        "ps_visible_loss": 3546841000.0,
+        "other_gross_gain": 179125528333.33334,
+        "other_hidden_loss": 71650211333.33334,
+        "other_visible_loss": 4081065000.0,
+        "cap_gain_dist": 3400058000.0
+      },
+      "sensitivity": {
+        "0%": 0.044732,
+        "10%": 0.096994,
+        "20%": 0.147567,
+        "30%": 0.196529,
+        "40%": 0.243957,
+        "50%": 0.289922,
+        "60%": 0.334491
+      }
+    }
+  }
+}

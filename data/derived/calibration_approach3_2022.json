@@ -1,0 +1,264 @@
+{
+  "year": 2022,
+  "groups": {
+    "Under 30K": {
+      "bin_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "empirical": 0.844362,
+      "lower_bound": 0.841688,
+      "upper_bound": 0.844362,
+      "confidence": "medium",
+      "per_bin": [
+        {
+          "agi_bin_id": 1,
+          "lt_gain": 18446786000.0,
+          "lt_loss": 41925801000.0,
+          "lt_carry": 35244735000.0,
+          "empirical": 0.807077,
+          "lower_bound": 0.803912,
+          "upper_bound": 0.807077,
+          "confidence": "medium"
+        },
+        {
+          "agi_bin_id": 2,
+          "lt_gain": 1088054000.0,
+          "lt_loss": 6916236000.0,
+          "lt_carry": 4880718000.0,
+          "empirical": 0.915557,
+          "lower_bound": 0.913981,
+          "upper_bound": 0.915557,
+          "confidence": "medium"
+        },
+        {
+          "agi_bin_id": 3,
+          "lt_gain": 1335545000.0,
+          "lt_loss": 9049354000.0,
+          "lt_carry": 6386169000.0,
+          "empirical": 0.920366,
+          "lower_bound": 0.918873,
+          "upper_bound": 0.920366,
+          "confidence": "medium"
+        },
+        {
+          "agi_bin_id": 4,
+          "lt_gain": 1464812000.0,
+          "lt_loss": 6659722000.0,
+          "lt_carry": 5018974000.0,
+          "empirical": 0.888552,
+          "lower_bound": 0.886536,
+          "upper_bound": 0.888552,
+          "confidence": "medium"
+        },
+        {
+          "agi_bin_id": 5,
+          "lt_gain": 1532008000.0,
+          "lt_loss": 6708964000.0,
+          "lt_carry": 4979748000.0,
+          "empirical": 0.884121,
+          "lower_bound": 0.882035,
+          "upper_bound": 0.884121,
+          "confidence": "medium"
+        },
+        {
+          "agi_bin_id": 6,
+          "lt_gain": 1910371000.0,
+          "lt_loss": 5929354000.0,
+          "lt_carry": 4325413000.0,
+          "empirical": 0.842963,
+          "lower_bound": 0.840271,
+          "upper_bound": 0.842963,
+          "confidence": "medium"
+        },
+        {
+          "agi_bin_id": 7,
+          "lt_gain": 2021229000.0,
+          "lt_loss": 7199622000.0,
+          "lt_carry": 5587899000.0,
+          "empirical": 0.863511,
+          "lower_bound": 0.861113,
+          "upper_bound": 0.863511,
+          "confidence": "medium"
+        }
+      ]
+    },
+    "30K-100K": {
+      "bin_ids": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "empirical": 0.763445,
+      "lower_bound": 0.759777,
+      "upper_bound": 0.763445,
+      "confidence": "medium",
+      "per_bin": [
+        {
+          "agi_bin_id": 8,
+          "lt_gain": 4584723000.0,
+          "lt_loss": 10936756000.0,
+          "lt_carry": 8146837000.0,
+          "empirical": 0.806293,
+          "lower_bound": 0.803118,
+          "upper_bound": 0.806293,
+          "confidence": "medium"
+        },
+        {
+          "agi_bin_id": 9,
+          "lt_gain": 4486838000.0,
+          "lt_loss": 13342078000.0,
+          "lt_carry": 8195540000.0,
+          "empirical": 0.827591,
+          "lower_bound": 0.82469,
+          "upper_bound": 0.827591,
+          "confidence": "medium"
+        },
+        {
+          "agi_bin_id": 10,
+          "lt_gain": 15256592000.0,
+          "lt_loss": 28420799000.0,
+          "lt_carry": 18796606000.0,
+          "empirical": 0.755793,
+          "lower_bound": 0.752045,
+          "upper_bound": 0.755793,
+          "confidence": "medium"
+        },
+        {
+          "agi_bin_id": 11,
+          "lt_gain": 16843816000.0,
+          "lt_loss": 28414495000.0,
+          "lt_carry": 16623372000.0,
+          "empirical": 0.727806,
+          "lower_bound": 0.723785,
+          "upper_bound": 0.727806,
+          "confidence": "medium"
+        }
+      ]
+    },
+    "100K-500K": {
+      "bin_ids": [
+        12,
+        13
+      ],
+      "empirical": 0.495966,
+      "lower_bound": 0.490916,
+      "upper_bound": 0.495966,
+      "confidence": "medium",
+      "per_bin": [
+        {
+          "agi_bin_id": 12,
+          "lt_gain": 81490301000.0,
+          "lt_loss": 72211059000.0,
+          "lt_carry": 51316456000.0,
+          "empirical": 0.602521,
+          "lower_bound": 0.597673,
+          "upper_bound": 0.602521,
+          "confidence": "medium"
+        },
+        {
+          "agi_bin_id": 13,
+          "lt_gain": 170417734000.0,
+          "lt_loss": 73111556000.0,
+          "lt_carry": 51236774000.0,
+          "empirical": 0.421854,
+          "lower_bound": 0.420632,
+          "upper_bound": 0.421854,
+          "confidence": "high"
+        }
+      ]
+    },
+    "500K-5M": {
+      "bin_ids": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "empirical": 0.194998,
+      "lower_bound": 0.194212,
+      "upper_bound": 0.194998,
+      "confidence": "high",
+      "per_bin": [
+        {
+          "agi_bin_id": 14,
+          "lt_gain": 138987687000.0,
+          "lt_loss": 30139331000.0,
+          "lt_carry": 22071586000.0,
+          "empirical": 0.273072,
+          "lower_bound": 0.272078,
+          "upper_bound": 0.273072,
+          "confidence": "high"
+        },
+        {
+          "agi_bin_id": 15,
+          "lt_gain": 75699834000.0,
+          "lt_loss": 10647549000.0,
+          "lt_carry": 7501472000.0,
+          "empirical": 0.193386,
+          "lower_bound": 0.192605,
+          "upper_bound": 0.193386,
+          "confidence": "high"
+        },
+        {
+          "agi_bin_id": 16,
+          "lt_gain": 49645540000.0,
+          "lt_loss": 5900362000.0,
+          "lt_carry": 3925583000.0,
+          "empirical": 0.165221,
+          "lower_bound": 0.164531,
+          "upper_bound": 0.165221,
+          "confidence": "high"
+        },
+        {
+          "agi_bin_id": 17,
+          "lt_gain": 156529573000.0,
+          "lt_loss": 13018642000.0,
+          "lt_carry": 8742031000.0,
+          "empirical": 0.122052,
+          "lower_bound": 0.121516,
+          "upper_bound": 0.122052,
+          "confidence": "high"
+        }
+      ]
+    },
+    "5M+": {
+      "bin_ids": [
+        18,
+        19
+      ],
+      "empirical": 0.05937,
+      "lower_bound": 0.059091,
+      "upper_bound": 0.05937,
+      "confidence": "high",
+      "per_bin": [
+        {
+          "agi_bin_id": 18,
+          "lt_gain": 114740377000.0,
+          "lt_loss": 7396507000.0,
+          "lt_carry": 5377544000.0,
+          "empirical": 0.100177,
+          "lower_bound": 0.099726,
+          "upper_bound": 0.100177,
+          "confidence": "high"
+        },
+        {
+          "agi_bin_id": 19,
+          "lt_gain": 494684930000.0,
+          "lt_loss": 14618634000.0,
+          "lt_carry": 11072483000.0,
+          "empirical": 0.04937,
+          "lower_bound": 0.049136,
+          "upper_bound": 0.04937,
+          "confidence": "high"
+        }
+      ]
+    }
+  }
+}
